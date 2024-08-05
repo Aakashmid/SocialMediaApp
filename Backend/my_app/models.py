@@ -1,5 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -7,7 +9,8 @@ class Profile(models.Model):
     user=models.OneToOneField(User,related_name='profile', on_delete=models.CASCADE)
     bio=models.CharField(blank=True,max_length=200)
     profileImg=models.ImageField(upload_to='profile_images',blank=True,default='media/defaultProfileImg')
-    
+    date_joined=models.DateField(auto_now_add=True)
+
     def __str__(self) -> str:
         return self.user.username
 
