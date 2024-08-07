@@ -3,6 +3,5 @@ __pycache__/
 migrations/
 myvenv/
 
-media/
 db.sqlite3
 

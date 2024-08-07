@@ -11,4 +11,6 @@ router.register('profile',views.ProfileViewSet,basename='Profile')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('signup/', views.signupHandler),
+    path('login/', views.loginHandler),
 ]
