@@ -7,10 +7,14 @@ from . import views
 router=DefaultRouter()
 
 router.register('posts',views.PostviewSet,basename='Post')
-router.register('profile',views.ProfileViewSet,basename='Profile')
+# router.register('profile/<int:pk>/',views.ProfileView,basename='Profile')
 
 urlpatterns = [
     path('', include(router.urls)),
+
     path('signup/', views.signupHandler),
     path('login/', views.loginHandler),
+
+    path('profile/',views.ProfileListView.as_view(),name='profile'),
+    path('profile/<int:pk>/',views.ProfileDetailView.as_view(),name='profile')
 ]
