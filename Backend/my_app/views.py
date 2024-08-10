@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
+from rest_framework.filters import SearchFilter
 
 from .serializers import profileSerializer,postSerialzer,userSerializer  # importing all serializers file and then using there Serializer class 
 from .models import Profile,Post,Like, Comment, Follower
@@ -46,6 +47,9 @@ class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
 
+    search_fields=['username','bio']  # search profiles by username or bio
+    filter_backends=[SearchFilter]
+
 class ProfileDetailView(RetrieveUpdateAPIView):
     queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
@@ -55,6 +59,10 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 class PostviewSet(ModelViewSet):
     serializer_class=postSerialzer.PostSerializer
     queryset=Post.objects.all()
-    
+
+    search_fields=['text','author']
+    filter_backends=[SearchFilter]
+
+        
 
 
