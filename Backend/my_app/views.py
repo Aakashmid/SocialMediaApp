@@ -6,11 +6,12 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
 from rest_framework.filters import SearchFilter
 
-from .serializers import profileSerializer,postSerialzer,userSerializer  # importing all serializers file and then using there Serializer class 
+from .serializers import profileSerializer,postSerialzer,userSerializer ,commentSerializer # importing all serializers file and then using there Serializer class 
 from .models import Profile,Post,Like, Comment, Follower
+from django.shortcuts import redirect
 # Create your views here.
 
 
@@ -42,7 +43,6 @@ def loginHandler(request):
     return Response({'token':token.key,'user':serializer.data})
 
 
-
 class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
@@ -50,11 +50,11 @@ class ProfileListView(ListAPIView):
     search_fields=['username','bio']  # search profiles by username or bio
     filter_backends=[SearchFilter]
 
+
 class ProfileDetailView(RetrieveUpdateAPIView):
     queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
     
-
 
 class PostviewSet(ModelViewSet):
     serializer_class=postSerialzer.PostSerializer
@@ -63,6 +63,39 @@ class PostviewSet(ModelViewSet):
     search_fields=['text','author']
     filter_backends=[SearchFilter]
 
+class  CommentListCreate(ListCreateAPIView):
+    serializer_class=commentSerializer.CommentSerializer
+
+    def get_queryset(self):
+        """
+        This view  return a list of all comments of a post , specified postId in url
+        """
+        postId=self.kwargs['postId']
+        queryset=Comment.objects.filter(post__id=postId)
+        return queryset
+    
+
+    # have to edit - incomplete
+    def create(self, request, *args, **kwargs):
+        serializer=self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # user=Profile.objects.get(user=self.request.user)
+        # Example: Add user to the serializer data
+        post=get_object_or_404(Post,id=self.kwargs['postId']) # get post by post id
+        serializer.save(post=post)
+        return Response(serializer.data)
         
+
+class RepliesList(ListAPIView):
+    serializer_class=commentSerializer.CommentSerializer
+    def get_queryset(self):
+        '''
+        get all replies of a comment , getting comment and post id from endpoint
+        '''
+        postId=self.kwargs['postId']
+        commentId=self.kwargs['commentId']
+        comment=Comment.objects.get(id=commentId)
+        queryset=Comment.objects.filter(post__id=postId,parent=comment)
+        return queryset
 
 
