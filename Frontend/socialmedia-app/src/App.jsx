@@ -4,6 +4,7 @@ import {
   Route
 } from 'react-router-dom';
 import Topbar from './Components/Topbar';
+import Home from './pages/Home';
 
 function App() {
 
@@ -16,8 +17,7 @@ function App() {
         </header>
 
         <Routes>
-          {/* <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} /> */}
+          <Route path="/" element={<Home />} />
         </Routes>
       </Router>
     </>

@@ -20,10 +20,10 @@ export default function Topbar() {
                 </div>
             </div>
             <div className="topbar-right flex items-center space-x-3 lg:space-x-5 ">
-                <ul className="topbar-icons hidden md:flex items-center space-x-3 ">
-                    <li className="topbar-icon"><PersonRounded htmlColor="white" /></li>
-                    <li className="topbar-icon"><MessageRounded htmlColor="white" /></li>
-                    <li className="topbar-icon"><NotificationsRounded htmlColor="white" /></li>
+                <ul className="topbar-icons hidden md:flex items-center space-x-2 lg:space-x-3 ">
+                    <li className="topbar-icon cursor-pointer"><PersonRounded htmlColor="white"  className="hover:text-blue-50 "/></li>
+                    <li className="topbar-icon cursor-pointer"><MessageRounded htmlColor="white" className="hover:text-blue-50 "/></li>
+                    <li className="topbar-icon cursor-pointer"><NotificationsRounded htmlColor="white" className="hover:text-blue-50 "/></li>
                 </ul>
                 <div className="search-btn md:hidden">
                     <button className="">
