@@ -1,7 +1,7 @@
 
 export default function Sidebar() {
   return (
-    <div className="sidebar-container lg:flex-[2] xl:flex-[2.5]">
+    <div className="sidebar-wrapper">
         sidebar
     </div>
   )
