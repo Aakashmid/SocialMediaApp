@@ -62,6 +62,14 @@ class PostviewSet(ModelViewSet):
 
     search_fields=['text','author']
     filter_backends=[SearchFilter]
+    def perform_create(self, serializer):
+        '''
+        perform_create just do additional action before saving object being created
+        '''
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        
+            
 
 class  CommentListCreate(ListCreateAPIView):
     serializer_class=commentSerializer.CommentSerializer

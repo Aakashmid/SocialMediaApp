@@ -5,10 +5,11 @@ from my_app.models import Comment,Like,Profile
 class CommentSerializer(serializers.ModelSerializer):
     replies=serializers.SerializerMethodField()
     likes=serializers.SerializerMethodField()
-    isLiked=serializers.SerializerMethodField()
+    author=ProfileSerializer(read_only=True)
     class Meta:
         model=Comment
-        fields=['id','user','post','text','parent','replies','likes','isLiked']
+        fields=['id','author','post','text','parent','replies','likes','isLiked']
+        extra_kwargs={'author':{'read_only':True}}
 
     def get_replies(self,obj):
         '''get replies count'''
@@ -20,10 +21,3 @@ class CommentSerializer(serializers.ModelSerializer):
         likes=Like.objects.filter(Comment=obj).count()
         return likes
     
-    def isLiked(self,obj):
-        '''checking where current user is liked this comment  or not        '''
-        # user=Profile.objects.get(user=self.request.user)
-        if Like.objects.filter(Comment=obj,user=user).exists():
-            return True
-        else:
-            return False
