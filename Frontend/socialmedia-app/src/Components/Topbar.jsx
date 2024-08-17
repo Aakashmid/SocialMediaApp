@@ -5,7 +5,7 @@ export default function Topbar() {
     return (
         <div className="topbarContainer bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2">
             <div className="logo">
-                <Link className="text-white font-medium text-2xl" to={'/'}><span>SocialApp</span></Link>
+                <Link className="text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
             </div>
             <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
                 <div className="searchBar bg-white rounded-[30px] px-2  flex items-center md:w-[300px] lg:w-[400px] xl:w-[500px]">

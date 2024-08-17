@@ -32,7 +32,7 @@ class Comment(models.Model):
     parent=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
     text=models.CharField(max_length=200)
     isLiked=models.BooleanField(default=False)
-    # time=models.DateTimeField(auto_now_add=True,default=timezone.now)
+    time=models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.text

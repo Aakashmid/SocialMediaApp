@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import AllowAny
 
 from .serializers import profileSerializer,postSerialzer,userSerializer ,commentSerializer # importing all serializers file and then using there Serializer class 
 from .models import Profile,Post,Like, Comment, Follower
@@ -17,6 +18,7 @@ from django.shortcuts import redirect
 
 # for authentication
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def signupHandler(request):
     data=request.data
     serializer=userSerializer.UserSerializer(data=data)
@@ -30,9 +32,10 @@ def signupHandler(request):
         return Response({'token':token.key,'user':serializer.data})  # serializer.data is all field of user , defined in UserSerializer
 
     return Response({'error':serializer.errors})
-    
+
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def loginHandler(request):
     user=get_object_or_404(User,username=request.data['username'])
     if not user.check_password(request.data['password']):
@@ -90,7 +93,8 @@ class  CommentListCreate(ListCreateAPIView):
         # user=Profile.objects.get(user=self.request.user)
         # Example: Add user to the serializer data
         post=get_object_or_404(Post,id=self.kwargs['postId']) # get post by post id
-        serializer.save(post=post)
+        profile=get_object_or_404(Profile,user=self.request.user)
+        serializer.save(post=post,author=profile)  # user that commented is current user so 
         return Response(serializer.data)
         
 

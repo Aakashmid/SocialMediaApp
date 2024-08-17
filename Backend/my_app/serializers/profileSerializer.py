@@ -7,7 +7,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     username=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','date_joined','username','posts']
+        fields=['id','bio','date_joined','full_name','username','posts']
     
     def get_posts(self,obj):
         posts=Post.objects.filter(author=obj)

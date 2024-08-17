@@ -7,7 +7,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model=Post
         fields=['id','author','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
-        extra_kwargs={'author':{'read_only':True}}
+        extra_kwargs={'author':{'read_only':True},'isLiked':{'read_only':True}}
     
     def get_comments(self,obj):
         return len(obj.comments.all())
@@ -16,5 +16,6 @@ class PostSerializer(serializers.ModelSerializer):
         return len(obj.likes.all())
     
     
+    
 
-# http   POST http://127.0.0.1:8000/posts/ author='aakash' text='helo aakash '
+# http   POST http://127.0.0.1:8000/api/posts/ author='aakash' text='helo aakash '
