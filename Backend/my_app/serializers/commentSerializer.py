@@ -9,7 +9,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model=Comment
         fields=['id','author','post','text','parent','replies','likes','isLiked']
-        extra_kwargs={'author':{'read_only':True}}
+        extra_kwargs={'author':{'read_only':True},'parent':{'read_only':True},'post':{'read_only':True}}
 
     def get_replies(self,obj):
         '''get replies count'''

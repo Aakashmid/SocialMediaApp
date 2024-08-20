@@ -11,6 +11,7 @@ urlpatterns = [
     path('signup/', views.signupHandler),
     path('login/', views.loginHandler),
 
+    path('api-auth/', include('rest_framework.urls')),
     path('api/', include('my_app.urls')),
 ]
 

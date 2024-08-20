@@ -46,6 +46,7 @@ def loginHandler(request):
     return Response({'token':token.key,'user':serializer.data})
 
 
+#  list searched users
 class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
@@ -67,11 +68,11 @@ class PostviewSet(ModelViewSet):
     filter_backends=[SearchFilter]
     def perform_create(self, serializer):
         '''
-        perform_create just do additional action before saving object being created
+        assining author of post  current user 
         '''
         if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        
+            author=get_object_or_404(Profile,user=self.request.user)
+            serializer.save(author=author)
             
 
 class  CommentListCreate(ListCreateAPIView):
@@ -79,35 +80,27 @@ class  CommentListCreate(ListCreateAPIView):
 
     def get_queryset(self):
         """
-        This view  return a list of all comments of a post , specified postId in url
+        This view  return a list of all comments or replies of a post or comment , specified postId in url
         """
         postId=self.kwargs['postId']
-        queryset=Comment.objects.filter(post__id=postId)
+        commentId=self.kwargs.get('commentId',None)
+        if commentId is None:
+            queryset=Comment.objects.filter(post__id=postId)
+        else:
+            queryset=Comment.objects.filter(post__id=postId,parent=self.kwargs['commentId'])
+
         return queryset
     
 
-    # have to edit - incomplete
-    def create(self, request, *args, **kwargs):
-        serializer=self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        # user=Profile.objects.get(user=self.request.user)
-        # Example: Add user to the serializer data
-        post=get_object_or_404(Post,id=self.kwargs['postId']) # get post by post id
-        profile=get_object_or_404(Profile,user=self.request.user)
-        serializer.save(post=post,author=profile)  # user that commented is current user so 
-        return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+        post = get_object_or_404(Post, id=self.kwargs['postId'])  # Get the Post by postId
+        user = get_object_or_404(Profile, user=self.request.user)  # Get the Profile of the current user
+
+        if self.kwargs.get('commentId', None) is not None:
+            parent = get_object_or_404(Comment, id=self.kwargs['commentId'])
+
+        # Save the comment with the related post, author, and parent (if provided)
+        serializer.save(post=post, author=user, parent=parent)
         
-
-class RepliesList(ListAPIView):
-    serializer_class=commentSerializer.CommentSerializer
-    def get_queryset(self):
-        '''
-        get all replies of a comment , getting comment and post id from endpoint
-        '''
-        postId=self.kwargs['postId']
-        commentId=self.kwargs['commentId']
-        comment=Comment.objects.get(id=commentId)
-        queryset=Comment.objects.filter(post__id=postId,parent=comment)
-        return queryset
-
-
+        
