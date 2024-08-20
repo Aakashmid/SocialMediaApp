@@ -8,8 +8,8 @@ export default function Login() {
                     <h1 className="login-logo text-[50px] font-bold text-blue-600">Buzzline</h1>
                     <p className="login-desc text-2xl text-wrap">Connect with friends and the world around you on Buzzline.</p>
                 </div>
-                <div className="login-form w-full md:w-[500px] rounded-md bg-white">
-                    <LoginForm method={'login'} route={'/login'} />
+                <div className="login-form w-full  sm:mx-auto sm:w-[500px] rounded-md bg-white">
+                    <LoginForm method={'login'} route={'login/'} />
                 </div>
             </div>
         </div>

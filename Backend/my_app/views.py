@@ -56,9 +56,18 @@ class ProfileListView(ListAPIView):
 
 
 class ProfileDetailView(RetrieveUpdateAPIView):
-    queryset=Profile.objects.all()
     serializer_class=profileSerializer.ProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        profile=Profile.objects.get(user=request.user)
+        serializer=self.serializer_class(profile,many=True)
+        return Response(serializer.data)
     
+    # def perform_update(self, serializer):
+    #     profile=Profile.objects.get(user=self.request.user)
+    #     if serializer.
+    
+        
 
 class PostviewSet(ModelViewSet):
     serializer_class=postSerialzer.PostSerializer

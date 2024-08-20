@@ -8,7 +8,7 @@ from my_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('signup/', views.signupHandler),
+    path('register/', views.signupHandler),
     path('login/', views.loginHandler),
 
     path('api-auth/', include('rest_framework.urls')),

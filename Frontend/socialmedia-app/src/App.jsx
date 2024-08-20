@@ -8,26 +8,33 @@ import Home from './pages/Home';
 import ProtectedRoute from './Components/Protectedroute';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
+import { Navigate } from 'react-router-dom';
 
 function App() {
 
+  const Logout = () => {
+    localStorage.clear()
+    return <Navigate to={'/login'} />
+  }
+
+  const RegisterAndLogout = () => {
+    localStorage.clear()
+    return <Registration />
+  }
 
   return (
     <>
       <Router>
-        <header>
-          <ProtectedRoute>
-            <Topbar />
-          </ProtectedRoute>
-        </header>
-
         <Routes>
-          {/* <Route path="/" element={
-            <ProtectedRoute> <Home /></ProtectedRoute>
-          } /> */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Topbar />
+              <Home />
+            </ProtectedRoute>
+          } />
           <Route path='/login' element={<Login />} />
-          <Route path='/' element={<Home />} />
-          <Route path='/register' element={<Registration />} />
+          <Route path='/register' element={<RegisterAndLogout />} />
+          <Route path='/logout' element={<Logout />} />
         </Routes>
       </Router>
     </>

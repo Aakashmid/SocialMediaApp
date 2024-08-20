@@ -13,7 +13,7 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('users/',views.ProfileListView.as_view(),name='profile'),
-    path('profile/<int:pk>/',views.ProfileDetailView.as_view(),name='profile'),
+    path('profile/',views.ProfileDetailView.as_view(),name='profile'),
 
     path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
     path('comments/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='post-comments')
