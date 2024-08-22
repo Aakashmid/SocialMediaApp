@@ -1,7 +1,7 @@
 import { MoreVert } from "@mui/icons-material";
 
 export default function Post() {
-    const likeHandler=()=>{
+    const likeHandler = () => {
         console.log('liked')
     }
     return (
@@ -18,7 +18,7 @@ export default function Post() {
             </div>
             <div className="card-center">
                 <p className="post-text">This is my first psot </p>
-                <img src="src/assets/post/4.jpeg" alt=".." className="mt-4 w-full max-h-[300px] lg:max-h-[500px] object-contain" />
+                <img src="src/assets/post/4.jpeg" alt=".." className="mt-4 w-full max-h-[400px] md:max-h-[500px] object-contain" />
             </div>
             <div className="post-card-bottom flex justify-between items-center">
                 <div className="postLeftBottom flex space-x-2 items-center">

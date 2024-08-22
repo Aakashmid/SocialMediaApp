@@ -6,11 +6,11 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView,RetrieveAPIView
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
 
-from .serializers import profileSerializer,postSerialzer,userSerializer ,commentSerializer # importing all serializers file and then using there Serializer class 
+from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
 from .models import Profile,Post,Like, Comment, Follower
 from django.shortcuts import redirect
 # Create your views here.
@@ -21,7 +21,7 @@ from django.shortcuts import redirect
 @permission_classes([AllowAny])
 def signupHandler(request):
     data=request.data
-    serializer=userSerializer.UserSerializer(data=data)
+    serializer=UserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         user=User.objects.get(username=request.data['username'])
@@ -42,35 +42,37 @@ def loginHandler(request):
         return Response({'data':'not found','status':status.HTTP_404_NOT_FOUND})
     
     token ,created=Token.objects.get_or_create(user=user)
-    serializer=userSerializer.UserSerializer(instance=user)
+    serializer=UserSerializer(instance=user)
     return Response({'token':token.key,'user':serializer.data})
 
 
 #  list searched users
 class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
-    serializer_class=profileSerializer.ProfileSerializer
+    serializer_class=ProfileSerializer
 
     search_fields=['username','bio']  # search profiles by username or bio
     filter_backends=[SearchFilter]
 
 
 class ProfileDetailView(RetrieveUpdateAPIView):
-    serializer_class=profileSerializer.ProfileSerializer
+    serializer_class=ProfileSerializer
+    queryset=Profile.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        profile=Profile.objects.get(user=request.user)
-        serializer=self.serializer_class(profile,many=True)
-        return Response(serializer.data)
-    
+    def get_object(self):
+        return self.request.user.profile
+    # have to modify update (for fullname etc)
     # def perform_update(self, serializer):
-    #     profile=Profile.objects.get(user=self.request.user)
-    #     if serializer.
-    
-        
+    #     if serializer.is_valid():
+    #         user=self.request.user
+    #         serializer.save(user=user)
+            
+class AnotherProfileView(RetrieveAPIView):
+    serializer_class=ProfileSerializer
+    queryset=Profile.objects.all()
 
 class PostviewSet(ModelViewSet):
-    serializer_class=postSerialzer.PostSerializer
+    serializer_class=PostSerializer
     queryset=Post.objects.all()
 
     search_fields=['text','author']
@@ -85,8 +87,7 @@ class PostviewSet(ModelViewSet):
             
 
 class  CommentListCreate(ListCreateAPIView):
-    serializer_class=commentSerializer.CommentSerializer
-
+    serializer_class=CommentSerializer
     def get_queryset(self):
         """
         This view  return a list of all comments or replies of a post or comment , specified postId in url
@@ -101,7 +102,6 @@ class  CommentListCreate(ListCreateAPIView):
         return queryset
     
 
-    
     def perform_create(self, serializer):
         post = get_object_or_404(Post, id=self.kwargs['postId'])  # Get the Post by postId
         user = get_object_or_404(Profile, user=self.request.user)  # Get the Profile of the current user
@@ -112,4 +112,8 @@ class  CommentListCreate(ListCreateAPIView):
         # Save the comment with the related post, author, and parent (if provided)
         serializer.save(post=post, author=user, parent=parent)
         
-        
+# class FollowersList(ListAPIView):
+#     serializer_class=ProfileSerializer
+#     def get_queryset(self):
+#         querse
+#         return 
