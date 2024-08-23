@@ -5,12 +5,13 @@ import Sidebar from "../Components/Sidebar";
 import api from "../Api";
 import { Apps, Cancel } from "@mui/icons-material";
 
-export default function Home() {
-  const [profileData, setProfileData] = useState([])
-  const [showSidebar, setShowSidebar] = useState(false)
-  useEffect(() => {
-    api.get('api/profile/').then((res) => setProfileData(res.data)).catch((error) => console.log(error))
-  }, []) // this function runs first time when page reloded
+
+export default function Home({ User }) {
+  // const [profileData, setProfileData] = useState([])
+  // const [showSidebar, setShowSidebar] = useState(false)
+  // useEffect(() => {
+  //   api.get('api/profile/').then((res) => setProfileData(res.data)).catch((error) => console.log(error))
+  // }, []) // this function runs first time when page reloded
 
   return (
     <div className="home-page-container lg:flex ">
@@ -30,7 +31,7 @@ export default function Home() {
         <Sidebar />
       </div>
       <div className="md:w-[650px] mx-auto lg:flex-[5]">
-        <Feed currentUser={profileData} />
+        <Feed currentUser={User} />
       </div>
       <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
         <Rightbar />

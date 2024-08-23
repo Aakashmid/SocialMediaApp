@@ -8,9 +8,9 @@ export default function Post({ post }) {
         <div className="post-card p-4 custom-shodow-b rounded-lg mb-8 flex-col flex space-y-5 lg:space-y-6">
             <div className="post-card-top  flex items-center justify-between">
                 <div className="profile flex items-center space-x-3 cursor-pointer">
-                    <img src="src/assets/person/2.jpeg" className="user-profileImg w-7 h-7 rounded-[50%] object-cover" alt=".." />
-                    <span className="username text-sm ">Aakash Kumar </span>
-                    <span className="published time text-xs">5 min ago </span>
+                    <img src={post.author.profileImg} className="user-profileImg w-7 h-7 rounded-[50%] object-cover" alt=".." />
+                    <span className="username text-sm ">{post.author.username}</span>
+                    <span className="published time text-xs">{post.publish_time} </span>
                 </div>
                 <div className="postTopRight p-1 cursor-pointer">
                     <MoreVert fontSize="small" />

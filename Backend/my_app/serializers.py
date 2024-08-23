@@ -11,23 +11,9 @@ class UserSerializer(serializers.ModelSerializer):
         
 # ------------------------------------------------------------------------- #
 
-class PostSerializer(serializers.ModelSerializer):
-    comments=serializers.SerializerMethodField()
-    likes=serializers.SerializerMethodField()
-    class Meta:
-        model=Post
-        fields=['id','author','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
-        extra_kwargs={'author':{'read_only':True},'isLiked':{'read_only':True}}
-    
-    def get_comments(self,obj):
-        return obj.comments.count()
-    
-    def get_likes(self,obj):
-        return obj.likes.count()
-# ------------------------------------------------------------------------- #
 
 class ProfileSerializer(serializers.ModelSerializer):
-    posts=serializers.SerializerMethodField()
+    posts_count=serializers.SerializerMethodField()
     username=serializers.SerializerMethodField()
     full_name=serializers.SerializerMethodField()
     followers=serializers.SerializerMethodField()
@@ -35,12 +21,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     isFollow=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','username','profileImg','full_name','posts','date_joined','isFollow','followers','followings'] 
+        fields=['id','bio','username','profileImg','full_name','posts_count','date_joined','isFollow','followers','followings'] 
     
-    def get_posts(self,profile):
-        posts=Post.objects.filter(author=profile)
-        serializer=PostSerializer(posts,many=True)
-        return serializer.data
+    def get_posts_count(self,profile):
+        return profile.posts.count()
     def get_full_name(self,profile):
         return profile.user.first_name + ' ' +profile.user.last_name
 
@@ -59,6 +43,21 @@ class ProfileSerializer(serializers.ModelSerializer):
     
 # PostSerializer.author=ProfileSerializer()
 # PostSerializer.Meta.fields=['author','id','likes','comments']
+# ------------------------------------------------------------------------- #
+class PostSerializer(serializers.ModelSerializer):
+    comments=serializers.SerializerMethodField()
+    likes=serializers.SerializerMethodField()
+    author=ProfileSerializer(read_only=True)
+    class Meta:
+        model=Post
+        fields=['id','author','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
+        extra_kwargs={'author':{'read_only':True},'isLiked':{'read_only':True}}
+    
+    def get_comments(self,obj):
+        return obj.comments.count()
+    
+    def get_likes(self,obj):
+        return obj.likes.count()
 # ------------------------------------------------------------------------- #
 
 class CommentSerializer(serializers.ModelSerializer):
