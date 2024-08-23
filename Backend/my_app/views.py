@@ -62,10 +62,10 @@ class ProfileDetailView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user.profile
     # have to modify update (for fullname etc)
-    # def perform_update(self, serializer):
-    #     if serializer.is_valid():
-    #         user=self.request.user
-    #         serializer.save(user=user)
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            user=self.request.user
+            serializer.save(user=user)
             
 class AnotherProfileView(RetrieveAPIView):
     serializer_class=ProfileSerializer

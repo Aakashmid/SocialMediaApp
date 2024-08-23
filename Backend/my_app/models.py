@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user=models.OneToOneField(User,related_name='profile', on_delete=models.CASCADE)
     bio=models.CharField(blank=True,max_length=200)
-    profileImg=models.ImageField(upload_to='profile_images',blank=True,default='media/defaultProfileImg')
+    profileImg=models.ImageField(upload_to='profile_images/',blank=True,default='defaultProfileimg.png')
     date_joined=models.DateField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -17,7 +17,7 @@ class Profile(models.Model):
 class Post(models.Model):
     author=models.ForeignKey(Profile,related_name='posts',on_delete=models.CASCADE)  # related name help to query related date 
     text=models.CharField( max_length=500)
-    postImg=models.ImageField(upload_to='post_images',null=True ,blank=True)
+    postImg=models.ImageField(upload_to='post_images/',null=True ,blank=True)
     publish_time=models.DateTimeField(auto_now_add=True)
     updated_time=models.DateTimeField(auto_now_add=True)
     isLiked=models.BooleanField(default=False)

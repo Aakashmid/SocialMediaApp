@@ -10,7 +10,7 @@ api.interceptors.request.use(  // modify  requuest before sending ,adding author
     (config) => {
         const token = localStorage.getItem(TOKEN);
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Token ${token}`;
         }
         return config;
     },

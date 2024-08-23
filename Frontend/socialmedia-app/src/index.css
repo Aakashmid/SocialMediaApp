@@ -2,8 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-    .custom-shodow-b{
-        box-shadow: 0px 0px 16px -8px rgba(0,0 ,0 , 0.68);
+@layer components {
+    .custom-shodow-b {
+        box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+    }
+
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: rgb(238, 238, 238);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgb(194, 194, 194);
     }
 }

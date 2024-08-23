@@ -35,7 +35,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     isFollow=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','username','full_name','posts','date_joined','isFollow','followers','followings'] 
+        fields=['id','bio','username','profileImg','full_name','posts','date_joined','isFollow','followers','followings'] 
     
     def get_posts(self,profile):
         posts=Post.objects.filter(author=profile)
@@ -54,7 +54,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         return profile.followings.count()
     
     def get_isFollow(self,profile):
-        return True if Follower.objects.filter(Author=profile,follower=self.request.user.profile) else False
+        # return True if Follower.objects.filter(Author=profile,follower=self.request.user.profile) else False
+        return True
     
 # PostSerializer.author=ProfileSerializer()
 # PostSerializer.Meta.fields=['author','id','likes','comments']

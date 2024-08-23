@@ -1,8 +1,19 @@
 import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayCircleFilledOutlined, Group } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 export default function Sidebar() {
+  const CloseFriend = () => {
+    return (
+      <li className="sidebarFriend">
+        <Link to={'/'} className=" flex space-x-4 items-center p-1">
+          <img src='src/assets/person/1.jpeg' alt="..." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
+          <span className="sidebarFriendName">Aakash</span>
+        </Link>
+      </li>)
+  }
+
+
   return (
-    <div className="sidebar-wrapper p-5 h-[100vh]">
+    <div className="sidebar-wrapper py-3  px-5 h-[100vh] overflow-y-scroll custom-scrollbar ">
       <ul className="sideBar-list flex flex-col space-y-1">
         <li className="hover:bg-blue-200">
           <Link to={'/'} className="py-[5px] flex items-center space-x-4" ><RssFeed /> <span className="lg:text-lg">Feed</span></Link>
@@ -34,6 +45,25 @@ export default function Sidebar() {
       </ul>
       <button className="my-4 py-[6px] px-10 font-medium  rounded bg-gray-100 ">Show more</button>
       <hr className="bg-gray-300 h-[2px]" />
+      {/* <ul className="sidebarFriendList">
+        {users.map((u) => {
+          return <CloseFriend />
+        })}
+      </ul> */}
+      <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+        <CloseFriend />
+      </ul>
+
     </div>
   )
 }
