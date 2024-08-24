@@ -38,7 +38,7 @@ class Comment(models.Model):
         return self.text
 
 class Follower(models.Model):
-    Author=models.ForeignKey(Profile,related_name='followers',on_delete=models.CASCADE)
+    toFollowing=models.ForeignKey(Profile,related_name='followers',on_delete=models.CASCADE)
     follower=models.ForeignKey(Profile,related_name='followings' ,on_delete=models.CASCADE)
 
     def __str__(self) -> str:

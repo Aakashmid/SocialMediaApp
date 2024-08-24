@@ -16,7 +16,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Follower)
 class FollowerAdmin(admin.ModelAdmin):
-    list_display=['id','Author','follower']
+    list_display=['id','toFollowing','follower']
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet,ViewSet
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -9,7 +9,8 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView,RetrieveAPIView
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
-
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.views import APIView
 from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
 from .models import Profile,Post,Like, Comment, Follower
 from django.shortcuts import redirect
@@ -54,22 +55,53 @@ class ProfileListView(ListAPIView):
     search_fields=['username','bio']  # search profiles by username or bio
     filter_backends=[SearchFilter]
 
-
+# profile view for getting profile data and updating profile
 class ProfileDetailView(RetrieveUpdateAPIView):
     serializer_class=ProfileSerializer
     queryset=Profile.objects.all()
 
     def get_object(self):
-        return self.request.user.profile
+        profile_id=self.kwargs.get('profile_id')
+        if profile_id:
+            return get_object_or_404(Profile,id=profile_id)
+        else:
+            return get_object_or_404(Profile,user=self.request.user)
+        
     # have to modify update (for fullname etc)
     def perform_update(self, serializer):
+        instace=self.get_object()
+        if instace.user != self.request.user:
+            raise PermissionDenied("You don't have permission to change this object !")
         if serializer.is_valid():
             user=self.request.user
             serializer.save(user=user)
-            
-class AnotherProfileView(RetrieveAPIView):
-    serializer_class=ProfileSerializer
-    queryset=Profile.objects.all()
+
+class FollowView(ViewSet):
+    def follow(self,request,pk):
+        toFollow=get_object_or_404(Profile,id=pk)
+        follower=self.request.user.profile
+        Follower.objects.create(toFollowing=toFollow,follower=follower)
+        return Response({'message':'now following this user'})
+    def unfollow(self,request,pk):
+        toUnFollow=get_object_or_404(Profile,id=pk)
+        follower=self.request.user.profile
+        Follower.objects.delete(toFollowing=toUnFollow,follower=follower)
+        return Response({'message':'now not  following this user'})
+    def isFollowing(self,request,pk):
+        toFollwoing=get_object_or_404(Profile,id=pk)
+        follower=self.request.user.profile
+        if Follower.objects.filter(toFollwoing=toFollwoing,follower=follower).exists():
+            isfollowing=True
+        else:
+            isfollowing=False
+        return Response({'isFollowing':isfollowing})
+
+class ProfilePostsView(ListAPIView):
+    serializer_class=PostSerializer
+    def get_queryset(self):
+        creator=get_object_or_404(Profile,id=self.kwargs.get('profile_id',None))
+        queryset=Post.objects.filter(author=creator) #filter post by author
+        return queryset
 
 class PostviewSet(ModelViewSet):
     serializer_class=PostSerializer

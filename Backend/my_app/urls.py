@@ -13,8 +13,12 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('profiles/',views.ProfileListView.as_view(),name='profiles'),
-    path('profile/',views.ProfileDetailView.as_view(),name='my-profile'),
-    path('profile/<int:id>',views.AnotherProfileView.as_view(),name='user-profile'),
+    path('profile/',views.ProfileDetailView.as_view(),name='profile'),
+    path('profile/<int:profile_id>/',views.ProfileDetailView.as_view(),name='profile'), 
+    path('follow/<int:pk>/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
+    path('unfollow/<int:pk>/',views.FollowView.as_view({'post':'unfollow'}),name='unfollow'),
+    path('isFollowing/<int:pk>/',views.FollowView.as_view({'get':'isFollowing'}),name='isfollowing'),
+    path('profile/<int:profile_id>/posts',views.ProfilePostsView.as_view(),name='profile-posts'),
 
     path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
     path('comments/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='post-comments'),
