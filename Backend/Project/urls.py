@@ -10,10 +10,10 @@ urlpatterns = [
 
     path('register/', views.signupHandler),
     path('login/', views.loginHandler),
-
-    path('api-auth/', include('rest_framework.urls')),
+    
     path('api/', include('my_app.urls')),
 ]
 
+# handler404 = views.custom_404_view
 if settings.DEBUG: 
     urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

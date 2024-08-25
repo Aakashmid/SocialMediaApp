@@ -12,9 +12,10 @@ APPEND_SLASH=True
 SECRET_KEY = 'django-insecure-52sh(q&%=7i)x!**qbx(gu-7)x6pz6egt93@t!#em6s$&=p6wz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition

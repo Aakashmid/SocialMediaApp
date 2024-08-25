@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet,ViewSet
 from rest_framework.decorators import api_view,permission_classes
@@ -10,10 +9,8 @@ from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreate
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.views import APIView
 from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
 from .models import Profile,Post,Like, Comment, Follower
-from django.shortcuts import redirect
 # Create your views here.
 
 
@@ -52,7 +49,7 @@ class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
 
-    search_fields=['username','bio']  # search profiles by username or bio
+    search_fields=['bio','username']  # search profiles by username or bio
     filter_backends=[SearchFilter]
 
 # profile view for getting profile data and updating profile
@@ -76,21 +73,22 @@ class ProfileDetailView(RetrieveUpdateAPIView):
             user=self.request.user
             serializer.save(user=user)
 
+# view related to followers model
 class FollowView(ViewSet):
     def follow(self,request,pk):
         toFollow=get_object_or_404(Profile,id=pk)
         follower=self.request.user.profile
         Follower.objects.create(toFollowing=toFollow,follower=follower)
-        return Response({'message':'now following this user'})
+        return Response({'message':'now following '})
     def unfollow(self,request,pk):
         toUnFollow=get_object_or_404(Profile,id=pk)
         follower=self.request.user.profile
-        Follower.objects.delete(toFollowing=toUnFollow,follower=follower)
-        return Response({'message':'now not  following this user'})
+        Follower.objects.get(toFollowing=toUnFollow,follower=follower).delete()
+        return Response({'message':'unfollowed'})
     def isFollowing(self,request,pk):
         toFollwoing=get_object_or_404(Profile,id=pk)
         follower=self.request.user.profile
-        if Follower.objects.filter(toFollwoing=toFollwoing,follower=follower).exists():
+        if Follower.objects.filter(toFollowing=toFollwoing,follower=follower).exists():
             isfollowing=True
         else:
             isfollowing=False
@@ -149,3 +147,6 @@ class  CommentListCreate(ListCreateAPIView):
 #     def get_queryset(self):
 #         querse
 #         return 
+
+# def custom_404_view(request, exception):
+#     return Response({'error':"The endpoint you are looking for is incorrect !"})
