@@ -1,17 +1,39 @@
 import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayCircleFilledOutlined, Group } from "@mui/icons-material"
+import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import api from "../Api"
+import { ProfileContext } from "./context"
 export default function Sidebar() {
-  const CloseFriend = () => {
+  const [followings, setFollowings] = useState([])
+  const profile = useContext(ProfileContext)
+  const getFollowings = async () => {
+    try {
+      const res = await api.get(`api/followings/4`)
+      if (res.status === 200) {
+        setFollowings(res.data)
+        console.log(res.data)
+      }
+    } catch (error) {
+      console.error("Failed to fetch followings : ", error)
+    }
+    // finally {
+    // }
+  }
+
+  const Following = ({ user }) => {
     return (
       <li className="sidebarFriend">
         <Link to={'/'} className=" flex space-x-4 items-center p-1">
-          <img src='src/assets/person/1.jpeg' alt="..." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
-          <span className="sidebarFriendName">Aakash</span>
+          <img src={user.profileImg} alt=".." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
+          <img src={user.profileImg} alt=".." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
+          <span className="sidebarFriendName">{user.username}</span>
         </Link>
       </li>)
   }
 
-
+  useEffect(() => {
+    getFollowings()
+  }, [])
   return (
     <div className="sidebar-wrapper py-3  px-5 h-[100vh] overflow-y-scroll custom-scrollbar ">
       <ul className="sideBar-list flex flex-col space-y-1">
@@ -45,23 +67,13 @@ export default function Sidebar() {
       </ul>
       <button className="my-4 py-[6px] px-10 font-medium  rounded bg-gray-100 ">Show more</button>
       <hr className="bg-gray-300 h-[2px]" />
-      {/* <ul className="sidebarFriendList">
-        {users.map((u) => {
-          return <CloseFriend />
-        })}
-      </ul> */}
+      <div className="friends-list mt-4">
+        <h2 className="text-lg font-medium">Followings</h2>
+      </div>
       <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
-        <CloseFriend />
+        {followings.map((user) => {
+          return <Following user={user} key={user.id} />
+        })}
       </ul>
 
     </div>

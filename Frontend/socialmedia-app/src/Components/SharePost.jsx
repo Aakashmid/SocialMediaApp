@@ -6,7 +6,7 @@ export default function SharePost({ onShare }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })
 
     const handleFileChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.files })
+        setFormData({ ...formData, [e.target.name]: e.target.files[0] })
     }
 
     const handleTextChange = (e) => {
@@ -18,10 +18,11 @@ export default function SharePost({ onShare }) {
     const handleSubmit = (e) => {
         e.preventDefault()
         // console.log(formData)
-        onShare(formData)
+        const data = new FormData(formData);
+        onShare(data)
     }
 
-    const profile = useContext(ProfileContext)
+    const profile = useContext(ProfileContext)  // accessing profile data using ProfileContext
     return (
         <div className="share-container custom-shodow-b p-4 rounded-xl">
             <form onSubmit={handleSubmit}>

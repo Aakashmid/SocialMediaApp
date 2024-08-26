@@ -38,7 +38,7 @@ export default function Topbar() {
                         </button>
                     </div>
                     <div className="profileImg ">{/*show when user is logged in */}
-                        <img src={profile.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border" />
+                        <img src={profile.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border border-gray-400" />
                     </div>
                 </div>
 

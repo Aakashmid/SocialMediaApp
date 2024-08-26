@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
-import api from "../Api";
 import { Apps, Cancel } from "@mui/icons-material";
 import Topbar from "../Components/Topbar";
 

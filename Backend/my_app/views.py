@@ -102,13 +102,13 @@ class FollowView(ViewSet):
     
     def followers(self,request,pk):
         toFollwoing=get_object_or_404(Profile,id=pk)
-        data=toFollwoing.followers
+        data=[obj.follower for obj  in toFollwoing.followers.all()]
         serialize=ProfileSerializer(data,many=True)
         return Response(serialize.data)
     
     def followings(self,request,pk):
         follower=get_object_or_404(Profile,id=pk)
-        data=follower.followings
+        data=[obj.toFollowing for obj in follower.followings.all()]
         serialize=ProfileSerializer(data,many=True)
         return Response(serialize.data)
         

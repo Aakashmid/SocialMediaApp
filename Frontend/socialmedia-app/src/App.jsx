@@ -1,10 +1,11 @@
+import ProtectedRoute from './Components/Protectedroute';
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
+
 import Home from './pages/Home';
-import ProtectedRoute from './Components/Protectedroute';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import { Navigate } from 'react-router-dom';
@@ -14,22 +15,26 @@ import { TOKEN } from './Components/constants';
 import api from './Api';
 
 function App() {
-  // const [profileData, setProfileData] = useState()
-  // const fetchProfileData = async () => {
-  //   if (localStorage.getItem(TOKEN)) {
-  //     const res = await api.get('api/profile/')
-  //     if (res.status === 200) {
-  //       setProfileData(res.data)
-  //     }
-  //     else {
-  //       console.error(res.statusText)
-  //     }
-  //   }
-  // }
+  const [profileData, setProfileData] = useState({})
+  const token = localStorage.getItem(TOKEN);
+  const fetchProfileData = async () => {
+    if (token) {
+      try {
+        const res = await api.get('api/profile/');
+        if (res.status === 200) {
+          setProfileData(res.data);
+        } else {
+          console.error('Error fetching profile data:', res.status);
+        }
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    }
+  }
 
-  // useEffect(() => {
-  //   fetchProfileData()
-  // }, [])
+  useEffect(() => {
+    fetchProfileData()
+  }, [token])
 
   const Logout = () => {
     localStorage.clear()

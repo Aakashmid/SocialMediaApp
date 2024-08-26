@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Post from "./Post";
 import SharePost from "./SharePost";
 import api from "../Api";
-import { ErrorOutline } from "@mui/icons-material";
 
 
 export default function Feed({ currentUser }) {
