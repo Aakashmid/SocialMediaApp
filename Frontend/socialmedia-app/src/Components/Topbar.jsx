@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { SearchRounded, AccountCircleRounded, MessageRounded, PersonRounded, NotificationsRounded } from '@mui/icons-material/';
+import { useContext } from "react";
+import { ProfileContext } from "./context";
 
 export default function Topbar() {
+    const profile = useContext(ProfileContext)
     return (
         <header>
-
-            <div className="topbarContainer bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2">
+            <div className="topbarContainer bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
                 <div className="logo">
                     <Link className="text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
                 </div>
@@ -36,8 +38,7 @@ export default function Topbar() {
                         </button>
                     </div>
                     <div className="profileImg ">{/*show when user is logged in */}
-                        {/* <img src="assets/profileImg" alt="" className="" /> */}
-                        <AccountCircleRounded className="" htmlColor="white" fontSize="large" />
+                        <img src={profile.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border" />
                     </div>
                 </div>
 

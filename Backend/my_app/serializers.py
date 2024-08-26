@@ -26,7 +26,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_posts_count(self,profile):
         return profile.posts.count()
     def get_full_name(self,profile):
-        return profile.user.first_name + ' ' +profile.user.last_name
+        return profile.user.first_name + ' ' + profile.user.last_name
 
     def get_username(self,profile):
         return profile.user.username

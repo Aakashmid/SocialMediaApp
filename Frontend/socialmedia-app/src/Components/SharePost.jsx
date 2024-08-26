@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { PermMedia } from '@mui/icons-material'
+import { ProfileContext } from "./context"
 
-export default function SharePost({ currentUser, onShare }) {
+export default function SharePost({ onShare }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })
 
     const handleFileChange = (e) => {
@@ -20,13 +21,13 @@ export default function SharePost({ currentUser, onShare }) {
         onShare(formData)
     }
 
-    // console.log(currentUser)
+    const profile = useContext(ProfileContext)
     return (
         <div className="share-container custom-shodow-b p-4 rounded-xl">
             <form onSubmit={handleSubmit}>
                 <div className="share-top flex space-x-2">
-                    <img src={currentUser.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border" />
-                    <input type="text" name="text" id="text" value={formData.text} onChange={handleTextChange} className="focus:outline-none text-[15px] p-1 w-10/12" placeholder={`What is in your mind ${currentUser.username} ?`} />
+                    <img src={profile.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border" />
+                    <input type="text" name="text" id="text" value={formData.text} onChange={handleTextChange} className="focus:outline-none text-[15px] p-1 w-10/12" placeholder={`What is in your mind ${profile.username} ?`} />
                 </div>
                 <hr className="w-[95%] my-5 mx-auto bg-gray-400 h-[2px]" />
                 <div className="share-bottom flex">
