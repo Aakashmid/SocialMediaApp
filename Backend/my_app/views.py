@@ -1,12 +1,16 @@
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ModelViewSet,ViewSet
+from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView,RetrieveAPIView
+from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter
+from .myfilters import ProfileFilter
+
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
 from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
@@ -49,8 +53,10 @@ class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
 
-    search_fields=['bio','username']  # search profiles by username or bio
-    filter_backends=[SearchFilter]
+    # search_fields=['bio','username']  # search profiles by username or bio
+    filter_backends=[filters.DjangoFilterBackend]
+    filterset_class= ProfileFilter
+    renderer_classes=[JSONRenderer]
 
 # profile view for getting profile data and updating profile
 class ProfileDetailView(RetrieveUpdateAPIView):
@@ -93,6 +99,26 @@ class FollowView(ViewSet):
         else:
             isfollowing=False
         return Response({'isFollowing':isfollowing})
+    
+    def followers(self,request,pk):
+        toFollwoing=get_object_or_404(Profile,id=pk)
+        data=toFollwoing.followers
+        serialize=ProfileSerializer(data,many=True)
+        return Response(serialize.data)
+    
+    def followings(self,request,pk):
+        follower=get_object_or_404(Profile,id=pk)
+        data=follower.followings
+        serialize=ProfileSerializer(data,many=True)
+        return Response(serialize.data)
+        
+    
+# class Followers(ListAPIView):
+#     serializer_class=ProfileSerializer
+#     def get_queryset(self):
+#         toFollowing=get_object_or_404(Profile,id=self.kwargs.get('pk'))
+#         queryset=
+#         return queryset
 
 class ProfilePostsView(ListAPIView):
     serializer_class=PostSerializer
@@ -142,11 +168,7 @@ class  CommentListCreate(ListCreateAPIView):
         # Save the comment with the related post, author, and parent (if provided)
         serializer.save(post=post, author=user, parent=parent)
         
-# class FollowersList(ListAPIView):
-#     serializer_class=ProfileSerializer
-#     def get_queryset(self):
-#         querse
-#         return 
+
 
 # def custom_404_view(request, exception):
 #     return Response({'error':"The endpoint you are looking for is incorrect !"})
