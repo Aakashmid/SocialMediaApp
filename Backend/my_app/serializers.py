@@ -19,6 +19,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     followers=serializers.SerializerMethodField()
     followings=serializers.SerializerMethodField()
     isFollow=serializers.SerializerMethodField()
+    profileImg=serializers.SerializerMethodField()
     class Meta:
         model=Profile
         fields=['id','bio','username','profileImg','full_name','posts_count','date_joined','isFollow','followers','followings'] 
@@ -40,6 +41,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_isFollow(self,profile):
         # return True if Follower.objects.filter(Author=profile,follower=self.request.user.profile) else False
         return True
+    def get_profileImg(self, profile):
+        request = self.context.get('request')
+        if profile.profileImg:
+            return request.build_absolute_uri(profile.profileImg.url)
+        return None
     
 # PostSerializer.author=ProfileSerializer()
 # PostSerializer.Meta.fields=['author','id','likes','comments']

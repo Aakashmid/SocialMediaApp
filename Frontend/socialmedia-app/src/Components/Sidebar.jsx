@@ -8,7 +8,7 @@ export default function Sidebar() {
   const profile = useContext(ProfileContext)
   const getFollowings = async () => {
     try {
-      const res = await api.get(`api/followings/4`)
+      const res = await api.get(`api/followings/${profile.id}`)
       if (res.status === 200) {
         setFollowings(res.data)
         console.log(res.data)
@@ -25,17 +25,19 @@ export default function Sidebar() {
       <li className="sidebarFriend">
         <Link to={'/'} className=" flex space-x-4 items-center p-1">
           <img src={user.profileImg} alt=".." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
-          <img src={user.profileImg} alt=".." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
           <span className="sidebarFriendName">{user.username}</span>
         </Link>
       </li>)
   }
 
   useEffect(() => {
-    getFollowings()
+    if (profile.id) {  // if profile object exist then call getFollowings functions
+      getFollowings()
+    }
   }, [])
+
   return (
-    <div className="sidebar-wrapper py-3  px-5 h-[100vh] overflow-y-scroll custom-scrollbar ">
+    <div className="sidebar-wrapper py-3  px-5  h-[100vh] overflow-y-scroll custom-scrollbar ">
       <ul className="sideBar-list flex flex-col space-y-1">
         <li className="hover:bg-blue-200">
           <Link to={'/'} className="py-[5px] flex items-center space-x-4" ><RssFeed /> <span className="lg:text-lg">Feed</span></Link>
@@ -65,16 +67,16 @@ export default function Sidebar() {
           <Link to={'/'} className="py-[5px] flex items-center space-x-4"><School /><span className="lg:text-lg">Courses</span></Link>
         </li>
       </ul>
-      <button className="my-4 py-[6px] px-10 font-medium  rounded bg-gray-100 ">Show more</button>
-      <hr className="bg-gray-300 h-[2px]" />
+      <hr className="bg-gray-300 h-[2px] my-2" />
       <div className="friends-list mt-4">
         <h2 className="text-lg font-medium">Followings</h2>
+        <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
+          {followings.map((user) => {
+            return <Following user={user} key={user.id} />
+          })}
+        </ul>
+        <button className="my-4 py-[6px] px-10 font-medium  rounded bg-gray-100 ">Show more</button>
       </div>
-      <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
-        {followings.map((user) => {
-          return <Following user={user} key={user.id} />
-        })}
-      </ul>
 
     </div>
   )

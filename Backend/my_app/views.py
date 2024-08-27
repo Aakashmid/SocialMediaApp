@@ -53,10 +53,9 @@ class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
 
-    # search_fields=['bio','username']  # search profiles by username or bio
-    filter_backends=[filters.DjangoFilterBackend]
-    filterset_class= ProfileFilter
-    renderer_classes=[JSONRenderer]
+    search_fields=['bio','user__username']  # search profiles by username or bio
+    filter_backends=[SearchFilter]
+    # renderer_classes=[JSONRenderer]
 
 # profile view for getting profile data and updating profile
 class ProfileDetailView(RetrieveUpdateAPIView):
@@ -103,13 +102,13 @@ class FollowView(ViewSet):
     def followers(self,request,pk):
         toFollwoing=get_object_or_404(Profile,id=pk)
         data=[obj.follower for obj  in toFollwoing.followers.all()]
-        serialize=ProfileSerializer(data,many=True)
+        serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
     
     def followings(self,request,pk):
         follower=get_object_or_404(Profile,id=pk)
         data=[obj.toFollowing for obj in follower.followings.all()]
-        serialize=ProfileSerializer(data,many=True)
+        serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
         
     
