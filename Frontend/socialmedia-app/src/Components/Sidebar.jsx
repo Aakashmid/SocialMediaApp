@@ -6,6 +6,15 @@ import { ProfileContext } from "./context"
 export default function Sidebar() {
   const [followings, setFollowings] = useState([])
   const profile = useContext(ProfileContext)
+  // const getFollowings = () => {
+  //   try {
+  //     api.get(`api/followings/${profile.id}`).then((res) => setFollowings(res.data)).catch((error) => console.error(error))
+  //   } catch (error) {
+  //     console.error("Failed to fetch followings : ", error)
+  //   }
+  //   // finally {
+  //   // }
+  // }
   const getFollowings = async () => {
     try {
       const res = await api.get(`api/followings/${profile.id}`)
@@ -34,7 +43,7 @@ export default function Sidebar() {
     if (profile.id) {  // if profile object exist then call getFollowings functions
       getFollowings()
     }
-  }, [])
+  }, [profile])
 
   return (
     <div className="sidebar-wrapper py-3  px-5  h-[100vh] overflow-y-scroll custom-scrollbar ">

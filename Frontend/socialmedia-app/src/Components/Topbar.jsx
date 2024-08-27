@@ -1,21 +1,22 @@
 import { Link } from "react-router-dom";
-import { SearchRounded, AccountCircleRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp } from '@mui/icons-material/';
+import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp } from '@mui/icons-material/';
 import { useContext, useState } from "react";
 import { ProfileContext } from "./context";
 
-const ProfilePopover = () => {
-    return <>
-        <div className="flex-col flex space-y-1 bg-white p-2 border rounded border-gray-200">
-            <Link to={'/profile'} className="p-1 flex items-center space-x-2 hover:text-blue-500 active:text-blue-500"><PersonOutline /><span className="">Profile</span></Link>
-            <hr />
-            <Link to={'/logout'} className="p-1 flex items-center space-x-2 hover:text-red-500 active:text-red-500"><ExitToApp /><span className="">Logout</span></Link>
-        </div>
-    </>
-}
 
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);
     const profile = useContext(ProfileContext)
+
+    const ProfilePopover = () => {
+        return <>
+            <div className="flex-col flex space-y-1 bg-white p-2 border-2 shadow rounded border-gray-200">
+                <Link to={`/profile/${profile.id}`} className="p-1 flex items-center space-x-2 hover:text-blue-500 active:text-blue-500"><PersonOutline /><span className="">Profile</span></Link>
+                <hr />
+                <Link to={'/logout'} className="p-1 flex items-center space-x-2 hover:text-red-500 active:text-red-500"><ExitToApp /><span className="">Logout</span></Link>
+            </div>
+        </>
+    }
     return (
         <header>
             <div className="topbarContainer bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
@@ -25,11 +26,11 @@ export default function Topbar() {
                 <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
                     <div className="searchBar bg-white rounded-[30px] px-2  flex items-center md:w-[300px] lg:w-[400px] xl:w-[500px]">
                         {/* search bar form */}
-                        <form action="#">
-                            <span className="py-1 cursor-pointer px-2">
-                                <SearchRounded />
+                        <form action="#" className="w-full flex items-center">
+                            <span className="py-1  cursor-pointer px-2">
+                                <SearchRounded className="hover:text-blue-800" />
                             </span>
-                            <input type="text" name="query" className="search-query bg-transparent focus:outline-none px-2 text-sm flex-grow py-[6px]" placeholder="Search for friend or post" />
+                            <input type="text" name="query" className="search-query bg-transparent focus:outline-none px-2 text-sm py-[6px] flex-grow " placeholder="Search post or friend  " />
                         </form>
                     </div>
                     <div className="topbar-links flex space-x-3 text-white">

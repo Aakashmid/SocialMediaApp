@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { ProfileContext } from './Components/context';
 import { TOKEN } from './Components/constants';
 import api from './Api';
+import { Profile } from './pages/Profile';
 
 function App() {
   const [profileData, setProfileData] = useState({})
@@ -56,6 +57,7 @@ function App() {
                 <Home />
               </ProtectedRoute>
             } />
+            <Route path='/profile/:id' element={<Profile />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<RegisterAndLogout />} />
             <Route path='/logout' element={<Logout />} />
