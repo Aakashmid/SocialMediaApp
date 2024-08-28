@@ -5,15 +5,12 @@ import {
   Route
 } from 'react-router-dom';
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Registration from './pages/Registration';
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ProfileContext } from './Components/context';
 import { TOKEN } from './Components/constants';
 import api from './Api';
-import { Profile } from './pages/Profile';
+import { Login, Profile, Registration, Home } from './Components/index'
 
 function App() {
   const [profileData, setProfileData] = useState({})

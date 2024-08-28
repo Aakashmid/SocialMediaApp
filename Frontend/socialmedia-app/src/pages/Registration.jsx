@@ -1,6 +1,5 @@
 import LoginForm from "../Components/LoginForm";
 
-
 export default function Registration() {
     return (
         <div className="registration-page min-h-[100vh] bg-gray-100 flex">

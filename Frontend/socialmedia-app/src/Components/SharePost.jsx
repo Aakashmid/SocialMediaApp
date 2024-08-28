@@ -9,7 +9,7 @@ export default function SharePost({ onShare }) {
         setFormData({ ...formData, [e.target.name]: e.target.files[0] })
     }
 
-    const handleChange = (e) => {
+    const handleChange = (e) => { // post description
         setFormData({ ...formData, [e.target.name]: e.target.value })
         // console.log(formData);
 

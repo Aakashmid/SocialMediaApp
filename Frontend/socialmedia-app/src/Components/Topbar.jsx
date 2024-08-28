@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp } from '@mui/icons-material/';
+import Sidebar from "./Sidebar";
+import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
 import { useContext, useState } from "react";
 import { ProfileContext } from "./context";
-
+import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(false);
     const profile = useContext(ProfileContext)
 
     const ProfilePopover = () => {
@@ -17,11 +19,17 @@ export default function Topbar() {
             </div>
         </>
     }
-    return (
+    return (<>
         <header>
-            <div className="topbarContainer bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
-                <div className="logo">
-                    <Link className="text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
+            <div className="topbarContainer fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
+                <div className='flex items-center topbar-left'>
+                    <div className="lg:hidden mr-2">
+                        {showSidebar ? <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>
+                            : <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><MenuIcon htmlColor="white" /></span>
+                        }
+                    </div>
+
+                    <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
                 </div>
                 <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
                     <div className="searchBar bg-white rounded-[30px] px-2  flex items-center md:w-[300px] lg:w-[400px] xl:w-[500px]">
@@ -60,6 +68,16 @@ export default function Topbar() {
                 </div>
 
             </div>
+            <div className="w-full h-[50px]"></div>
         </header>
+
+        {/* for small screen -  sidebar */}
+        {showSidebar &&
+            <div className="sidebar  bg-white  w-[60%] sm:w-[45%] md:[40%] fixed lg:hidden top-[52px] z-40">
+                <><Sidebar /></>
+            </div>
+        }
+
+    </>
     )
 }
