@@ -21,7 +21,7 @@ export default function Topbar() {
     }
     return (<>
         <header>
-            <div className="topbarContainer fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
+            <div className="topbarContainer z-50 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
                 <div className='flex items-center topbar-left'>
                     <div className="lg:hidden mr-2">
                         {showSidebar ? <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>
@@ -73,7 +73,7 @@ export default function Topbar() {
 
         {/* for small screen -  sidebar */}
         {showSidebar &&
-            <div className="sidebar  bg-white  w-[60%] sm:w-[45%] md:[40%] fixed lg:hidden top-[52px] z-40">
+            <div className="sidebar  bg-white  w-[60%] sm:w-[45%] md:[40%] fixed lg:hidden top-[50px] z-40">
                 <><Sidebar /></>
             </div>
         }

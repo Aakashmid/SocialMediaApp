@@ -10,10 +10,10 @@ export default function Home({ User }) {
     <>
       <Topbar />
       <div className="home-page-container lg:flex ">
-        <div className="hidden lg:block  flex-[2] xl:flex-[2.5] ">
+        <div className="hidden lg:block">
           <Sidebar />
         </div>
-        <div className="md:w-[650px] mx-auto lg:flex-[5]">
+        <div className="md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%] ">
           <Feed currentUser={User} />
         </div>
         <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
