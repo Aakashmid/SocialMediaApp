@@ -73,9 +73,7 @@ export default function Topbar() {
 
         {/* for small screen -  sidebar */}
         {showSidebar &&
-            <div className="sidebar  bg-white  w-[60%] sm:w-[45%] md:[40%] fixed lg:hidden top-[50px] z-40">
-                <><Sidebar /></>
-            </div>
+            <Sidebar />
         }
 
     </>

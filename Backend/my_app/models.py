@@ -20,7 +20,7 @@ class Post(models.Model):
     postImg=models.ImageField(upload_to='post_images/',null=True ,blank=True)
     publish_time=models.DateTimeField(auto_now_add=True)
     updated_time=models.DateTimeField(auto_now_add=True)
-    isLiked=models.BooleanField(default=False)
+    # isLiked=models.BooleanField(default=False)
     
 
     def __str__(self) -> str:
@@ -31,7 +31,7 @@ class Comment(models.Model):
     post=models.ForeignKey(Post,related_name='comments',on_delete=models.CASCADE)
     parent=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
     text=models.CharField(max_length=200)
-    isLiked=models.BooleanField(default=False)
+    # isLiked=models.BooleanField(default=False)
     time=models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

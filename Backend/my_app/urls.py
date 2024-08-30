@@ -11,6 +11,14 @@ router.register('posts',views.PostviewSet,basename='Post')
 urlpatterns = [
     path('', include(router.urls)),
 
+#    GET /posts/ (List all posts)
+#    GET /posts/{pk}/ (Retrieve a specific post)
+#    POST /posts/ (Create a new post)
+#    PUT /posts/{pk}/ (Update a post)
+#    PATCH /posts/{pk}/ (Partial update a post)
+#    DELETE /posts/{pk}/ (Delete a post)
+#    POST /posts/{pk}/like_post/ (Like/Unlike a post)
+
     path('profiles/',views.ProfileListView.as_view(),name='profiles'),
     path('profile/',views.ProfileDetailView.as_view(),name='profile'),
     path('profile/<int:profile_id>/',views.ProfileDetailView.as_view(),name='profile'), 
@@ -18,12 +26,11 @@ urlpatterns = [
     
     path('follow/<int:pk>/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
     path('unfollow/<int:pk>/',views.FollowView.as_view({'post':'unfollow'}),name='unfollow'),
-    path('isFollowing/<int:pk>/',views.FollowView.as_view({'get':'isFollowing'}),name='isfollowing'),
     path('followers/<int:pk>/',views.FollowView.as_view({'get':'followers'}),name='followers'),
     path('followings/<int:pk>/',views.FollowView.as_view({'get':'followings'}),name='followings'),
 
     path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
-    path('comments/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='post-comments'),
+    path('replies/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
     
     # path('followers/<int:userId>/',views.FollowersList.as_view(),name='user-followers'),  # here userId is profile.id
     # path('followings/<int:userId>/',views.FollowingsList.as_view(),name='user-followings'),  # here userId is profile.id

@@ -7,10 +7,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView,RetrieveAPIView
-from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter
-from .myfilters import ProfileFilter
 
+from rest_framework.decorators import action
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
 from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
@@ -90,35 +90,20 @@ class FollowView(ViewSet):
         follower=self.request.user.profile
         Follower.objects.get(toFollowing=toUnFollow,follower=follower).delete()
         return Response({'message':'unfollowed'})
-    def isFollowing(self,request,pk):
-        toFollwoing=get_object_or_404(Profile,id=pk)
-        follower=self.request.user.profile
-        if Follower.objects.filter(toFollowing=toFollwoing,follower=follower).exists():
-            isfollowing=True
-        else:
-            isfollowing=False
-        return Response({'isFollowing':isfollowing})
     
+    # get all followers
     def followers(self,request,pk):
         toFollwoing=get_object_or_404(Profile,id=pk)
         data=[obj.follower for obj  in toFollwoing.followers.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
-    
+    # get all followings
     def followings(self,request,pk):
         follower=get_object_or_404(Profile,id=pk)
         data=[obj.toFollowing for obj in follower.followings.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
         
-    
-# class Followers(ListAPIView):
-#     serializer_class=ProfileSerializer
-#     def get_queryset(self):
-#         toFollowing=get_object_or_404(Profile,id=self.kwargs.get('pk'))
-#         queryset=
-#         return queryset
-
 class ProfilePostsView(ListAPIView):
     serializer_class=PostSerializer
     def get_queryset(self):
@@ -126,33 +111,50 @@ class ProfilePostsView(ListAPIView):
         queryset=Post.objects.filter(author=creator) #filter post by author
         return queryset
 
-class PostviewSet(ModelViewSet):
-    serializer_class=PostSerializer
-    queryset=Post.objects.all()
 
-    search_fields=['text','author']
-    filter_backends=[SearchFilter]
+class PostviewSet(ModelViewSet):
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+    search_fields = ['text', 'author']
+    filter_backends = [SearchFilter]
+
     def perform_create(self, serializer):
         '''
-        assining author of post  current user 
+        Assigning author of post  current user
         '''
         if serializer.is_valid():
-            author=get_object_or_404(Profile,user=self.request.user)
+            author = get_object_or_404(Profile, user=self.request.user)
             serializer.save(author=author)
+
+    @action(detail=True, methods=['post'])
+    def like_post(self, request, pk=None):
+        '''
+        Custom action to like a post
+        '''
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user.profile
+
+        if Like.objects.filter(user=user,post=post).first() is not None:
+            Like.objects.get(user=user,post=post).delete()
+            liked = False
+        else:
+            Like.objects.create(user=user,post=post)  # Create a new Like object
+            liked = True
+        return Response({'liked': liked}, status=status.HTTP_200_OK)
             
 
 class  CommentListCreate(ListCreateAPIView):
     serializer_class=CommentSerializer
     def get_queryset(self):
         """
-        This view  return a list of all comments or replies of a post or comment , specified postId in url
+        This view  return a list of all comments or replies on a post or comment , specified postId in url and commentId 
         """
         postId=self.kwargs['postId']
         commentId=self.kwargs.get('commentId',None)
         if commentId is None:
-            queryset=Comment.objects.filter(post__id=postId)
+            queryset=Comment.objects.filter(post__id=postId) # fetch all comments of a post 
         else:
-            queryset=Comment.objects.filter(post__id=postId,parent=self.kwargs['commentId'])
+            queryset=Comment.objects.filter(post__id=postId,parent=self.kwargs['commentId']) # fetch replies of comment 
 
         return queryset
     
@@ -160,13 +162,16 @@ class  CommentListCreate(ListCreateAPIView):
     def perform_create(self, serializer):
         post = get_object_or_404(Post, id=self.kwargs['postId'])  # Get the Post by postId
         user = get_object_or_404(Profile, user=self.request.user)  # Get the Profile of the current user
-
         if self.kwargs.get('commentId', None) is not None:
             parent = get_object_or_404(Comment, id=self.kwargs['commentId'])
-
+            serializer.save(post=post, author=user, parent=parent)
         # Save the comment with the related post, author, and parent (if provided)
-        serializer.save(post=post, author=user, parent=parent)
-        
+        else:
+            serializer.save(post=post, user=user)
+
+
+class LikeView():
+    pass
 
 
 # def custom_404_view(request, exception):

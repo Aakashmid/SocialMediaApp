@@ -18,11 +18,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     full_name=serializers.SerializerMethodField()
     followers=serializers.SerializerMethodField()
     followings=serializers.SerializerMethodField()
-    isFollow=serializers.SerializerMethodField()
+    isFollowed=serializers.SerializerMethodField()
     profileImg=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','username','profileImg','full_name','posts_count','date_joined','isFollow','followers','followings'] 
+        fields=['id','bio','username','profileImg','full_name','posts_count','date_joined','isFollowed','followers','followings'] 
     
     def get_posts_count(self,profile):
         return profile.posts.count()
@@ -38,9 +38,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_followings(self,profile):
         return profile.followings.count()
     
-    def get_isFollow(self,profile):
-        # return True if Follower.objects.filter(Author=profile,follower=self.request.user.profile) else False
-        return True
+    def get_isFollowed(self,profile): # find where a profile is followed by current user
+        request= self.context.get('request')
+        if request.user.is_anonymous:  # this line is just for development 
+            return False 
+        return True if Follower.objects.filter(Author=profile,follower=request.user.profile)   else False
     def get_profileImg(self, profile):
         request = self.context.get('request')
         if profile.profileImg:
@@ -53,36 +55,56 @@ class ProfileSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     comments=serializers.SerializerMethodField()
     likes=serializers.SerializerMethodField()
+    isLiked=serializers.SerializerMethodField()
     author=ProfileSerializer(read_only=True)
     class Meta:
         model=Post
         fields=['id','author','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
         extra_kwargs={'author':{'read_only':True},'isLiked':{'read_only':True}}
     
-    def get_comments(self,obj):
-        return obj.comments.count()
+    def get_comments(self,post):
+        return post.comments.count()
     
-    def get_likes(self,obj):
-        return obj.likes.count()
+    def get_likes(self,post):
+        return post.likes.count()
+    def get_isLiked(self,post):
+        '''get whether comment is liked by current user of not'''
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        elif Like.objects.filter(post=post, user=request.user.profile).exists():
+            return True
+        return False
 # ------------------------------------------------------------------------- #
 
 class CommentSerializer(serializers.ModelSerializer):
     replies=serializers.SerializerMethodField()
     likes=serializers.SerializerMethodField()
-    author=ProfileSerializer(read_only=True)
+    isLiked=serializers.SerializerMethodField()
+    user=ProfileSerializer(read_only=True)
     class Meta:
         model=Comment
-        fields=['id','author','post','text','parent','replies','likes','isLiked']
-        extra_kwargs={'author':{'read_only':True},'parent':{'read_only':True},'post':{'read_only':True}}
+        fields=['id','user','post','text','parent','replies','likes','isLiked']
+        extra_kwargs={'user':{'read_only':True},'parent':{'read_only':True},'post':{'read_only':True}}
 
-    def get_replies(self,obj):
+    def get_replies(self,comment):
         '''get replies count'''
-        replies=Comment.objects.filter(parent=obj).count()
+        replies=Comment.objects.filter(parent=comment).count()
         return replies
     
-    def get_likes(self,obj):
+    def get_likes(self,comment):
         '''get likes count'''
-        likes=Like.objects.filter(Comment=obj).count()
+        likes=Like.objects.filter(Comment=comment).count()
         return likes
+    
+    def get_isLiked(self,comment):
+        '''get whether comment is liked by current user of not'''
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        elif Like.objects.filter(Comment=comment, user=request.user.profile).exists():
+            return True
+        return False
+
     
 # ------------------------------------------------------------------------- #
