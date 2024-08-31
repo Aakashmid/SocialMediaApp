@@ -36,8 +36,8 @@ export default function Feed({ currentUser }) {
     return (
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
-                <SharePost currentUser={currentUser} onShare={creatPost} />
-                <div className="posts mt-8">
+                <SharePost onShare={creatPost} />
+                <div className="posts mt-8 flex flex-col space-y-4">
                     {posts.map((post) => {
                         return <Post key={post.id} post={post} />
                     })}

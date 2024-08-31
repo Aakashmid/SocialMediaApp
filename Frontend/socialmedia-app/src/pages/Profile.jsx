@@ -5,13 +5,17 @@ import SharePost from '../Components/SharePost'
 import { ProfileContext } from '../Components/context'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
+import { Close } from '@mui/icons-material'
 
 const Profile = () => {
+    const [profile, setProfile] = useState({});
+    const [isCUProfile, setisCUProfile] = useState(false); // is currentuserprofie
+    const [showShare, setShowShare] = useState(false);
+
+
     const { id } = useParams()
     const cu_profile = useContext(ProfileContext)  // get current user profile data
 
-    let [profile, setProfile] = useState({});
-    const [isCUProfile, setisCUProfile] = useState(false) // is currentuserprofie
 
     const getProfileData = async () => {
         try {
@@ -76,14 +80,23 @@ const Profile = () => {
                             </div>
                         </div>
                         {isCUProfile &&
-                            <div className="p-4">
-                                <SharePost />
+                            <div className='px-4'>
+                                <div className="flex justify-between py-2 mb-4">
+                                    <button className='px-4 py-1 bg-gray-700 rounded text-white w-[45%]'>Edit Profile</button>
+                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className='px-4 py-1 bg-gray-700 rounded text-white w-[45%]'>New Post</button>}
+                                </div>
+                                {showShare &&
+                                    <div className="relative">
+                                        <span onClick={() => setShowShare(!showShare)}><Close /></span>
+                                        <SharePost />
+                                    </div>}
                             </div>
                         }
                         <div className="profile-feed-contaier p-4">
-                            <div className="border-b float-left">
-                                <button className=''></button>
-                                <button className=''></button>
+                            <div className="border-b  flex justify-between px-14 py-2">
+                                <button className='text-lg '>Posts</button>
+                                <button className='text-lg '>Videos</button>
+                                <button className='text-lg '>Saved</button>
                             </div>
                             <div className="profile-feed">
                                 <div className="posts-container">

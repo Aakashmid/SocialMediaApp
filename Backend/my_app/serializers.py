@@ -42,7 +42,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         request= self.context.get('request')
         if request.user.is_anonymous:  # this line is just for development 
             return False 
-        return True if Follower.objects.filter(Author=profile,follower=request.user.profile)   else False
+        return True if Follower.objects.filter(toFollowing=profile,follower=request.user.profile)   else False
     def get_profileImg(self, profile):
         request = self.context.get('request')
         if profile.profileImg:

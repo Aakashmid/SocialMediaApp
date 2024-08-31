@@ -14,7 +14,7 @@ export default function Home({ User }) {
           <Sidebar />
         </div>
         <div className="md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%] ">
-          <Feed currentUser={User} />
+          <Feed />
         </div>
         <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
           <Rightbar />

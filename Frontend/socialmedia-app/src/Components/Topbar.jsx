@@ -52,6 +52,7 @@ export default function Topbar() {
                         <li className="topbar-icon cursor-pointer"><MessageRounded htmlColor="white" className="hover:text-blue-50 " /></li>
                         <li className="topbar-icon cursor-pointer"><NotificationsRounded htmlColor="white" className="hover:text-blue-50 " /></li>
                     </ul>
+
                     <div className="search-btn md:hidden">
                         <button className="">
                             <SearchRounded htmlColor="white" fontSize="large" />
