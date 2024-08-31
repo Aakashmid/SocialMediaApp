@@ -6,11 +6,15 @@ import { ProfileContext } from '../Components/context'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
+import Loader from '../Components/Loader'
+import ProfilePosts from '../Components/profile/ProfilePosts'
 
 const Profile = () => {
     const [profile, setProfile] = useState({});
     const [isCUProfile, setisCUProfile] = useState(false); // is currentuserprofie
     const [showShare, setShowShare] = useState(false);
+    const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
+    const [profilePosts, setProfilePosts] = useState([]);
 
 
     const { id } = useParams()
@@ -30,6 +34,18 @@ const Profile = () => {
         }
     }
 
+    const getProfilePosts = async () => {
+        try {
+            const res = await api.get(`api/profile/${id}/posts`)
+            if (res.status === 200) {
+                setProfilePosts(res.data)
+            } else {
+                console.error('Error fetching  posts:', res.status);
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
     // fetch profile data if the id in the url is not the same as the logged in user's id
     useEffect(() => {
         if (cu_profile.id != id) {
@@ -39,7 +55,12 @@ const Profile = () => {
             setisCUProfile(true);
             setProfile(cu_profile);
         }
-    }, [])
+        getProfilePosts()
+    }, [id, cu_profile])
+
+    const Underline = () => {  // underlineComponent
+        return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
+    }
     return (
         <>
             <Topbar />
@@ -51,7 +72,7 @@ const Profile = () => {
                     <div className="profile-top">
                         <div className="profileCover relative">
                             <img src="/src/assets/post/3.jpeg" className='cover-img w-full h-36 object-cover' alt="..." />
-                            <img src="/src/assets/person/1.jpeg" className='profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white' alt="" />
+                            <img src={profile.profileImg} className='profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white' alt="" />
                             <div className="w-full h-16"></div>
                         </div>
                         <div className="profileInfo ">
@@ -81,28 +102,26 @@ const Profile = () => {
                         </div>
                         {isCUProfile &&
                             <div className='px-4'>
-                                <div className="flex justify-between py-2 mb-4">
-                                    <button className='px-4 py-1 bg-gray-700 rounded text-white w-[45%]'>Edit Profile</button>
-                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className='px-4 py-1 bg-gray-700 rounded text-white w-[45%]'>New Post</button>}
+                                <div className="grid grid-cols-2 gap-5 py-2 mb-4">
+                                    <button className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>Edit Profile</button>
+                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
                                 </div>
                                 {showShare &&
-                                    <div className="relative">
-                                        <span onClick={() => setShowShare(!showShare)}><Close /></span>
+                                    <div className="relative py-2">
+                                        <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute -top-4 bg-gray-50 p-1 hover:bg-gray-200'><Close /></span>
                                         <SharePost />
                                     </div>}
                             </div>
                         }
                         <div className="profile-feed-contaier p-4">
-                            <div className="border-b  flex justify-between px-14 py-2">
-                                <button className='text-lg '>Posts</button>
-                                <button className='text-lg '>Videos</button>
-                                <button className='text-lg '>Saved</button>
+                            <div className="border-b  flex justify-between  py-1">
+                                <button className={`text-lg px-12 relative ${feedOP === 'posts' && 'font-semibold'}`} onClick={() => setfeedOp('posts')}>Posts {feedOP === 'posts' && <Underline />}</button>
+                                <button className={`text-lg px-12 relative ${feedOP === 'videos' && 'font-semibold'}`} onClick={() => setfeedOp('videos')}>Videos {feedOP === 'videos' && <Underline />}</button>
+                                <button className={`text-lg px-12 relative ${feedOP === 'saved' && 'font-semibold'}`} onClick={() => setfeedOp('saved')}>Saved {feedOP === 'saved' && <Underline />}</button>
                             </div>
-                            <div className="profile-feed">
-                                <div className="posts-container">
-
-                                </div>
-                            </div>
+                        </div>
+                        <div className="profile-feed px-4">
+                            {feedOP === 'posts' && <ProfilePosts posts={profilePosts} />}
                         </div>
                     </div>
                 </div>

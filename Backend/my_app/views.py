@@ -168,11 +168,14 @@ class  CommentListCreate(ListCreateAPIView):
         # Save the comment with the related post, author, and parent (if provided)
         else:
             serializer.save(post=post, user=user)
-
-
-class LikeView():
-    pass
-
-
-# def custom_404_view(request, exception):
-#     return Response({'error':"The endpoint you are looking for is incorrect !"})
+    @action(detail=True,methods=['post'])       
+    def like_comment(self,request,pk=None):
+        comment=get_object_or_404(Comment,id=pk)
+        user=self.request.user.profile
+        if Like.objects.filter(user=user,Comment=comment).first() is  not None:
+            Like.objects.get(user=user,Comment=comment).delete()
+            liked=False
+        else:
+            Like.objects.create(user=user,Comment=comment)
+            liked=True
+        return Response({'liked':liked})
