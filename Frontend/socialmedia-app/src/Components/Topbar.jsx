@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import ProfilePopover from "./Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
 import { useContext, useState } from "react";
 import { ProfileContext } from "./context";
@@ -8,17 +9,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
+    const [isClickable, setIsClickable] = useState(false);
     const profile = useContext(ProfileContext)
-
-    const ProfilePopover = () => {
-        return <>
-            <div className="flex-col flex space-y-1 bg-white p-2 border-2 shadow rounded border-gray-200">
-                <Link to={`/profile/${profile.id}`} className="p-1 flex items-center space-x-2 hover:text-blue-500 active:text-blue-500"><PersonOutline /><span className="">Profile</span></Link>
-                <hr />
-                <Link to={'/logout'} className="p-1 flex items-center space-x-2 hover:text-red-500 active:text-red-500"><ExitToApp /><span className="">Logout</span></Link>
-            </div>
-        </>
-    }
     return (<>
         <header>
             <div className="topbarContainer z-50 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
@@ -58,12 +50,16 @@ export default function Topbar() {
                             <SearchRounded htmlColor="white" fontSize="large" />
                         </button>
                     </div>
+
                     <div className="profileImg ">{/*show when user is logged in */}
                         <img src={profile.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer" onClick={() => setShowProPopover(!showProPopover)} />
                         {/* <div className={`topbar-popover absolute right-2 top-[50px] w-36  lg:w-44 transform h-0 overflow-hidden`}> */}
-                        <div className={`topbar-popover absolute right-2 top-[50px] w-36  lg:w-44 transition-all duration-1000 overflow-hidden ${showProPopover ? 'h-fit' : 'h-0'}`}>
+                        <div className={`topbar-profile-popover absolute right-2 top-[50px] w-36  lg:w-44 transition-all duration-1000 overflow-hidden ${showProPopover ? 'h-fit' : 'h-0'}`}>
                             <ProfilePopover />
-                            {/* {showProPopover && <span className="w-full h-full top-0 left-0 fixed" onClick={() => setShowProPopover(!showProPopover)}></span>} */}
+                            {showProPopover && (
+                                <span className={`fixed inset-0 ${!isClickable ? 'pointer-events-none' : 'pointer-events-auto'} `} onClick={() => setShowProPopover(!showProPopover)} >
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>

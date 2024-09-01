@@ -1,26 +1,21 @@
 import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayCircleFilledOutlined, Group } from "@mui/icons-material"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../Api"
 import { ProfileContext } from "./context"
 export default function Sidebar() {
-  const [followings, setFollowings] = useState([])
+  const [followings, setFollowings] = useState([]);
+  const followingsRef = useRef([]);
   const profile = useContext(ProfileContext)
-  // const getFollowings = () => {
-  //   try {
-  //     api.get(`api/followings/${profile.id}`).then((res) => setFollowings(res.data)).catch((error) => console.error(error))
-  //   } catch (error) {
-  //     console.error("Failed to fetch followings : ", error)
-  //   }
-  //   // finally {
-  //   // }
-  // }
   const getFollowings = async () => {
     try {
       const res = await api.get(`api/followings/${profile.id}`)
       if (res.status === 200) {
-        setFollowings(res.data)
-        console.log(res.data)
+        followingsRef.current = res.data;
+        setFollowings(res.data);
+        console.log(res.data);
+      } else {
+        console.error("Failed to fetch followings : ", res.status)
       }
     } catch (error) {
       console.error("Failed to fetch followings : ", error)
@@ -39,9 +34,13 @@ export default function Sidebar() {
       </li>)
   }
 
+
+  // have to modify so that getFollowings function not run every time
   useEffect(() => {
-    if (profile.id) {  // if profile object exist then call getFollowings functions
+    if (profile.id && followingsRef.current.length === 0) {  // if profile object exist then call getFollowings functions
       getFollowings()
+    } else {
+      setFollowings(followingsRef.current)
     }
   }, [profile])
 

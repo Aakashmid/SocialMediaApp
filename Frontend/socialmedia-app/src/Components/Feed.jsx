@@ -18,6 +18,7 @@ export default function Feed({ currentUser }) {
         })
     }
 
+    // Create post
     const creatPost = (data) => {
         api.post('api/posts/', data).then((res) => {
             if (res.status === 201) {
@@ -31,7 +32,7 @@ export default function Feed({ currentUser }) {
 
     useEffect(() => {
         getPosts()
-        console.log(posts)
+        // console.log(posts)
     }, [])
     return (
         <div className="feed-container  p-5">

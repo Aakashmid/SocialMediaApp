@@ -36,6 +36,7 @@ function App() {
 
   const Logout = () => {
     localStorage.clear()
+    setProfileData({});
     return <Navigate to={'/login'} />
   }
 

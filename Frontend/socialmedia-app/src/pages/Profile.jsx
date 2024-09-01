@@ -46,6 +46,18 @@ const Profile = () => {
             console.error('Error fetching posts:', error);
         }
     }
+
+    const creatPost = (data) => {
+        api.post('api/posts/', data).then((res) => {
+            if (res.status === 201) {
+                console.log('post created ')
+                getProfilePosts()
+            }
+        }).catch((error) => {
+            console.log(error.response.data)
+        })
+    }
+
     // fetch profile data if the id in the url is not the same as the logged in user's id
     useEffect(() => {
         if (cu_profile.id != id) {
@@ -61,6 +73,7 @@ const Profile = () => {
     const Underline = () => {  // underlineComponent
         return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
     }
+
     return (
         <>
             <Topbar />
@@ -68,7 +81,7 @@ const Profile = () => {
                 <div className="hidden lg:block ">
                     <Sidebar />
                 </div>
-                <div className="profile-wrapper w-full flex-[5] lg:ml-[25%]">
+                <div className="profile-wrapper w-full md:w-[650px] md:mx-auto md:shadow-lg min-h-[100vh] flex-[5] lg:ml-[25%]">
                     <div className="profile-top">
                         <div className="profileCover relative">
                             <img src="/src/assets/post/3.jpeg" className='cover-img w-full h-36 object-cover' alt="..." />
@@ -101,7 +114,7 @@ const Profile = () => {
                             </div>
                         </div>
                         {isCUProfile &&
-                            <div className='px-4'>
+                            <div className='px-4 mx-auto lg:w-2/3 xl:2-1/2 '>
                                 <div className="grid grid-cols-2 gap-5 py-2 mb-4">
                                     <button className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>Edit Profile</button>
                                     {!showShare && <button onClick={() => setShowShare(!showShare)} className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
@@ -109,18 +122,20 @@ const Profile = () => {
                                 {showShare &&
                                     <div className="relative py-2">
                                         <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute -top-4 bg-gray-50 p-1 hover:bg-gray-200'><Close /></span>
-                                        <SharePost />
+                                        <SharePost onShare={creatPost} />
                                     </div>}
                             </div>
                         }
-                        <div className="profile-feed-contaier p-4">
-                            <div className="border-b  flex justify-between  py-1">
-                                <button className={`text-lg px-12 relative ${feedOP === 'posts' && 'font-semibold'}`} onClick={() => setfeedOp('posts')}>Posts {feedOP === 'posts' && <Underline />}</button>
-                                <button className={`text-lg px-12 relative ${feedOP === 'videos' && 'font-semibold'}`} onClick={() => setfeedOp('videos')}>Videos {feedOP === 'videos' && <Underline />}</button>
-                                <button className={`text-lg px-12 relative ${feedOP === 'saved' && 'font-semibold'}`} onClick={() => setfeedOp('saved')}>Saved {feedOP === 'saved' && <Underline />}</button>
+                    </div>
+                    <div className="profile-center lg:w-2/3">
+                        <div className="profile-feed-contaier px-4 pt-2 pb-1">
+                            <div className="border-b  flex justify-around  py-1">
+                                <button className={`text-lg px-6 relative ${feedOP === 'posts' && 'font-semibold'}`} onClick={() => setfeedOp('posts')}>Posts {feedOP === 'posts' && <Underline />}</button>
+                                <button className={`text-lg px-6 relative ${feedOP === 'videos' && 'font-semibold'}`} onClick={() => setfeedOp('videos')}>Videos {feedOP === 'videos' && <Underline />}</button>
+                                <button className={`text-lg px-6 relative ${feedOP === 'saved' && 'font-semibold'}`} onClick={() => setfeedOp('saved')}>Saved {feedOP === 'saved' && <Underline />}</button>
                             </div>
                         </div>
-                        <div className="profile-feed px-4">
+                        <div className="profile-feed ">
                             {feedOP === 'posts' && <ProfilePosts posts={profilePosts} />}
                         </div>
                     </div>
