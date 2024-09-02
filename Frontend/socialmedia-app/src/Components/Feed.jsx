@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Post from "./Post";
 import SharePost from "./SharePost";
 import api from "../Api";
+import Posts from "./Posts";
 
 
 export default function Feed({ currentUser }) {
@@ -38,10 +39,8 @@ export default function Feed({ currentUser }) {
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
                 <SharePost onShare={creatPost} />
-                <div className="posts mt-8 flex flex-col space-y-4">
-                    {posts.map((post) => {
-                        return <Post key={post.id} post={post} />
-                    })}
+                <div className="feed-posts">
+                    <Posts posts={posts} />
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Topbar from '../Components/Topbar'
 import SharePost from '../Components/SharePost'
 import { ProfileContext } from '../Components/context'
@@ -15,7 +15,7 @@ const Profile = () => {
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
-
+    const navigate = useNavigate()
 
     const { id } = useParams()
     const cu_profile = useContext(ProfileContext)  // get current user profile data
@@ -52,6 +52,7 @@ const Profile = () => {
             if (res.status === 201) {
                 console.log('post created ')
                 getProfilePosts()
+                getProfileData()
             }
         }).catch((error) => {
             console.log(error.response.data)
@@ -69,6 +70,11 @@ const Profile = () => {
         }
         getProfilePosts()
     }, [id, cu_profile])
+
+    // handling when clicked to a post on profile page
+    const handleOnclickPost = (id) => {
+        navigate(`posts/${id}`, { state: { posts: profilePosts } })
+    };
 
     const Underline = () => {  // underlineComponent
         return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
@@ -136,7 +142,7 @@ const Profile = () => {
                             </div>
                         </div>
                         <div className="profile-feed ">
-                            {feedOP === 'posts' && <ProfilePosts posts={profilePosts} />}
+                            {feedOP === 'posts' && <ProfilePosts posts={profilePosts} onclickPost={handleOnclickPost} />}
                         </div>
                     </div>
                 </div>

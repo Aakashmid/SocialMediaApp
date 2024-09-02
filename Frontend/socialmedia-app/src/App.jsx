@@ -11,6 +11,7 @@ import { ProfileContext } from './Components/context';
 import { TOKEN } from './Components/constants';
 import api from './Api';
 import { Login, Profile, Registration, Home } from './Components/index'
+import ProfilePostsPage from './Components/profile/profilePostsPage';
 
 function App() {
   const [profileData, setProfileData] = useState({})
@@ -26,6 +27,7 @@ function App() {
         }
       } catch (error) {
         console.error('Error fetching profile data:', error);
+        Navigate('/logout')
       }
     }
   }
@@ -55,7 +57,12 @@ function App() {
                 <Home />
               </ProtectedRoute>
             } />
-            <Route path='/profile/:id' element={<Profile />} />
+            <Route path='/profile/:id' element={
+              <ProtectedRoute><Profile /></ProtectedRoute>
+            } />
+            <Route path='/profile/:id/posts/:id' element={
+              <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
+            } />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<RegisterAndLogout />} />
             <Route path='/logout' element={<Logout />} />

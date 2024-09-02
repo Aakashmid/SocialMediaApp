@@ -32,8 +32,5 @@ urlpatterns = [
     path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
     path('replies/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
     
-    # path('followers/<int:userId>/',views.FollowersList.as_view(),name='user-followers'),  # here userId is profile.id
-    # path('followings/<int:userId>/',views.FollowingsList.as_view(),name='user-followings'),  # here userId is profile.id
-
 ]
 

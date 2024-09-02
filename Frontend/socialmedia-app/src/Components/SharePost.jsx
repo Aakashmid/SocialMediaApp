@@ -17,11 +17,15 @@ export default function SharePost({ onShare }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('text', formData.text);
-        data.append('postImg', formData.postImg);
-        onShare(data);
-        // clear the form data
+        if (formData.text === '' || formData.postImg === '') {
+            alert('Description or Post image is not provided !!');
+        } else {
+            const data = new FormData();
+            data.append('text', formData.text);
+            data.append('postImg', formData.postImg);
+            onShare(data);
+            // clear the form data
+        }
         setFormData({ text: '', postImg: '' })
     };
 

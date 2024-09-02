@@ -17,7 +17,7 @@ class Profile(models.Model):
 class Post(models.Model):
     author=models.ForeignKey(Profile,related_name='posts',on_delete=models.CASCADE)  # related name help to query related date 
     text=models.CharField( max_length=500)
-    postImg=models.ImageField(upload_to='post_images/',null=True ,blank=True)
+    postImg=models.ImageField(upload_to='post_images/')
     publish_time=models.DateTimeField(auto_now_add=True)
     updated_time=models.DateTimeField(auto_now_add=True)
     # isLiked=models.BooleanField(default=False)
