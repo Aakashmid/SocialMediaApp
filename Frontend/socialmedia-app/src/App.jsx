@@ -11,7 +11,7 @@ import { ProfileContext } from './Components/context';
 import { TOKEN } from './Components/constants';
 import api from './Api';
 import { Login, Profile, Registration, Home } from './Components/index'
-import ProfilePostsPage from './Components/profile/profilePostsPage';
+import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 
 function App() {
   const [profileData, setProfileData] = useState({})

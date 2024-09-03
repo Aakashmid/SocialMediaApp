@@ -10,15 +10,16 @@ import Loader from '../Components/Loader'
 import ProfilePosts from '../Components/profile/ProfilePosts'
 
 const Profile = () => {
+
     const [profile, setProfile] = useState({});
     const [isCUProfile, setisCUProfile] = useState(false); // is currentuserprofie
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
+    const cu_profile = useContext(ProfileContext)  // get current user profile data
     const navigate = useNavigate()
 
     const { id } = useParams()
-    const cu_profile = useContext(ProfileContext)  // get current user profile data
 
 
     const getProfileData = async () => {
@@ -47,7 +48,7 @@ const Profile = () => {
         }
     }
 
-    const creatPost = (data) => {
+    const creatPost = (data, page) => {
         api.post('api/posts/', data).then((res) => {
             if (res.status === 201) {
                 console.log('post created ')
@@ -73,13 +74,12 @@ const Profile = () => {
 
     // handling when clicked to a post on profile page
     const handleOnclickPost = (id) => {
-        navigate(`posts/${id}`, { state: { posts: profilePosts } })
+        navigate(`posts/${id}`, { state: { posts: profilePosts, postid: "post" + id } })
     };
 
     const Underline = () => {  // underlineComponent
         return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
     }
-
     return (
         <>
             <Topbar />
