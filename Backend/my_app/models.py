@@ -42,7 +42,7 @@ class Follower(models.Model):
     follower=models.ForeignKey(Profile,related_name='followings' ,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return 'Author - '+ self.Author +', follower -'+self.follower    
+        return 'toFollowing - '+ self.toFollowing.user.username +', follower -'+self.follower.user.username    
 
 class Like(models.Model):
     user=models.ForeignKey(Profile, on_delete=models.CASCADE)

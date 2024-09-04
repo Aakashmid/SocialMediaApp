@@ -39,7 +39,7 @@ export default function Feed({ currentUser }) {
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
                 <SharePost onShare={creatPost} />
-                <div className="feed-posts">
+                <div className="feed-posts mt-5">
                     <Posts posts={posts} />
                 </div>
             </div>

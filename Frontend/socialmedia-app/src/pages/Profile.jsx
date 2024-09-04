@@ -8,6 +8,7 @@ import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
 import Loader from '../Components/Loader'
 import ProfilePosts from '../Components/profile/ProfilePosts'
+import { followUser, unfollowUser } from '../Components/apiService'
 
 const Profile = () => {
 
@@ -74,8 +75,21 @@ const Profile = () => {
 
     // handling when clicked to a post on profile page
     const handleOnclickPost = (id) => {
-        navigate(`posts/${id}`, { state: { posts: profilePosts, postid: "post" + id } })
+        navigate(`posts/${id}`, { state: { posts: profilePosts, postid: "post" + id, profileId: profile.id } })
     };
+
+    // handle follow a user   // have to work on it 
+    const handleFollow = async (userId) => {
+        if (profile.isFollowed) {
+            const response = await unfollowUser(userId);
+            getProfileData()
+            console.log(response)
+        } else {
+            const response = await followUser(userId);
+            getProfileData()
+            console.log(response)
+        }
+    }
 
     const Underline = () => {  // underlineComponent
         return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
@@ -97,7 +111,7 @@ const Profile = () => {
                         <div className="profileInfo ">
                             <p className={`flex  justify-center ${!isCUProfile && 'space-x-4 items-center'} `}>
                                 <span className="profile-Name text-xl font-semibold ">{profile.username}</span>
-                                {!isCUProfile && <><button className='follow-unfollow-btn  rounded text-sm px-1 py-[2px] bg-gray-700 text-white'>Follow</button></>}
+                                {!isCUProfile && <><button onClick={() => handleFollow(profile.id)} className='follow-unfollow-btn  rounded text-sm px-1 py-[2px] bg-gray-700 text-white'>{profile.isFollowed ? "Following" : "Follow"}</button></>}
                             </p>
                             <p className="profile-bio mt-2 text-center ">{profile.bio}</p>
                             <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">

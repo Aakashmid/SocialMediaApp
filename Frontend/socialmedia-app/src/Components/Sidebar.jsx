@@ -5,6 +5,7 @@ import api from "../Api"
 import { ProfileContext } from "./context"
 export default function Sidebar() {
   const [followings, setFollowings] = useState([]);
+  const dataFetchedRef = useRef(false);
   const followingsRef = useRef([]);
   const profile = useContext(ProfileContext)
   const getFollowings = async () => {
@@ -37,12 +38,13 @@ export default function Sidebar() {
 
   // have to modify so that getFollowings function not run every time
   useEffect(() => {
-    if (profile.id && followingsRef.current.length === 0) {  // if profile object exist then call getFollowings functions
-      getFollowings()
+    if (profile.id && !dataFetchedRef.current) { // Check if profile exists and data hasn't been fetched
+      getFollowings();
+      dataFetchedRef.current = true; // Mark data as fetched
     } else {
-      setFollowings(followingsRef.current)
+      setFollowings(followingsRef.current);
     }
-  }, [profile])
+  }, [profile]);
 
   return (
     <div className="sidebar-container lg:flex-[2] xl:flex-[2.5]  lg:w-1/4 w-[60%] sm:w-[45%] md:w-[40%] fixed z-10">

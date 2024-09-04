@@ -24,7 +24,7 @@ urlpatterns = [
     path('profile/<int:profile_id>/',views.ProfileDetailView.as_view(),name='profile'), 
     path('profile/<int:profile_id>/posts',views.ProfilePostsView.as_view(),name='profile-posts'),
     
-    path('follow/<int:pk>/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
+    path('follow/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
     path('unfollow/<int:pk>/',views.FollowView.as_view({'post':'unfollow'}),name='unfollow'),
     path('followers/<int:pk>/',views.FollowView.as_view({'get':'followers'}),name='followers'),
     path('followings/<int:pk>/',views.FollowView.as_view({'get':'followings'}),name='followings'),

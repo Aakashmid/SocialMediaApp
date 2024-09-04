@@ -80,14 +80,19 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 
 # view related to followers model
 class FollowView(ViewSet):
-    def follow(self,request,pk):
-        toFollow=get_object_or_404(Profile,id=pk)
-        follower=self.request.user.profile
-        Follower.objects.create(toFollowing=toFollow,follower=follower)
+    def follow(self,request):
+        user_id = request.data.get('userId')
+        if not user_id:
+            return Response({"detail":"User id is required"})
+        usertoFollow=get_object_or_404(Profile,id=user_id)
+        follower=request.user.profile
+        if usertoFollow.followers.filter(follower=follower).exists():
+            return Response({"detail":"Already following !"})
+        Follower.objects.create(toFollowing=usertoFollow,follower=follower)
         return Response({'message':'now following '})
     def unfollow(self,request,pk):
         toUnFollow=get_object_or_404(Profile,id=pk)
-        follower=self.request.user.profile
+        follower=request.user.profile
         Follower.objects.get(toFollowing=toUnFollow,follower=follower).delete()
         return Response({'message':'unfollowed'})
     
