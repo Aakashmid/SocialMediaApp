@@ -12,6 +12,8 @@ import { TOKEN } from './Components/constants';
 import api from './Api';
 import { Login, Profile, Registration, Home } from './Components/index'
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
+import Topbar from './Components/Topbar';
+import Followers from './Components/profile/Followers';
 
 function App() {
   const [profileData, setProfileData] = useState({})
@@ -62,6 +64,9 @@ function App() {
             } />
             <Route path='/profile/:id/posts/:id' element={
               <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
+            } />
+            <Route path='/profile/:id/:str' element={
+              <ProtectedRoute><Followers /></ProtectedRoute>
             } />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<RegisterAndLogout />} />

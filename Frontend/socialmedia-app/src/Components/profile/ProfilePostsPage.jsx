@@ -6,6 +6,7 @@ import Sidebar from '../Sidebar';
 import Rightbar from '../Rightbar';
 import { ProfileContext } from '../context';
 import { ArrowBack } from '@mui/icons-material';
+import Layout from '../Layout';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
@@ -21,12 +22,8 @@ export default function ProfilePostsPage() {
     }, [postid]);
     return (
         <>
-            <Topbar />
-            <div className="page-wrapper lg:flex">
-                <div className="sidebar lg:block hidden">
-                    <Sidebar />
-                </div>
-                <div className="profile-posts-wrapper md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%]  p-5">
+            <Layout>
+                <div className="profile-posts-wrapper  p-5">
                     <div className="page-top">
                         <div className="flex items-center space-x-6">
                             <Link to={`/profile/${profileId}`} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link>
@@ -37,8 +34,7 @@ export default function ProfilePostsPage() {
                         <Posts posts={posts} />
                     </div>
                 </div>
-                <div className="lg:flex-[2] xl:flex-[2.5]"></div>
-            </div>
+            </Layout>
         </>
     )
 }

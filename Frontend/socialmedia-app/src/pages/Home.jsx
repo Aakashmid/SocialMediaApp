@@ -5,6 +5,7 @@ import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
 import { ProfileContext } from "../Components/context";
 import Loader from "../Components/Loader";
+import Layout from "../Components/Layout";
 
 
 export default function Home() {
@@ -16,8 +17,7 @@ export default function Home() {
   // }, [profile])
   return (
     <>
-      <Topbar />
-      <div className="home-page-container lg:flex ">
+      {/* <div className="home-page-container lg:flex ">
         <div className="hidden lg:block">
           <Sidebar />
         </div>
@@ -27,7 +27,11 @@ export default function Home() {
         <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
           <Rightbar />
         </div>
-      </div>
+      </div> */}
+      <Layout>
+        <Feed />
+        {/* <Rightbar /> */}
+      </Layout>
     </>
   )
 }

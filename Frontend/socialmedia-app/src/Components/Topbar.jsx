@@ -54,13 +54,10 @@ export default function Topbar() {
                     <div className="profileImg ">{/*show when user is logged in */}
                         <img src={profile.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer" onClick={() => setShowProPopover(!showProPopover)} />
                         {/* <div className={`topbar-popover absolute right-2 top-[50px] w-36  lg:w-44 transform h-0 overflow-hidden`}> */}
-                        <div className={`topbar-profile-popover absolute right-2 top-[50px] w-36  lg:w-44 transition-all duration-1000 overflow-hidden ${showProPopover ? 'h-fit' : 'h-0'}`}>
-                            <ProfilePopover />
-                            {showProPopover && (
-                                <span className={`fixed inset-0 ${!isClickable ? 'pointer-events-none' : 'pointer-events-auto'} `} onClick={() => setShowProPopover(!showProPopover)} >
-                                </span>
-                            )}
+                        <div className={`topbar-profile-popover absolute right-2 top-[50px] w-36  lg:w-44 transition-all duration-1000 overflow-hidden z-10 ${showProPopover ? 'h-fit' : 'h-0'}`}>
+                            <ProfilePopover popover={{ showProPopover, setShowProPopover }} />
                         </div>
+                        {showProPopover && <span onClick={() => setShowProPopover(!showProPopover)} className="hide-popover-span bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-0"></span>}
                     </div>
                 </div>
 
