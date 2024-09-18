@@ -1,5 +1,16 @@
 import api from "../Api"
 
+export const fetchUserProfile = async (id) => {
+    try {
+        const response = await api.get(`/api/profile/${id}`);
+        if (response.status != 200) {
+            throw new Error('Failed to fetch user profile');
+        }
+        return await response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 // post related
 
@@ -13,7 +24,7 @@ import api from "../Api"
 //////////// follower related /////////////////
 
 // follow a user
-const followUser = async (userId) => {
+export const followUser = async (userId) => {
     try {
         const res = await api.post('/api/follow/', { userId })
         // if (res.status === 200){
@@ -23,7 +34,7 @@ const followUser = async (userId) => {
         console.error(error)
     }
 }
-const unfollowUser = async (userId) => {
+export const unfollowUser = async (userId) => {
     try {
         const res = await api.post(`/api/unfollow/${userId}/`)
         // if (res.status === 200){
@@ -33,5 +44,3 @@ const unfollowUser = async (userId) => {
         throw error
     }
 }
-
-export { followUser, unfollowUser };

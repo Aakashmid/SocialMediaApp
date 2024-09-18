@@ -1,9 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import Posts from '../Posts'
 import { Link, useLocation } from 'react-router-dom'
-import Topbar from '../Topbar';
-import Sidebar from '../Sidebar';
-import Rightbar from '../Rightbar';
 import { ProfileContext } from '../context';
 import { ArrowBack } from '@mui/icons-material';
 import Layout from '../Layout';
@@ -11,7 +8,7 @@ import Layout from '../Layout';
 export default function ProfilePostsPage() {
     const location = useLocation();
     const profile = useContext(ProfileContext);
-    const { posts, postid, profileId } = location.state || [];  //here profileId  of post creator
+    const { posts, postid, profileId } = location.state || [];  //here profileId  of post owner
     useEffect(() => {
         if (postid) {
             const element = document.getElementById(postid);

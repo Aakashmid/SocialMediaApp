@@ -14,9 +14,7 @@ export default function Layout({ children }) {
                     <Sidebar />
                 </div>
                 <div className="md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%] ">
-                    {/* <Feed /> */}
                     {firstChild}
-                    {/* {children} */}
                 </div>
                 <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
                     {secondChild}
