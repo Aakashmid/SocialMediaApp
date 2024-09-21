@@ -67,7 +67,7 @@ class ProfileDetailView(RetrieveUpdateAPIView):
         if profile_id:
             return get_object_or_404(Profile,id=profile_id)
         else:
-            return get_object_or_404(Profile,user=self.request.user)
+            raise ValueError("profile_id is required")
         
     # have to modify update (for fullname etc)
     def perform_update(self, serializer):
@@ -78,16 +78,15 @@ class ProfileDetailView(RetrieveUpdateAPIView):
             user=self.request.user
             serializer.save(user=user)
 
-# view related to followers model
+# Follower model related request handler
 class FollowView(ViewSet):
-    def follow(self,request):
-        user_id = request.data.get('userId')
-        if not user_id:
-            return Response({"detail":"User id is required"})
-        usertoFollow=get_object_or_404(Profile,id=user_id)
+    def follow(self,request,pk):
+        usertoFollow=get_object_or_404(Profile,id=pk)
         follower=request.user.profile
+        if usertoFollow == follower:
+            return Response({"detail": "You cannot follow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
         if usertoFollow.followers.filter(follower=follower).exists():
-            return Response({"detail":"Already following !"})
+            return Response({"detail":"Already following !"},status=status.HTTP_201_CREATED)
         Follower.objects.create(toFollowing=usertoFollow,follower=follower)
         return Response({'message':'now following '})
     def unfollow(self,request,pk):
@@ -120,7 +119,7 @@ class ProfilePostsView(ListAPIView):
 class PostviewSet(ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    search_fields = ['text', 'author']
+    search_fields = ['text', 'creator__user__username']
     filter_backends = [SearchFilter]
 
     def perform_create(self, serializer):
@@ -128,8 +127,8 @@ class PostviewSet(ModelViewSet):
         Assigning author of post  current user
         '''
         if serializer.is_valid():
-            author = get_object_or_404(Profile, user=self.request.user)
-            serializer.save(author=author)
+            creator = get_object_or_404(Profile, user=self.request.user)
+            serializer.save(creator=creator)
 
     @action(detail=True, methods=['post'])
     def like_post(self, request, pk=None):

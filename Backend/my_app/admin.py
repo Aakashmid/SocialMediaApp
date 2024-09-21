@@ -8,7 +8,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display=['id','text','publish_time','updated_time','author']
+    list_display=['id','text','publish_time','updated_time','creator']
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

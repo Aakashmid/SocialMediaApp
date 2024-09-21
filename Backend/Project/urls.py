@@ -10,7 +10,6 @@ urlpatterns = [
 
     path('register/', views.signupHandler),
     path('login/', views.loginHandler),
-    
     path('api/', include('my_app.urls')),
 ]
 

@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=['id','username','password','email']
+        extra_kwargs={"password":{"write_only":True}}
         
 # ------------------------------------------------------------------------- #
 
@@ -59,8 +60,8 @@ class PostSerializer(serializers.ModelSerializer):
     author=ProfileSerializer(read_only=True)
     class Meta:
         model=Post
-        fields=['id','author','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
-        extra_kwargs={'author':{'read_only':True},'isLiked':{'read_only':True}}
+        fields=['id','creator','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
+        extra_kwargs={'creator':{'read_only':True},'isLiked':{'read_only':True}}
     
     def get_comments(self,post):
         return post.comments.count()
