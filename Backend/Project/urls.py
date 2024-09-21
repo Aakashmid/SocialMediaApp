@@ -7,9 +7,9 @@ from my_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('register/', views.signupHandler),
-    path('login/', views.loginHandler),
+    path('auth/register/', views.signupHandler),
+    path('auth/login/', views.loginHandler),
+    path('auth/logout/', views.logoutHandler),
     path('api/', include('my_app.urls')),
 ]
 

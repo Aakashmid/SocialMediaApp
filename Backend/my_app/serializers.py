@@ -57,7 +57,7 @@ class PostSerializer(serializers.ModelSerializer):
     comments=serializers.SerializerMethodField()
     likes=serializers.SerializerMethodField()
     isLiked=serializers.SerializerMethodField()
-    author=ProfileSerializer(read_only=True)
+    creator=ProfileSerializer(read_only=True)
     class Meta:
         model=Post
         fields=['id','creator','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']

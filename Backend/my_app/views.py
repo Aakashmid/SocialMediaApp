@@ -35,7 +35,6 @@ def signupHandler(request):
 
     return Response({'error':serializer.errors})
 
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def loginHandler(request):
@@ -47,6 +46,15 @@ def loginHandler(request):
     serializer=UserSerializer(instance=user)
     return Response({'token':token.key,'user':serializer.data})
 
+@api_view(['POST'])
+def logoutHandler(request):
+    try:
+        token = Token.objects.get(user=request.user)
+        # Delete the token, which logs the user out
+        token.delete()
+        return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
+    except Token.DoesNotExist:
+        return Response({"error": "Invalid token or user not logged in"}, status=status.HTTP_400_BAD_REQUEST)
 
 #  list searched users
 class ProfileListView(ListAPIView):
@@ -73,7 +81,7 @@ class ProfileDetailView(RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         instace=self.get_object()
         if instace.user != self.request.user:
-            raise PermissionDenied("You don't have permission to change this object !")
+            raise PermissionDenied("You don't have permission to change this data !")
         if serializer.is_valid():
             user=self.request.user
             serializer.save(user=user)
@@ -84,16 +92,18 @@ class FollowView(ViewSet):
         usertoFollow=get_object_or_404(Profile,id=pk)
         follower=request.user.profile
         if usertoFollow == follower:
-            return Response({"detail": "You cannot follow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "You cannot follow or unfollow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
         if usertoFollow.followers.filter(follower=follower).exists():
-            return Response({"detail":"Already following !"},status=status.HTTP_201_CREATED)
+            return Response({"detail":f"Already following {usertoFollow.user.username}!"},status=status.HTTP_201_CREATED)
         Follower.objects.create(toFollowing=usertoFollow,follower=follower)
-        return Response({'message':'now following '})
+        return Response({'message':f'You are now following {usertoFollow.user.username}'})
     def unfollow(self,request,pk):
         toUnFollow=get_object_or_404(Profile,id=pk)
         follower=request.user.profile
+        if toUnFollow == follower:
+            return Response({"detail": "You cannot follow or unfollow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
         Follower.objects.get(toFollowing=toUnFollow,follower=follower).delete()
-        return Response({'message':'unfollowed'})
+        return Response({'message':f'unfollowed {toUnFollow.user.username}'})
     
     # get all followers
     def followers(self,request,pk):
@@ -106,6 +116,15 @@ class FollowView(ViewSet):
         follower=get_object_or_404(Profile,id=pk)
         data=[obj.toFollowing for obj in follower.followings.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
+        return Response(serialize.data)
+    
+    def friends(self,request,pk):
+        user=get_object_or_404(Profile,id=pk)
+        followers=user.followers.all().values_list('follower',flat=True)  # returns ids of follower 
+        followings=user.followings.all().values_list('toFollowing',flat=True)
+        friend_ids=set(followers).intersection(followings)
+        friends=Profile.objects.filter(id__in=friend_ids)
+        serialize=ProfileSerializer(friends,many=True,context={'request':request})
         return Response(serialize.data)
         
 class ProfilePostsView(ListAPIView):
