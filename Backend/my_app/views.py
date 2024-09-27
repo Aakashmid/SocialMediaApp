@@ -22,8 +22,7 @@ from .models import Profile,Post,Like, Comment, Follower
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def signupHandler(request):
-    data=request.data
-    serializer=UserSerializer(data=data)
+    serializer=UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         user=User.objects.get(username=request.data['username'])
@@ -71,11 +70,11 @@ class ProfileDetailView(RetrieveUpdateAPIView):
     queryset=Profile.objects.all()
 
     def get_object(self):
-        profile_id=self.kwargs.get('profile_id')
-        if profile_id:
-            return get_object_or_404(Profile,id=profile_id)
+        username=self.kwargs.get('username')
+        if username:
+            return get_object_or_404(Profile,user__username=username)
         else:
-            raise ValueError("profile_id is required")
+            raise ValueError("username is required")
         
     # have to modify update (for fullname etc)
     def perform_update(self, serializer):

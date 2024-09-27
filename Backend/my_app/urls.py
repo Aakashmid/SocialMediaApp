@@ -12,8 +12,8 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('users/',views.ProfileListView.as_view(),name='profiles'),
-    path('profile/<int:profile_id>/',views.ProfileDetailView.as_view(),name='profile'), 
-    path('profile/<int:profile_id>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
+    path('profile/<str:username>/',views.ProfileDetailView.as_view(),name='profile'), 
+    path('profile/<str:username>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
     
     path('follow/<int:pk>/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
     path('unfollow/<int:pk>/',views.FollowView.as_view({'delete':'unfollow'}),name='unfollow'),

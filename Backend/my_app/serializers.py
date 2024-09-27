@@ -50,6 +50,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(profile.profileImg.url)
         return None
     
+    def update(self, instance, validated_data):
+        full_name=self.initial_data.get("full_name",None)
+        if full_name:
+            pass
+        return instance
+    
 # PostSerializer.author=ProfileSerializer()
 # PostSerializer.Meta.fields=['author','id','likes','comments']
 # ------------------------------------------------------------------------- #
