@@ -23,7 +23,8 @@ urlpatterns = [
     path('friends/<int:pk>/',views.FollowView.as_view({'get':'friends'}),name='friends'),
 
     path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
-    path('replies/<int:postId>/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
+    path('comment-reply/<int:pk>/like',views.like_comment,name='like-comment-reply'),
+    path('replies/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
     
 ]
 

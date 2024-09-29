@@ -1,17 +1,17 @@
 from django.contrib.auth.models import User
+from django.http import Http404
 from rest_framework.viewsets import ModelViewSet,ViewSet
-from rest_framework.renderers import JSONRenderer,BrowsableAPIRenderer
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView,CreateAPIView,RetrieveAPIView
+from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
 from rest_framework.filters import SearchFilter
 
 from rest_framework.decorators import action
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
 from .models import Profile,Post,Like, Comment, Follower
@@ -34,6 +34,7 @@ def signupHandler(request):
 
     return Response({'error':serializer.errors})
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def loginHandler(request):
@@ -45,6 +46,7 @@ def loginHandler(request):
     serializer=UserSerializer(instance=user)
     return Response({'token':token.key,'user':serializer.data})
 
+
 @api_view(['POST'])
 def logoutHandler(request):
     try:
@@ -55,6 +57,7 @@ def logoutHandler(request):
     except Token.DoesNotExist:
         return Response({"error": "Invalid token or user not logged in"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 #  list searched users
 class ProfileListView(ListAPIView):
     queryset=Profile.objects.all()
@@ -63,6 +66,7 @@ class ProfileListView(ListAPIView):
     search_fields=['bio','user__username']  # search profiles by username or bio
     filter_backends=[SearchFilter]
     # renderer_classes=[JSONRenderer]
+
 
 # profile view for getting profile data and updating profile
 class ProfileDetailView(RetrieveUpdateAPIView):
@@ -84,6 +88,7 @@ class ProfileDetailView(RetrieveUpdateAPIView):
         if serializer.is_valid():
             user=self.request.user
             serializer.save(user=user)
+
 
 # Follower model related request handler
 class FollowView(ViewSet):
@@ -125,7 +130,8 @@ class FollowView(ViewSet):
         friends=Profile.objects.filter(id__in=friend_ids)
         serialize=ProfileSerializer(friends,many=True,context={'request':request})
         return Response(serialize.data)
-        
+
+  
 class ProfilePostsView(ListAPIView):
     serializer_class=PostSerializer
     def get_queryset(self):
@@ -155,7 +161,6 @@ class PostviewSet(ModelViewSet):
         '''
         post = get_object_or_404(Post, pk=pk)
         user = request.user.profile
-
         if Like.objects.filter(user=user,post=post).first() is not None:
             Like.objects.get(user=user,post=post).delete()
             liked = False
@@ -163,7 +168,10 @@ class PostviewSet(ModelViewSet):
             Like.objects.create(user=user,post=post)  # Create a new Like object
             liked = True
         return Response({'liked': liked}, status=status.HTTP_200_OK)
-            
+    
+    @action(detail=True,methods=['post'])  # handling saving unsaving a  post
+    def save_post(self,request,pk=None):
+        pass
 
 class  CommentListCreate(ListCreateAPIView):
     serializer_class=CommentSerializer
@@ -171,33 +179,35 @@ class  CommentListCreate(ListCreateAPIView):
         """
         This view  return a list of all comments or replies on a post or comment , specified postId in url and commentId 
         """
-        postId=self.kwargs['postId']
+        postId=self.kwargs.get('postId',None)
         commentId=self.kwargs.get('commentId',None)
+        if postId and  not Post.objects.filter(id=postId).first() :
+            raise  Http404("Post of given id does not exits")
         if commentId is None:
             queryset=Comment.objects.filter(post__id=postId) # fetch all comments of a post 
         else:
-            queryset=Comment.objects.filter(post__id=postId,parent=self.kwargs['commentId']) # fetch replies of comment 
-
+            queryset=Comment.objects.filter(parent=self.kwargs['commentId']) # fetch replies of comment 
         return queryset
     
 
     def perform_create(self, serializer):
         post = get_object_or_404(Post, id=self.kwargs['postId'])  # Get the Post by postId
         user = get_object_or_404(Profile, user=self.request.user)  # Get the Profile of the current user
-        if self.kwargs.get('commentId', None) is not None:
+        if self.kwargs.get('commentId', None) is not None:  # for handling reply on post 
             parent = get_object_or_404(Comment, id=self.kwargs['commentId'])
             serializer.save(post=post, author=user, parent=parent)
         # Save the comment with the related post, author, and parent (if provided)
         else:
             serializer.save(post=post, user=user)
-    @action(detail=True,methods=['post'])       
-    def like_comment(self,request,pk=None):
-        comment=get_object_or_404(Comment,id=pk)
-        user=self.request.user.profile
-        if Like.objects.filter(user=user,Comment=comment).first() is  not None:
-            Like.objects.get(user=user,Comment=comment).delete()
-            liked=False
-        else:
-            Like.objects.create(user=user,Comment=comment)
-            liked=True
-        return Response({'liked':liked})
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_comment(request,pk=None):  # handle like on reply or comment
+    comment=get_object_or_404(Comment,id=pk)
+    user=request.user.profile
+    if Like.objects.filter(user=user,Comment=comment).first() is  not None:
+        Like.objects.get(user=user,Comment=comment).delete()
+        liked=False
+    else:
+        Like.objects.create(user=user,Comment=comment)
+        liked=True
+    return Response({'liked':liked})
