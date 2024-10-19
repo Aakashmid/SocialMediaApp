@@ -7,7 +7,7 @@ import {
 
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ProfileContext } from './Components/context';
+import { ProfileContext } from './Components/Context';
 import { TOKEN } from './Components/constants';
 import api from './Api';
 import { Login, Profile, Registration, Home } from './Components/index'

@@ -2,7 +2,7 @@ import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayC
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../Api"
-import { ProfileContext } from "./context"
+import { ProfileContext } from "./Context"
 export default function Sidebar() {
   const [followings, setFollowings] = useState([]);
   const dataFetchedRef = useRef(false);

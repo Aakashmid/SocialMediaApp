@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import ProfilePopover from "./Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
 import { useContext, useState } from "react";
-import { ProfileContext } from "./context";
+import { ProfileContext } from "./Context";
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Topbar() {

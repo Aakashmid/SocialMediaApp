@@ -3,7 +3,7 @@ import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
-import { ProfileContext } from "../Components/context";
+import { ProfileContext } from "../Components/Context";
 import Loader from "../Components/Loader";
 import Layout from "../Components/Layout";
 

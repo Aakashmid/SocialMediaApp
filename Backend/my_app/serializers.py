@@ -75,23 +75,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         profile_instance.save()
         return profile_instance
     
-# PostSerializer.author=ProfileSerializer()
-# PostSerializer.Meta.fields=['author','id','likes','comments']
+
 # ------------------------------------------------------------------------- #
 class PostSerializer(serializers.ModelSerializer):
-    comments=serializers.SerializerMethodField()
-    likes=serializers.SerializerMethodField()
+    comments_count=serializers.SerializerMethodField()
+    likes_count=serializers.SerializerMethodField()
     isLiked=serializers.SerializerMethodField()
     creator=ProfileSerializer(read_only=True)
     class Meta:
         model=Post
-        fields=['id','creator','text','postImg', 'comments','likes','isLiked','publish_time','updated_time']
+        fields=['id','creator','text','postImg', 'comments_count','likes_count','isLiked','is_public', 'publish_time','updated_time']
         extra_kwargs={'creator':{'read_only':True},'isLiked':{'read_only':True}}
     
-    def get_comments(self,post):
+    def get_comments_count(self,post):
         return post.comments.count()
     
-    def get_likes(self,post):
+    def get_likes_count(self,post):
         return post.likes.count()
     def get_isLiked(self,post):
         '''get whether comment is liked by current user of not'''

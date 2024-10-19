@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import Posts from '../Posts'
 import { Link, useLocation } from 'react-router-dom'
-import { ProfileContext } from '../context';
+import { ProfileContext } from '../Context';
 import { ArrowBack } from '@mui/icons-material';
 import Layout from '../Layout';
 

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Layout from '../Layout'
 import { ArrowBack } from '@mui/icons-material'
-import { ProfileContext } from '../context'
+import { ProfileContext } from '../Context'
 import { fetchUserProfile } from '../apiService'
 
 export default function Followers() {

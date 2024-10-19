@@ -12,19 +12,21 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('users/',views.ProfileListView.as_view(),name='profiles'),
-    path('profile/<str:username>/',views.ProfileDetailView.as_view(),name='profile'), 
-    path('profile/<str:username>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
+    path('users/<str:username>/',views.ProfileDetailView.as_view(),name='user-profile'), 
+    path('users/<str:username>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
     
-    path('follow/<int:pk>/',views.FollowView.as_view({'post':'follow'}),name='follow'),  # pk is pk of user profile to follow
-    path('unfollow/<int:pk>/',views.FollowView.as_view({'delete':'unfollow'}),name='unfollow'),
-    path('followers/<int:pk>/',views.FollowView.as_view({'get':'followers'}),name='followers'),
-    path('followings/<int:pk>/',views.FollowView.as_view({'get':'followings'}),name='followings'),
-    path('followings/<int:pk>/',views.FollowView.as_view({'get':'followings'}),name='followings'),
-    path('friends/<int:pk>/',views.FollowView.as_view({'get':'friends'}),name='friends'),
+    path('users/<int:pk>/follow/',views.FollowView.as_view({'post':'follow'}),name='follow'),    # pk is pk of user profile to follow
+    path('users/<int:pk>/unfollow/',views.FollowView.as_view({'delete':'unfollow'}),name='unfollow'),
+    path('users/<int:pk>/followers/',views.FollowView.as_view({'get':'followers'}),name='user-followers'),
+    path('users/<int:pk>/followings/',views.FollowView.as_view({'get':'followings'}),name='user-followings'),
+    path('users/friends/',views.FollowView.as_view({'get':'friends'}),name='friends'),           # get current user friends
+    path('users/<int:other_userid>/mutual-friends/',views.FollowView.as_view({'get':'friends'}),name='friends'),   # get current user friends
 
-    path('comments/<int:postId>/',views.CommentListCreate.as_view(),name='post-comments'),
-    path('comment-reply/<int:pk>/like',views.like_comment,name='like-comment-reply'),
-    path('replies/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
+
+    path('posts/<int:postId>/comments/',views.CommentListCreate.as_view(),name='post-comments'),
+    path('comments/<int:pk>/like/',views.like_comment,name='like-comment-reply'),                  # like a reply or comment 
+    path('posts/comments/<int:commentId>/replies/',views.CommentListCreate.as_view(),name='comments-replies'),
+    # path('replies/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
     
 ]
 

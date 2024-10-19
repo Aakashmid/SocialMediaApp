@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-from rest_framework import status
+from rest_framework import status 
 from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
 from rest_framework.filters import SearchFilter
 
@@ -65,8 +65,6 @@ class ProfileListView(ListAPIView):
 
     search_fields=['bio','user__username']  # search profiles by username or bio
     filter_backends=[SearchFilter]
-    # renderer_classes=[JSONRenderer]
-
 
 # profile view for getting profile data and updating profile
 class ProfileDetailView(RetrieveUpdateAPIView):
@@ -101,6 +99,8 @@ class FollowView(ViewSet):
             return Response({"detail":f"Already following {usertoFollow.user.username}!"},status=status.HTTP_201_CREATED)
         Follower.objects.create(toFollowing=usertoFollow,follower=follower)
         return Response({'message':f'You are now following {usertoFollow.user.username}'})
+
+
     def unfollow(self,request,pk):
         toUnFollow=get_object_or_404(Profile,id=pk)
         follower=request.user.profile
@@ -116,20 +116,39 @@ class FollowView(ViewSet):
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
     # get all followings
+
     def followings(self,request,pk):
         follower=get_object_or_404(Profile,id=pk)
         data=[obj.toFollowing for obj in follower.followings.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
     
-    def friends(self,request,pk):
-        user=get_object_or_404(Profile,id=pk)
-        followers=user.followers.all().values_list('follower',flat=True)  # returns ids of follower 
-        followings=user.followings.all().values_list('toFollowing',flat=True)
-        friend_ids=set(followers).intersection(followings)
-        friends=Profile.objects.filter(id__in=friend_ids)
-        serialize=ProfileSerializer(friends,many=True,context={'request':request})
-        return Response(serialize.data)
+    def friends(self,request,other_userid=None):
+        '''
+        getting friends of current user and mutual friends of two users
+        '''
+        if other_userid is not None:
+             # Get the other user profile
+            other_user = get_object_or_404(Profile, id=other_userid)
+
+            # Get the followers and followings of the other user
+            other_user_followers = other_user.followers.all().values_list('follower', flat=True)
+            other_user_followings = other_user.followings.all().values_list('toFollowing', flat=True)
+
+            # Get mutual friends by comparing followers and followings
+            mutual_friend_ids = set(user.followers.all().values_list('follower', flat=True)).intersection(other_user_followings)
+            mutual_friend_ids.update(set(user.followings.all().values_list('toFollowing', flat=True)).intersection(other_user_followers))
+            
+            mutual_friends = Profile.objects.filter(id__in=mutual_friend_ids)
+            serializer = ProfileSerializer(mutual_friends, many=True, context={'request': request})
+        else:
+            user=request.user
+            followers=user.followers.all().values_list('follower',flat=True)  # returns ids of follower 
+            followings=user.followings.all().values_list('toFollowing',flat=True)
+            friend_ids=set(followers).intersection(followings)
+            friends=Profile.objects.filter(id__in=friend_ids)
+            serializer=ProfileSerializer(friends,many=True,context={'request':request})
+        return Response(serializer.data)
 
   
 class ProfilePostsView(ListAPIView):
@@ -154,10 +173,10 @@ class PostviewSet(ModelViewSet):
             creator = get_object_or_404(Profile, user=self.request.user)
             serializer.save(creator=creator)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'],url_path='like-unlike/')
     def like_post(self, request, pk=None):
         '''
-        Custom action to like a post
+        This view handles like a post and checks if the user has already liked it
         '''
         post = get_object_or_404(Post, pk=pk)
         user = request.user.profile
@@ -169,8 +188,11 @@ class PostviewSet(ModelViewSet):
             liked = True
         return Response({'liked': liked}, status=status.HTTP_200_OK)
     
-    @action(detail=True,methods=['post'])  # handling saving unsaving a  post
+    @action(detail=True,methods=['post']) 
     def save_post(self,request,pk=None):
+        '''
+        This view handles save a post and checks if the user has already saved it and unsave it 
+        '''
         pass
 
 class  CommentListCreate(ListCreateAPIView):
@@ -199,6 +221,8 @@ class  CommentListCreate(ListCreateAPIView):
         # Save the comment with the related post, author, and parent (if provided)
         else:
             serializer.save(post=post, user=user)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def like_comment(request,pk=None):  # handle like on reply or comment
@@ -211,3 +235,4 @@ def like_comment(request,pk=None):  # handle like on reply or comment
         Like.objects.create(user=user,Comment=comment)
         liked=True
     return Response({'liked':liked})
+
