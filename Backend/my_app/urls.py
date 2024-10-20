@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('users/',views.ProfileListView.as_view(),name='profiles'),
+    # path('search/',views.SearchView.as_view(),name='search-post-user'),
     path('users/<str:username>/',views.ProfileDetailView.as_view(),name='user-profile'), 
     path('users/<str:username>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
     
@@ -25,7 +26,7 @@ urlpatterns = [
 
     path('posts/<int:postId>/comments/',views.CommentListCreate.as_view(),name='post-comments'),
     path('comments/<int:pk>/like/',views.like_comment,name='like-comment-reply'),                  # like a reply or comment 
-    path('posts/comments/<int:commentId>/replies/',views.CommentListCreate.as_view(),name='comments-replies'),
+    path('comments/<int:commentId>/replies/',views.CommentListCreate.as_view(),name='comments-replies'),
     # path('replies/<int:commentId>',views.CommentListCreate.as_view(),name='comments-replies'),
     
 ]

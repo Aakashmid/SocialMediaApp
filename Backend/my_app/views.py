@@ -28,7 +28,6 @@ def signupHandler(request):
         user=User.objects.get(username=request.data['username'])
         user.set_password(request.data['password'])
         user.save()
-        Profile.objects.create(user=user)
         token=Token.objects.create(user=user)
         return Response({'token':token.key,'user':serializer.data})  # serializer.data is all field of user , defined in UserSerializer
 

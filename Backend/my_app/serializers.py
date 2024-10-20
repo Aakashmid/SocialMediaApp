@@ -6,10 +6,25 @@ from rest_framework.exceptions import ValidationError
 # ------------------------------------------------------------------------- #
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name  = serializers.CharField() 
     class Meta:
         model=User
-        fields=['id','username','password','email']
+        fields=['id','username','password','full_name','email']
         extra_kwargs={"password":{"write_only":True}}
+
+    def create(self, validated_data):
+        full_name = validated_data.pop('full_name')
+        name_parts = full_name.split(' ', 1)
+        first_name = name_parts[0]
+        last_name = name_parts[1] if len(name_parts) > 1 else ""
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=first_name,
+            last_name=last_name
+        )
+        return user
         
 # ------------------------------------------------------------------------- #
 
@@ -18,13 +33,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     posts_count=serializers.SerializerMethodField()
     username=serializers.SerializerMethodField()
     full_name=serializers.SerializerMethodField()
-    followers=serializers.SerializerMethodField()
-    followings=serializers.SerializerMethodField()
+    followers_count=serializers.SerializerMethodField()
+    followings_count=serializers.SerializerMethodField()
     isFollowed=serializers.SerializerMethodField()
     profileImg=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','username','profileImg','full_name','posts_count','date_joined','isFollowed','followers','followings'] 
+        fields=['id','bio','username','profileImg','full_name','date_of_birth','gender','posts_count','date_joined','isFollowed','followers_count','followings_count'] 
     
     def get_posts_count(self,profile):
         return profile.posts.count()
@@ -34,10 +49,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_username(self,profile):
         return profile.user.username
 
-    def get_followers(self,profile):
+    def get_followers_count(self,profile):
         return profile.followers.count()
     
-    def get_followings(self,profile):
+    def get_followings_count(self,profile):
         return profile.followings.count()
     
     def get_isFollowed(self,profile): # find where a profile is followed by current user

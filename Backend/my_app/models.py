@@ -3,12 +3,12 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 # Create your models here.
-
-
 class Profile(models.Model):
     user=models.OneToOneField(User,related_name='profile', on_delete=models.CASCADE)
     bio=models.CharField(blank=True,max_length=200)
     profileImg=models.ImageField(upload_to='profile_images/',blank=True,default='defaultProfileimg.png')
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')], blank=True)
     date_joined=models.DateField(auto_now_add=True)
     updated_time=models.DateTimeField(auto_now=True)  
 
