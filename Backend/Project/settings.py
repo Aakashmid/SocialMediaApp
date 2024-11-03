@@ -137,7 +137,7 @@ REST_FRAMEWORK = {
     # ),
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True   # for development only 
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:5173',  # allow specific orign to make request

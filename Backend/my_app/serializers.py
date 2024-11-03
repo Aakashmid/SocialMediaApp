@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 # ------------------------------------------------------------------------- #
 
 class UserSerializer(serializers.ModelSerializer):
-    full_name  = serializers.CharField() 
+    full_name  = serializers.CharField(write_only=True) 
     class Meta:
         model=User
         fields=['id','username','password','full_name','email']
@@ -17,14 +17,16 @@ class UserSerializer(serializers.ModelSerializer):
         name_parts = full_name.split(' ', 1)
         first_name = name_parts[0]
         last_name = name_parts[1] if len(name_parts) > 1 else ""
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
+        user = User.objects.create_user(**validated_data,
             first_name=first_name,
             last_name=last_name
         )
         return user
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['full_name'] = f"{instance.first_name} {instance.last_name}".strip()
+        return representation
         
 # ------------------------------------------------------------------------- #
 

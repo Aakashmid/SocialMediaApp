@@ -18,6 +18,18 @@ from .models import Profile,Post,Like, Comment, Follower
 # Create your views here.
 
 
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
+def custom_404_view(request,exception):
+    return Response(
+        data={
+            "error": "The resource you are looking for was not found."
+        },
+        status=status.HTTP_404_NOT_FOUND
+    )
+
+
+
 # for authentication
 @api_view(['POST'])
 @permission_classes([AllowAny])
