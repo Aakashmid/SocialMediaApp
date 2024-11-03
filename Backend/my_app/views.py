@@ -83,16 +83,16 @@ class ProfileDetailView(RetrieveUpdateAPIView):
     queryset=Profile.objects.all()
 
     def get_object(self):
-        username=self.kwargs.get('username')
-        if username:
-            return get_object_or_404(Profile,user__username=username)
+        user_id=self.kwargs.get('user_id')
+        if user_id:
+            return get_object_or_404(Profile,user__id=user_id)
         else:
             raise ValueError("username is required")
         
     # have to modify update (for fullname etc)
     def perform_update(self, serializer):
-        instace=self.get_object()
-        if instace.user != self.request.user:
+        instance=self.get_object()
+        if instance.user != self.request.user:
             raise PermissionDenied("You don't have permission to change this data !")
         if serializer.is_valid():
             user=self.request.user
@@ -165,8 +165,8 @@ class FollowView(ViewSet):
 class ProfilePostsView(ListAPIView):
     serializer_class=PostSerializer
     def get_queryset(self):
-        creator=get_object_or_404(Profile,id=self.kwargs.get('profile_id',None))
-        queryset=Post.objects.filter(author=creator) #filter post by author
+        creator=get_object_or_404(Profile,id=self.kwargs.get('user_id',None))
+        queryset=Post.objects.filter(creator=creator) #filter post by author
         return queryset
 
 

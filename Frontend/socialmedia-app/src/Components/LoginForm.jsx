@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { Link } from 'react-router-dom'
 import api from "../Api"
-import { TOKEN } from "./constants"
+import { TOKEN,USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
 import Loader from "./Loader"
+
+// handing register and login operations
 export default function LoginForm({ route, method }) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -20,6 +22,7 @@ export default function LoginForm({ route, method }) {
     setPassword('')
   }
 
+  // handling submission of  login  and  register
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (method === 'register' & password !== confirm_password) {
@@ -31,11 +34,13 @@ export default function LoginForm({ route, method }) {
         setIsLoading(true)
         const res = await api.post(route, { username, password });
         localStorage.setItem(TOKEN, res.data.token)
+        localStorage.setItem(USER_ID, res.data.user.id) // set user id in local storage
         ClearForm()
         navigate('/')
       } catch (error) {
         if (error.response.status === 404) {
           setShowError('Username or Password is incorrect !')
+        // console.log(error)
         }
       } finally {
         setIsLoading(false)

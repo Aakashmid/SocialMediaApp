@@ -9,7 +9,7 @@ export default function Login() {
                     <p className="login-desc text-2xl text-wrap">Connect with friends and the world around you on Buzzline.</p>
                 </div>
                 <div className="login-form w-full  sm:mx-auto sm:w-[500px] rounded-md bg-white">
-                    <LoginForm method={'login'} route={'login/'} />
+                    <LoginForm method={'login'} route={'api/auth/login/'} />
                 </div>
             </div>
         </div>

@@ -10,11 +10,6 @@ import Layout from "../Components/Layout";
 
 export default function Home() {
   const profile = useContext(ProfileContext) // get profile object from context
-  // useEffect(() => {
-  //   if (!profile.id) { // if profile object not exist then redirect to login page
-  //     return <><Loader /></>
-  //   }
-  // }, [profile])
   return (
     <>
       {/* <div className="home-page-container lg:flex ">

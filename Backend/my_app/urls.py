@@ -13,8 +13,8 @@ urlpatterns = [
 
     path('users/',views.ProfileListView.as_view(),name='profiles'),
     # path('search/',views.SearchView.as_view(),name='search-post-user'),
-    path('users/<str:username>/',views.ProfileDetailView.as_view(),name='user-profile'), 
-    path('users/<str:username>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
+    path('users/<int:user_id>/',views.ProfileDetailView.as_view(),name='user-profile'), 
+    path('users/<int:user_id>/posts',views.ProfilePostsView.as_view(),name='user-posts'),
     
     path('users/<int:pk>/follow/',views.FollowView.as_view({'post':'follow'}),name='follow'),    # pk is pk of user profile to follow
     path('users/<int:pk>/unfollow/',views.FollowView.as_view({'delete':'unfollow'}),name='unfollow'),
