@@ -7,7 +7,6 @@ import {
 
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ProfileContext } from './Components/Context';
 import { TOKEN, USER_ID } from './Components/constants';
 import api from './Api';
 import { Login, Profile, Registration, Home } from './Components/index'
@@ -15,10 +14,11 @@ import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 import Topbar from './Components/Topbar';
 import Followers from './Components/profile/Followers';
 import { fetchUserProfile } from './Components/apiService';
+import { ProfileContext, LoadingContext } from './Components/Context';
 
 function App() {
-  const [profileData, setProfileData] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [profileData, setProfileData] = useState({});
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem(TOKEN);
   const user_id = localStorage.getItem(USER_ID);
   const fetchProfileData = async () => {
@@ -53,29 +53,31 @@ function App() {
 
   return (
     <>
-      <ProfileContext.Provider value={profileData}>
-        <Router>
-          <Routes>
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } />
-            <Route path='/profile/:id' element={
-              <ProtectedRoute><Profile /></ProtectedRoute>
-            } />
-            <Route path='/profile/:id/posts/:id' element={
-              <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
-            } />
-            <Route path='/profile/:id/:str' element={
-              <ProtectedRoute><Followers /></ProtectedRoute>
-            } />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<RegisterAndLogout />} />
-            <Route path='/logout' element={<Logout />} />
-          </Routes>
-        </Router>
-      </ProfileContext.Provider>
+      <LoadingContext.Provider value={{loading , setLoading}}>
+        <ProfileContext.Provider value={profileData}>
+          <Router>
+            <Routes>
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } />
+              <Route path='/profile/:id' element={
+                <ProtectedRoute><Profile /></ProtectedRoute>
+              } />
+              <Route path='/profile/:id/posts/:id' element={
+                <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
+              } />
+              <Route path='/profile/:id/:str' element={
+                <ProtectedRoute><Followers /></ProtectedRoute>
+              } />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<RegisterAndLogout />} />
+              <Route path='/logout' element={<Logout />} />
+            </Routes>
+          </Router>
+        </ProfileContext.Provider>
+      </LoadingContext.Provider>
     </>
   )
 }

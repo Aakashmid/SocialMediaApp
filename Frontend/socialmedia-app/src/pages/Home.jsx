@@ -3,26 +3,19 @@ import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
-import { ProfileContext } from "../Components/Context";
-import {HomePageLoader} from "../Components/Loader";
+import { HomePageLoader } from "../Components/Loader";
 import Layout from "../Components/Layout";
+import { LoadingContext, ProfileContext } from "../Components/Context";
+
 
 
 export default function Home() {
+  const { loading,setLoading} = useContext(LoadingContext); 
   const profile = useContext(ProfileContext) // get profile object from context
+  console.log(loading)
+  if (loading) return <HomePageLoader />;
   return (
     <>
-      {/* <div className="home-page-container lg:flex ">
-        <div className="hidden lg:block">
-          <Sidebar />
-        </div>
-        <div className="md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%] ">
-          <Feed />
-        </div>
-        <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
-          <Rightbar />
-        </div>
-      </div> */}
       <Layout>
         <Feed />
         {/* <Rightbar /> */}
