@@ -134,13 +134,14 @@ class FollowView(ViewSet):
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
     
-    def friends(self,request,other_userid=None):
+    def friends(self,request,user_id=None):
         '''
         getting friends of current user and mutual friends of two users
         '''
-        if other_userid is not None:
+        user= request.user.profile
+        if user_id is not None:
              # Get the other user profile
-            other_user = get_object_or_404(Profile, id=other_userid)
+            other_user = get_object_or_404(Profile, id=user_id)
 
             # Get the followers and followings of the other user
             other_user_followers = other_user.followers.all().values_list('follower', flat=True)
@@ -153,7 +154,6 @@ class FollowView(ViewSet):
             mutual_friends = Profile.objects.filter(id__in=mutual_friend_ids)
             serializer = ProfileSerializer(mutual_friends, many=True, context={'request': request})
         else:
-            user=request.user
             followers=user.followers.all().values_list('follower',flat=True)  # returns ids of follower 
             followings=user.followings.all().values_list('toFollowing',flat=True)
             friend_ids=set(followers).intersection(followings)
@@ -184,7 +184,7 @@ class PostviewSet(ModelViewSet):
             creator = get_object_or_404(Profile, user=self.request.user)
             serializer.save(creator=creator)
 
-    @action(detail=True, methods=['post'],url_path='like-unlike/')
+    @action(detail=True, methods=['post'],url_path='toggle-like')
     def like_post(self, request, pk=None):
         '''
         This view handles like a post and checks if the user has already liked it

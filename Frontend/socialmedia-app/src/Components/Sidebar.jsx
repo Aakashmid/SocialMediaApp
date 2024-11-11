@@ -10,7 +10,7 @@ export default function Sidebar() {
   const profile = useContext(ProfileContext)
   const getFollowings = async () => {
     try {
-      const res = await api.get(`api/followings/${profile.id}`)
+      const res = await api.get(`api/users/${profile.id}/followings/`)
       if (res.status === 200) {
         followingsRef.current = res.data;
         setFollowings(res.data);

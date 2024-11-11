@@ -10,9 +10,9 @@ export default function Post({ post }) {
         <div id={"post" + post.id} className="post-card p-4 custom-shodow-b rounded-lg  flex-col flex space-y-5 lg:space-y-6">
             <div className="post-card-top  flex items-center justify-between">
                 <div className="profile flex items-center space-x-3 cursor-pointer">
-                    <Link to={`/profile/${post.author.id}`} className="flex space-x-3 items-center">
-                        <img src={post.author.profileImg} className="user-profileImg w-7 h-7 border rounded-[50%] object-cover" alt=".." />
-                        <span className="username  ">{post.author.username}</span>
+                    <Link to={`/profile/${post.creator.id}`} className="flex space-x-3 items-center">
+                        <img src={post.creator.profileImg} className="user-profileImg w-7 h-7 border rounded-[50%] object-cover" alt=".." />
+                        <span className="username  ">{post.creator.username}</span>
                     </Link>
                     <span className="published time text-xs">{postPublishTime} </span>
                 </div>

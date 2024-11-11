@@ -17,6 +17,7 @@ export default function Feed({ currentUser }) {
         }).catch((error) => {
             console.log(error)
         })
+        // console.log(posts);
     }
 
     // Create post

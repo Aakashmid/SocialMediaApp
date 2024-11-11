@@ -3,12 +3,12 @@ import api from "../Api"
 export const fetchUserProfile = async (id) => {
     try {
         const response = await api.get(`/api/users/${id}`);
-        if (response.status != 200) {
+        if (response.status !== 200) {
             throw new Error('Failed to fetch user profile');
         }
-        console.log(await response.json());
-        return await response.data;
+        return response.data;  // Axios automatically parses JSON
     } catch (error) {
+        console.error('Error fetching user profile:', error);
         throw error;
     }
 };
@@ -22,7 +22,6 @@ export const GetPostDetail = async (id) => {
         if (response.status!= 200) {
             throw new Error('Failed to fetch post detail');
         }
-        console.log(await response.json());
         return await response.data;
     } catch (error) {
         throw error;
@@ -36,7 +35,6 @@ export const UpdatePost = async (id,post_data) =>{
         if (response.status!= 200) {
             throw new Error('Failed to update post');
         }
-        console.log(await response.json());
         return await response.data;
     } catch (error) {
         throw error;
@@ -51,7 +49,6 @@ export const CreatePost = async (id,post_data) =>{
         if (response.status!= 201) {
             throw new Error('Failed to create post');
         }
-        console.log(await response.json());
         return await response.data;
     } catch (error) {
         throw error;

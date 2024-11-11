@@ -21,7 +21,7 @@ urlpatterns = [
     path('users/<int:pk>/followers/',views.FollowView.as_view({'get':'followers'}),name='user-followers'),
     path('users/<int:pk>/followings/',views.FollowView.as_view({'get':'followings'}),name='user-followings'),
     path('users/friends/',views.FollowView.as_view({'get':'friends'}),name='friends'),           # get current user friends
-    path('users/<int:other_userid>/mutual-friends/',views.FollowView.as_view({'get':'friends'}),name='friends'),   # get current user friends
+    path('users/<int:user_id>/mutual-friends/',views.FollowView.as_view({'get':'friends'}),name='friends'),   # get current user friends
 
 
     path('posts/<int:postId>/comments/',views.CommentListCreate.as_view(),name='post-comments'),

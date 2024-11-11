@@ -6,7 +6,6 @@ import { ProfileContext } from '../Components/Context'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
-import Loader from '../Components/Loader'
 import ProfilePosts from '../Components/profile/ProfilePosts'
 import { followUser, unfollowUser } from '../Components/apiService'
 

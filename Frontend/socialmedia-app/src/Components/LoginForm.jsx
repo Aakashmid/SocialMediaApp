@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import api from "../Api"
 import { TOKEN,USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
-import Loader from "./Loader"
+import { CircleLoader } from  "./Loader"
 
 // handing register and login operations
 export default function LoginForm({ route, method }) {
@@ -52,7 +52,7 @@ export default function LoginForm({ route, method }) {
   return (
     <>
       <form onSubmit={handleSubmit} className="p-5  flex flex-col space-y-5 w-full shadow-md">
-        {isLoading && <Loader />}
+        {isLoading && <CircleLoader />}
         <div className="">
           <p className="text-center text-red-600 mb-2">{showError}</p>
           <h2 className="mb-10 text-center text-3xl font-semibold">{method === 'login' ? 'Login' : 'Signup'}</h2>
