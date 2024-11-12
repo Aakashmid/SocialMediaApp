@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { PermMedia } from '@mui/icons-material'
-import { ProfileContext } from "./Context"
+import { ProfileDataContext } from "./Contexts/ProfileContext"
 
 export default function SharePost({ onShare }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })
@@ -29,13 +29,13 @@ export default function SharePost({ onShare }) {
         setFormData({ text: '', postImg: '' })
     };
 
-    const profile = useContext(ProfileContext)  // accessing profile data using ProfileContext
+    const {profileData} = useContext(ProfileDataContext);   // accessing profile data using ProfileContext
     return (
         <div className="share-container custom-shodow-b p-4 rounded-xl">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="share-top flex space-x-2">
-                    <img src={profile.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border" />
-                    <input type="text" name="text" id="text" value={formData.text} onChange={handleChange} className="focus:outline-none text-[15px] p-1 w-10/12" placeholder={`What is in your mind ${profile.username} ?`} />
+                    <img src={profileData.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border" />
+                    <input type="text" name="text" id="text" value={formData.text} onChange={handleChange} className="focus:outline-none text-[15px] p-1 w-10/12" placeholder={`What is in your mind ${profileData.username} ?`} />
                 </div>
                 <hr className="w-[95%] my-5 mx-auto bg-gray-400 h-[2px]" />
                 <div className="share-bottom flex">

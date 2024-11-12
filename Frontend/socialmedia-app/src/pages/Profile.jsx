@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Topbar from '../Components/Topbar'
 import SharePost from '../Components/SharePost'
-import { ProfileContext } from '../Components/Context'
+import {  ProfileDataContext } from '../Components/Contexts/ProfileContext'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
@@ -16,7 +16,7 @@ const Profile = () => {
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
-    const cu_profile = useContext(ProfileContext)  // get current user profile data
+    const {profileData} = useContext(ProfileDataContext)
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -62,15 +62,15 @@ const Profile = () => {
 
     // fetch profile data if the id in the url is not the same as the logged in user's id
     useEffect(() => {
-        if (cu_profile.id != id) {
+        if (profileData.id != id) {
             getProfileData()
             // console.log(profile)
         } else {
             setisCUProfile(true);
-            setProfile(cu_profile);
+            setProfile(profileData);
         }
         getProfilePosts()
-    }, [id, cu_profile])
+    }, [id, profileData])
 
     // handling when clicked to a post on profile page
     const handleOnclickPost = (id) => {

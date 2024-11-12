@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Layout from '../Layout'
 import { ArrowBack } from '@mui/icons-material'
-import { ProfileContext } from '../Context'
+import {ProfileDataContext } from '../Contexts/ProfileContext'
 import { fetchUserProfile } from '../apiService'
 
 export default function Followers() {
     const { id, str } = useParams();  // str is string represent whethere this page is for followers of followings or user
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(false);
-    const cu_profile = useContext(ProfileContext); // cu - current user
+    const {profileData,setProfileData} = useContext(ProfileDataContext);
 
     const User = () => {
         return (
@@ -21,7 +21,7 @@ export default function Followers() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (id != cu_profile.id) {
+            if (id != profileData.id) {
                 try {
                     setLoading(true);
                     const userData = await fetchUserProfile(id);

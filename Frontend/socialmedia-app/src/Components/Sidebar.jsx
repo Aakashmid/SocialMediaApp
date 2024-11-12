@@ -2,15 +2,16 @@ import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayC
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../Api"
-import { ProfileContext } from "./Context";
+import { ProfileDataContext } from "./Contexts/ProfileContext";
 export default function Sidebar() {
   const [followings, setFollowings] = useState([]);
   const dataFetchedRef = useRef(false);
   const followingsRef = useRef([]);
-  const profile = useContext(ProfileContext)
+  const {profileData}= useContext(ProfileDataContext)
+  
   const getFollowings = async () => {
     try {
-      const res = await api.get(`api/users/${profile.id}/followings/`)
+      const res = await api.get(`api/users/${profileData.id}/followings/`)
       if (res.status === 200) {
         followingsRef.current = res.data;
         setFollowings(res.data);
@@ -38,13 +39,13 @@ export default function Sidebar() {
 
   // have to modify so that getFollowings function not run every time
   useEffect(() => {
-    if (profile.id && !dataFetchedRef.current) { // Check if profile exists and data hasn't been fetched
+    if (profileData.id && !dataFetchedRef.current) { // Check if profile exists and data hasn't been fetched
       getFollowings();
       dataFetchedRef.current = true; // Mark data as fetched
     } else {
       setFollowings(followingsRef.current);
     }
-  }, [profile]);
+  }, [profileData]);
 
   return (
     <div className="sidebar-container lg:flex-[2] xl:flex-[2.5]  lg:w-1/4 w-[60%] sm:w-[45%] md:w-[40%] fixed z-10">
