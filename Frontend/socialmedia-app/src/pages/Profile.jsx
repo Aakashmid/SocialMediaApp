@@ -24,7 +24,7 @@ const Profile = () => {
 
     const getProfileData = async () => {
         try {
-            const res = await api.get(`api/profile/${id}/`)
+            const res = await api.get(`api/users/${id}/`)
             if (res.status === 200) {
                 setProfile(res.data)
             } else {
@@ -37,7 +37,7 @@ const Profile = () => {
 
     const getProfilePosts = async () => {
         try {
-            const res = await api.get(`api/profile/${id}/posts`)
+            const res = await api.get(`api/users/${id}/posts`)
             if (res.status === 200) {
                 setProfilePosts(res.data)
             } else {
@@ -81,11 +81,11 @@ const Profile = () => {
     const handleFollow = async (userId) => {
         if (profile.isFollowed) {
             const response = await unfollowUser(userId);
-            getProfileData()
+            setProfile({...profile,followers_count:profile.followers_count-1,isFollowed:false})
             console.log(response)
         } else {
             const response = await followUser(userId);
-            getProfileData()
+            setProfile({...profile,followers_count:profile.followers_count+1,isFollowed:true})
             console.log(response)
         }
     }
@@ -116,13 +116,13 @@ const Profile = () => {
                             <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
                                 <div className="profile-followers">
                                     <Link className='' to={'followers'}>
-                                        <p className="font-semibold  text-center">{profile.followers}</p>
+                                        <p className="font-semibold  text-center">{profile.followers_count}</p>
                                         <p className="text-center text-sm text-gray-500">Followers</p>
                                     </Link>
                                 </div>
                                 <div className="profile-followings">
                                     <Link className='' to={'followings'}>
-                                        <p className="font-semibold  text-center">{profile.followings}</p>
+                                        <p className="font-semibold  text-center">{profile.followings_count}</p>
                                         <p className="text-center text-sm text-gray-500">Followings</p>
                                     </Link>
                                 </div>

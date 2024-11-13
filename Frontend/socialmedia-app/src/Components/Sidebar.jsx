@@ -3,22 +3,21 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../Api"
 import { ProfileDataContext } from "./Contexts/ProfileContext";
+import { fetchUserFollowings } from "./apiService";
 export default function Sidebar() {
   const [followings, setFollowings] = useState([]);
   const dataFetchedRef = useRef(false);
   const followingsRef = useRef([]);
   const {profileData}= useContext(ProfileDataContext)
+
   
-  const getFollowings = async () => {
+  //incomplete 
+  const getFollowings = async (user_id) => {
     try {
-      const res = await api.get(`api/users/${profileData.id}/followings/`)
-      if (res.status === 200) {
-        followingsRef.current = res.data;
-        setFollowings(res.data);
-        console.log(res.data);
-      } else {
-        console.error("Failed to fetch followings : ", res.status)
-      }
+      const res = await fetchUserFollowings(user_id);
+      console.log(res.data);
+      // followingsRef.current = res.data;
+      // setFollowings(res.data);
     } catch (error) {
       console.error("Failed to fetch followings : ", error)
     }
@@ -26,7 +25,7 @@ export default function Sidebar() {
     // }
   }
 
-  const Following = ({ user }) => {
+  const FollowingUser= ({ user }) => {
     return (
       <li className="sidebarFriend">
         <Link to={'/'} className=" flex space-x-4 items-center p-1">
@@ -40,7 +39,7 @@ export default function Sidebar() {
   // have to modify so that getFollowings function not run every time
   useEffect(() => {
     if (profileData.id && !dataFetchedRef.current) { // Check if profile exists and data hasn't been fetched
-      getFollowings();
+      getFollowings(profileData.id);
       dataFetchedRef.current = true; // Mark data as fetched
     } else {
       setFollowings(followingsRef.current);
@@ -84,7 +83,7 @@ export default function Sidebar() {
           <h2 className="text-lg font-medium">Followings</h2>
           <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
             {followings.map((user) => {
-              return <Following user={user} key={user.id} />
+              return <FollowingUser user={user} key={user.id} />
             })}
           </ul>
           <button className="my-4 py-[6px] px-10 font-medium  rounded bg-gray-100 ">Show more</button>

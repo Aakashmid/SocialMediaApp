@@ -19,7 +19,7 @@ export const fetchUserProfile = async (id) => {
 
 
 
-// post related
+/////////////////////////////////////////////////////////// post related
 
 // get posts
 export const GetPostDetail = async (id) => {
@@ -68,7 +68,7 @@ export const CreatePost = async (id, post_data) => {
 // follow a user
 export const followUser = async (userId) => {
     try {
-        const res = await api.post('/api/follow/', { userId })
+        const res = await api.post(`/api/users/${ userId }/follow/` )
         // if (res.status === 200){
         return res.data
         // }
@@ -79,7 +79,7 @@ export const followUser = async (userId) => {
 
 export const unfollowUser = async (userId) => {
     try {
-        const res = await api.post(`/api/unfollow/${userId}/`)
+        const res = await api.delete(`/api/users/${ userId }/unfollow/` )
         // if (res.status === 200){
         return res.data
         // }
@@ -87,3 +87,31 @@ export const unfollowUser = async (userId) => {
         throw error
     }
 }
+
+
+// get folllowings of a user 
+export const fetchUserFollowings = async (userId) => {
+    try {
+        const response = await api.get(`/api/users/${userId}/followings`);
+        if (response.status !== 200) {
+            throw new Error('Failed to fetch user followings');
+        }
+        return response.data; 
+    } catch (error) {
+        console.error('Error fetching user followings:', error);
+        throw error;
+    }
+};
+
+export const fetchUserFollowers = async (userId) => {
+    try {
+        const response = await api.get(`/api/users/${userId}/followers`);
+        if (response.status !== 200) {
+            throw new Error('Failed to fetch user followers');
+        }
+        return response.data; 
+    } catch (error) {
+        console.error('Error fetching user followers:', error);
+        throw error;
+    }
+};

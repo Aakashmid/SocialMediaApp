@@ -5,7 +5,8 @@ import { ArrowBack } from '@mui/icons-material'
 import {ProfileDataContext } from '../Contexts/ProfileContext'
 import { fetchUserProfile } from '../apiService'
 
-export default function Followers() {
+
+export default function FollowersFollowings() {
     const { id, str } = useParams();  // str is string represent whethere this page is for followers of followings or user
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function Followers() {
                 }
             }
             else {
-                setProfile(cu_profile)
+                setProfile(profileData)
             }
         }
         fetchData();

@@ -13,6 +13,7 @@ import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 import Followers from './Components/profile/Followers';
 import { fetchUserProfile } from './Components/apiService';
 import { ProfileDataContext } from './Components/Contexts/ProfileContext';
+import FollowersFollowings from './Components/profile/FollowersFollowings';
 
 function App() {
   const {profileData, setProfileData} = useContext(ProfileDataContext);
@@ -50,7 +51,7 @@ function App() {
             <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
           } />
           <Route path='/profile/:id/:str' element={
-            <ProtectedRoute><Followers /></ProtectedRoute>
+            <ProtectedRoute><FollowersFollowings /></ProtectedRoute>
           } />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<RegisterAndLogout />} />

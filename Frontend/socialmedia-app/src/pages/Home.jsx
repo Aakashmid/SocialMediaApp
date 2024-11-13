@@ -6,6 +6,7 @@ import {ProfileDataContext } from "../Components/Contexts/ProfileContext";
 import { LoadingContext } from "../Components/Contexts/LoadingContext";
 import { fetchUserProfile } from "../Components/apiService";
 import { USER_ID } from "../Components/constants";
+import Rightbar from "../Components/Rightbar";
 
 
 
@@ -31,7 +32,7 @@ export default function Home() {
     <>
       <Layout>
         <Feed />
-        {/* <Rightbar /> */}
+        <Rightbar/>
       </Layout>
     </>
   )
