@@ -2,7 +2,7 @@ import api from "../Api"
 
 
 export const fetchUserProfile = async (id) => {
-    console.log(id);
+    // console.log(id);
     try {
         const response = await api.get(`/api/users/${id}`);
         if (response.status !== 200) {

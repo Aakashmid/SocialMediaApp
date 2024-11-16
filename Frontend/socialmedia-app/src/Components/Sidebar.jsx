@@ -14,10 +14,10 @@ export default function Sidebar() {
   //incomplete 
   const getFollowings = async (user_id) => {
     try {
-      const res = await fetchUserFollowings(user_id);
-      console.log(res.data);
+      const data = await fetchUserFollowings(user_id);
+      console.log(data)
       // followingsRef.current = res.data;
-      // setFollowings(res.data);
+      setFollowings(data);
     } catch (error) {
       console.error("Failed to fetch followings : ", error)
     }
@@ -28,7 +28,7 @@ export default function Sidebar() {
   const FollowingUser= ({ user }) => {
     return (
       <li className="sidebarFriend">
-        <Link to={'/'} className=" flex space-x-4 items-center p-1">
+        <Link to={`/profile/${user.id}`} className=" flex space-x-4 items-center p-1">
           <img src={user.profileImg} alt=".." className="sidebarFriendImg w-8 h-8 rounded-[50%] object-cover" />
           <span className="sidebarFriendName">{user.username}</span>
         </Link>

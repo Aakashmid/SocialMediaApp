@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { Link } from 'react-router-dom'
 import api from "../Api"
-import { TOKEN,USER_ID } from "./constants"
+import { TOKEN, USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
-import { CircleLoader } from  "./Loader"
+import { CircleLoader } from "./Loader"
 
 // handing register and login operations
 export default function LoginForm({ route, method }) {
@@ -25,6 +25,11 @@ export default function LoginForm({ route, method }) {
   // handling submission of  login  and  register
   const handleSubmit = async (e) => {
     e.preventDefault()
+    var payload = { username: username, password: password };
+
+    if (method === 'register') {
+      payload.full_name = username;
+    }
     if (method === 'register' & password !== confirm_password) {
       setShowError('Password and Confirm Passoword is incorrect !')
       ClearForm()
@@ -32,16 +37,16 @@ export default function LoginForm({ route, method }) {
     else {
       try {
         setIsLoading(true)
-        const res = await api.post(route, { username, password });
-        localStorage.setItem(TOKEN, res.data.token)
-        localStorage.setItem(USER_ID, res.data.user.id) // set user id in local storage
-        ClearForm()
-        navigate('/')
-      } catch (error) {
-        if (error.response.status === 404) {
-          setShowError('Username or Password is incorrect !')
-        // console.log(error)
+
+        const res = await api.post(route, payload);
+        if (res && res.data) {
+          localStorage.setItem(TOKEN, res.data.token)
+          localStorage.setItem(USER_ID, res.data.user.id) // set user id in local storage
+          ClearForm()
+          navigate('/')
         }
+      } catch (error) {
+        console.log(error.response.data)
       } finally {
         setIsLoading(false)
       }

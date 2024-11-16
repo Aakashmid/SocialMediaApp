@@ -9,7 +9,7 @@ export default function Registration() {
                     <p className="login-desc text-2xl text-wrap">Connect with friends and the world around you on Buzzline.</p>
                 </div>
                 <div className="login-form w-full  sm:mx-auto sm:w-[500px] rounded-md bg-white">
-                    <LoginForm method={'register'} route={'register/'} />
+                    <LoginForm method={'register'} route={'api/auth/register/'} />
                 </div>
             </div>
         </div>

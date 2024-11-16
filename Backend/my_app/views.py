@@ -43,7 +43,7 @@ def signupHandler(request):
         token=Token.objects.create(user=user)
         return Response({'token':token.key,'user':serializer.data})  # serializer.data is all field of user , defined in UserSerializer
 
-    return Response({'error':serializer.errors})
+    return Response({'error':serializer.errors},status=status.HTTP_409_CONFLICT)
 
 
 @api_view(['POST'])
@@ -51,7 +51,7 @@ def signupHandler(request):
 def loginHandler(request):
     user=get_object_or_404(User,username=request.data['username'])
     if not user.check_password(request.data['password']):
-        return Response({'data':'not found','status':status.HTTP_404_NOT_FOUND})
+        return Response({'data':'not found'},status=status.HTTP_404_NOT_FOUND)
     
     token ,created=Token.objects.get_or_create(user=user)
     serializer=UserSerializer(instance=user)

@@ -10,30 +10,37 @@ import { useContext, useEffect, useState } from 'react';
 import { TOKEN, USER_ID } from './Components/constants';
 import { Login, Profile, Registration, Home } from './Components/index'
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
-import Followers from './Components/profile/Followers';
 import { fetchUserProfile } from './Components/apiService';
 import { ProfileDataContext } from './Components/Contexts/ProfileContext';
 import FollowersFollowings from './Components/profile/FollowersFollowings';
 
 function App() {
   const {profileData, setProfileData} = useContext(ProfileDataContext);
-  // const token = localStorage.getItem(TOKEN);
   // const user_id = localStorage.getItem(USER_ID);
 
   // useEffect(() => {
   //   fetchUserProfile(user_id);
   // }, [token])
 
+
+
+
   const Logout = () => {
-    localStorage.clear()
-    setProfileData({});
-    return <Navigate to={'/login'} />
-  }
+    useEffect(() => {
+      localStorage.clear();
+      setProfileData({});
+    }, [setProfileData]);
+
+    // return <Navigate to="/login" replace />;
+    return <Navigate to="/login"  />;
+  };
 
   const RegisterAndLogout = () => {
-    localStorage.clear()
-    return <Registration />
-  }
+    // useEffect(() => {
+      localStorage.clear();
+    // }, []);
+    return <Registration />;
+  };
 
   return (
     <>
