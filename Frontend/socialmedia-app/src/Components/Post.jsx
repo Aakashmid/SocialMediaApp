@@ -30,7 +30,7 @@ export default function Post({ post }) {
                     <img className='likeIcon w-6 h-6  cursor-pointer' src="/src/assets/heart.png" onClick={likeHandler} alt="" />
                     <span className='postlikeCounter text-[15px]'>{post.likes > 0 && `${post.likes} people like it`}</span>
                 </div>
-                <div className="postRightBottom"><span className="postComment border-b-[3px] cursor-pointer text-[15px] border-dotted ">{post.comments > 0 && `{post.comments} comments`} </span></div>
+                <div className="postRightBottom"><span className="postComment border-b-[3px] cursor-pointer text-[15px] border-dotted ">{post.comments > 0 && `${post.comments}`}  comments </span></div>
             </div>
         </div>
     )

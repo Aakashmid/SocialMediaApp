@@ -55,7 +55,7 @@ def loginHandler(request):
     
     token ,created=Token.objects.get_or_create(user=user)
     serializer=UserSerializer(instance=user)
-    return Response({'token':token.key,'user':serializer.data})
+    return Response({'token':token.key,'user':serializer.data},status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -100,6 +100,16 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 
 
 # Follower model related request handler
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
+class FollowView(ViewSet):
 class FollowView(ViewSet):
     def follow(self,request,pk):
         usertoFollow=get_object_or_404(Profile,id=pk)
@@ -173,7 +183,7 @@ class ProfilePostsView(ListAPIView):
 class PostviewSet(ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    search_fields = ['text', 'creator__user__username']
+    search_fields = ['text', 'creator__user__username']  # has to add tags
     filter_backends = [SearchFilter]
 
     def perform_create(self, serializer):

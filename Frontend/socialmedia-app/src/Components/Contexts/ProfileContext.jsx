@@ -15,7 +15,6 @@ export const ProfileDataProvider = ({ children }) => {
             try {
                 setLoading(true);
                 const data = await fetchUserProfile(userId);
-
                 setProfileData(data);
                 setLoading(false);
 

@@ -115,13 +115,13 @@ const Profile = () => {
                             <p className="profile-bio mt-2 text-center ">{profile.bio}</p>
                             <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
                                 <div className="profile-followers">
-                                    <Link className='' to={'followers'}>
+                                    <Link className=''  to={`${profile.followers_count > 0 ? 'followers' : ''}`}>
                                         <p className="font-semibold  text-center">{profile.followers_count}</p>
                                         <p className="text-center text-sm text-gray-500">Followers</p>
                                     </Link>
                                 </div>
                                 <div className="profile-followings">
-                                    <Link className='' to={'followings'}>
+                                    <Link className='' to={`${profile.followings_count > 0 ? 'followings' : ''}`}>
                                         <p className="font-semibold  text-center">{profile.followings_count}</p>
                                         <p className="text-center text-sm text-gray-500">Followings</p>
                                     </Link>

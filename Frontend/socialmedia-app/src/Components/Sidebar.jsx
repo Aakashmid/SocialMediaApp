@@ -15,14 +15,11 @@ export default function Sidebar() {
   const getFollowings = async (user_id) => {
     try {
       const data = await fetchUserFollowings(user_id);
-      console.log(data)
       // followingsRef.current = res.data;
       setFollowings(data);
     } catch (error) {
       console.error("Failed to fetch followings : ", error)
     }
-    // finally {
-    // }
   }
 
   const FollowingUser= ({ user }) => {
