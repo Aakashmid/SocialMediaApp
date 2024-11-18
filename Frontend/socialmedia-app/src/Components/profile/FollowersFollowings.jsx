@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Layout from '../Layout'
 import { ArrowBack } from '@mui/icons-material'
 import { ProfileDataContext } from '../Contexts/ProfileContext'
-import { fetchUserFollowers, fetchUserFollowings, fetchUserProfile } from '../apiService'
+import { fetchUserFollowers, fetchUserFollowings, fetchUserProfile, followUser, unfollowUser } from '../apiService'
 
 
 export default function FollowersFollowings() {
@@ -13,30 +13,32 @@ export default function FollowersFollowings() {
     const [data, setData] = useState([]);           // here data is user followings or followers
     const { profileData, setProfileData } = useContext(ProfileDataContext);
 
+    
     const handelFollowUnfollow = async (user) =>{
-        // try {
-        //      const res = await api.post(`/api/users/${user_id}/follow`);  // user_id - id of user to follow
-        //     //  if (res.status === 200) {
-        //     //      setProfileData(res.data);
-        //     //  } else {
-        //     //      console.error('Failed to follow/unfollow user');
-        //     //  }
-        //  } catch (error) {
-        //      console.error('Error following/unfollowing user:', error);
-        //  }
-        var followBtn = document.getElementById(`followBtn${user.id}`);
-        if(user.isFollowed){
-            console.log('unfollowed');
-            // followBtn.innerText= 'Unfollowed';
-            user.isFollowed = false;
+        try {
+            var followBtn = document.getElementById(`followBtn${user.id}`);
+            if (user.isFollowed) {
+                const response = await unfollowUser(user.id);
+                setProfileData({...profileData,followers_count:profileData.followers_count-1,isFollowed:false})
+                setData(data.map(item => 
+                    item.id === user.id ? { ...item, isFollowed: false } : item
+                ));
+                // followBtn.innerText='Follow';
+                console.log('unfollowed user')
+            } else {
+                const response = await followUser(user.id);
+                setProfileData({...profileData,followers_count:profileData.followers_count+1,isFollowed:true})
+                setData(data.map(item => 
+                    item.id === user.id ? { ...item, isFollowed: true } : item
+                ));
+                // followBtn.innerText='Following';
+                console.log('following user');
+            }
+        } catch (error) {
+            console.error(error);
         }
-        else{
-            // followBtn.innerText= 'Followed';
-            // user.isFollowed = true;
-            console.log('followed');
-        }
+        
     }
-
     const UserCard = ({user}) => {
         return (
             <>
@@ -56,7 +58,6 @@ export default function FollowersFollowings() {
 
     const getFollowersOrFollowings = async (userId) => {
         try {
-            console.log(str)
             setLoading(true);
             var res_data;
             if (str === "followings") {
@@ -110,7 +111,7 @@ export default function FollowersFollowings() {
                     </div>
                     <div className="mt-5">
                         {data.map(user => {
-                            return <UserCard user={user} key={user.id} />
+                            return user.id!=profileData.id && <UserCard user={user} key={user.id} />
                         })}
                         {/* <User */}
                     </div>

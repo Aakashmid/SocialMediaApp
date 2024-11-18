@@ -34,7 +34,7 @@ export default function SharePost({ onShare }) {
         <div className="share-container custom-shodow-b p-4 rounded-xl">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="share-top flex space-x-2">
-                    <img src={profileData.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border" />
+                    <img onClick={()=> {window.location.href =`/profile/${profileData.id}`}} src={profileData.profileImg} alt="" className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer" />
                     <input type="text" name="text" id="text" value={formData.text} onChange={handleChange} className="focus:outline-none text-[15px] p-1 w-10/12" placeholder={`What is in your mind ${profileData.username} ?`} />
                 </div>
                 <hr className="w-[95%] my-5 mx-auto bg-gray-400 h-[2px]" />

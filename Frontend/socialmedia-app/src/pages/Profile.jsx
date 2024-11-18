@@ -16,7 +16,8 @@ const Profile = () => {
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
-    const {profileData} = useContext(ProfileDataContext)
+    const {profileData,setProfileData} = useContext(ProfileDataContext)
+    
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -25,11 +26,7 @@ const Profile = () => {
     const getProfileData = async () => {
         try {
             const res = await api.get(`api/users/${id}/`)
-            if (res.status === 200) {
-                setProfile(res.data)
-            } else {
-                console.error('Error fetching profile data:', res.status);
-            }
+                setProfile(res.data);
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
@@ -82,10 +79,16 @@ const Profile = () => {
         if (profile.isFollowed) {
             const response = await unfollowUser(userId);
             setProfile({...profile,followers_count:profile.followers_count-1,isFollowed:false})
+            if (profile.id !=profileData.id){
+                setProfileData({...profileData,followings_count:profileData.followings_count-1})
+            }
             console.log(response)
         } else {
             const response = await followUser(userId);
             setProfile({...profile,followers_count:profile.followers_count+1,isFollowed:true})
+            if (profile.id !=profileData.id){
+                setProfileData({...profileData,followings_count:profileData.followings_coun+1})
+            }
             console.log(response)
         }
     }

@@ -101,16 +101,6 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 
 # Follower model related request handler
 class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
-class FollowView(ViewSet):
     def follow(self,request,pk):
         usertoFollow=get_object_or_404(Profile,id=pk)
         follower=request.user.profile

@@ -4,7 +4,7 @@ from .models import Profile,Post,Like, Comment, Follower
 # Register your models here.
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['user','gender']
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
