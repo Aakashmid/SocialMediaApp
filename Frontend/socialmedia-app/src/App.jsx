@@ -16,15 +16,6 @@ import FollowersFollowings from './Components/profile/FollowersFollowings';
 
 function App() {
   const {profileData, setProfileData} = useContext(ProfileDataContext);
-  // const user_id = localStorage.getItem(USER_ID);
-
-  // useEffect(() => {
-  //   fetchUserProfile(user_id);
-  // }, [token])
-
-
-
-
   const Logout = () => {
     useEffect(() => {
       localStorage.clear();
@@ -36,9 +27,7 @@ function App() {
   };
 
   const RegisterAndLogout = () => {
-    // useEffect(() => {
       localStorage.clear();
-    // }, []);
     return <Registration />;
   };
 

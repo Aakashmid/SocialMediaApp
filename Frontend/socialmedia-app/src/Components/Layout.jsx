@@ -9,17 +9,18 @@ export default function Layout({ children }) {
             <header>
                 <Topbar />
             </header>
-            <div className="home-page-container lg:flex ">
-                <div className="hidden lg:block">
+            <div className="home-page-container lg:flex  ">
+                <div className="hidden lg:block ">
                     <Sidebar />
                 </div>
-                <div className="md:w-[650px] mx-auto lg:flex-[5] lg:ml-[25%] ">
+                <div className="md:w-[650px] mx-auto lg:flex-[4] lg:ml-[25%] lg:px-12 ">
                     {firstChild}
                 </div>
                 <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
                     {secondChild}
                 </div>
             </div>
+
         </>
     )
 }
