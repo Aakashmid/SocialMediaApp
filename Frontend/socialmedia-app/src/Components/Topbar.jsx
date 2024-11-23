@@ -13,7 +13,7 @@ export default function Topbar() {
     const {profileData} = useContext(ProfileDataContext);
     return (<>
         <header>
-            <div className="topbarContainer z-50 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
+            <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
                 <div className='flex items-center topbar-left'>
                     <div className="lg:hidden mr-2">
                         {showSidebar ? <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>

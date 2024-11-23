@@ -15,7 +15,7 @@ import { ProfileDataContext } from './Components/Contexts/ProfileContext';
 import FollowersFollowings from './Components/profile/FollowersFollowings';
 
 function App() {
-  const {profileData, setProfileData} = useContext(ProfileDataContext);
+  const { profileData, setProfileData } = useContext(ProfileDataContext);
   const Logout = () => {
     useEffect(() => {
       localStorage.clear();
@@ -23,11 +23,11 @@ function App() {
     }, [setProfileData]);
 
     // return <Navigate to="/login" replace />;
-    return <Navigate to="/login"  />;
+    return <Navigate to="/login" />;
   };
 
   const RegisterAndLogout = () => {
-      localStorage.clear();
+    localStorage.clear();
     return <Registration />;
   };
 
