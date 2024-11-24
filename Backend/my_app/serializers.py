@@ -136,7 +136,7 @@ class CommentSerializer(serializers.ModelSerializer):
     
     def get_likes(self,comment):
         '''get likes count'''
-        likes=Like.objects.filter(Comment=comment).count()
+        likes=Like.objects.filter(comment=comment).count()
         return likes
     
     def get_isLiked(self,comment):
@@ -144,7 +144,7 @@ class CommentSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
-        elif Like.objects.filter(Comment=comment, user=request.user.profile).exists():
+        elif Like.objects.filter(comment=comment, user=request.user.profile).exists():
             return True
         return False
 

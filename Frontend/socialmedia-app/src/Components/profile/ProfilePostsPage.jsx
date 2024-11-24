@@ -9,7 +9,7 @@ import { ProfileDataContext } from '../Contexts/ProfileContext';
 export default function ProfilePostsPage() {
     const location = useLocation();
     const {profileData,setProfileData} = useContext(ProfileDataContext);
-    const { posts, postid, profileId } = location.state || [];  //here profileId  of post owner
+    const { posts, postid, profileId } = location.state || [];  //here profileId  of post creator
     useEffect(() => {
         if (postid) {
             const element = document.getElementById(postid);

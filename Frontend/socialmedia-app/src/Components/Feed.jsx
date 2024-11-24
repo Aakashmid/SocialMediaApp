@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Post from "./Post";
+import Post from "./PostDetail";
 import SharePost from "./SharePost";
 import api from "../Api";
 import Posts from "./Posts";

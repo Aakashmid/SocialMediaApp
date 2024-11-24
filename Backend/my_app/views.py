@@ -217,7 +217,7 @@ class  CommentListCreate(ListCreateAPIView):
         if postId and  not Post.objects.filter(id=postId).first() :
             raise  Http404("Post of given id does not exits")
         if commentId is None:
-            queryset=Comment.objects.filter(post__id=postId) # fetch all comments of a post 
+            queryset=Comment.objects.filter(post__id=postId).order_by( '-time')  # order by time in descending orderfetch all comments of a post 
         else:
             queryset=Comment.objects.filter(parent=self.kwargs['commentId']) # fetch replies of comment 
         return queryset
@@ -234,16 +234,17 @@ class  CommentListCreate(ListCreateAPIView):
             serializer.save(post=post, user=user)
 
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def like_comment(request,pk=None):  # handle like on reply or comment
     comment=get_object_or_404(Comment,id=pk)
     user=request.user.profile
-    if Like.objects.filter(user=user,Comment=comment).first() is  not None:
-        Like.objects.get(user=user,Comment=comment).delete()
+    if Like.objects.filter(user=user,comment=comment).first() is  not None:
+        Like.objects.get(user=user,comment=comment).delete()
         liked=False
     else:
-        Like.objects.create(user=user,Comment=comment)
+        Like.objects.create(user=user,comment=comment)
         liked=True
     return Response({'liked':liked})
 

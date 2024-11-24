@@ -16,6 +16,19 @@ export const fetchUserProfile = async (id) => {
 
 /////////////////////////////////////////////////////////// post related
 
+
+// like a post 
+export const LikePost = async (userId) => {
+    try {
+        const res = await api.post(`/api/posts/${userId}/like/`);
+        if (res.status === 200) {
+            return res.data
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
 // get posts
 export const GetPostDetail = async (id) => {
     try {
@@ -56,6 +69,16 @@ export const CreatePost = async (id, post_data) => {
     }
 }
 
+
+///// Comment Related 
+export const fetchComments = async (post_id) => {  // post_id
+    try {
+        const response = await api.get(`/api/posts/${post_id}/comments`);
+        return await response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 //////////// follower related /////////////////
@@ -106,14 +129,3 @@ export const fetchUserFollowers = async (userId) => {
     }
 };
 
-
-export const LikePost = async (userId) => {
-    try {
-        const res = await api.post(`/api/posts/${userId}/like/`);
-        if (res.status === 200) {
-            return res.data
-        }
-    } catch (error) {
-        throw error
-    }
-}
