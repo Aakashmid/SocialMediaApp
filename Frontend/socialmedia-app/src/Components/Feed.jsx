@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Post from "./PostDetail";
 import SharePost from "./SharePost";
 import api from "../Api";
 import Posts from "./Posts";
@@ -23,10 +22,7 @@ export default function Feed({ currentUser }) {
     // Create post
     const creatPost = (data) => {
         api.post('api/posts/', data).then((res) => {
-            if (res.status === 201) {
-                console.log('post created ')
-                getPosts()
-            }
+            getPosts()
         }).catch((error) => {
             console.log(error.response.data)
         })

@@ -7,10 +7,8 @@ import {
 
 import { Navigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import { TOKEN, USER_ID } from './Components/constants';
 import { Login, Profile, Registration, Home } from './Components/index'
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
-import { fetchUserProfile } from './Components/apiService';
 import { ProfileDataContext } from './Components/Contexts/ProfileContext';
 import FollowersFollowings from './Components/profile/FollowersFollowings';
 
@@ -30,7 +28,6 @@ function App() {
     localStorage.clear();
     return <Registration />;
   };
-
   return (
     <>
       <Router>

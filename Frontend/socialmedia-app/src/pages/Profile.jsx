@@ -49,8 +49,8 @@ const Profile = () => {
         api.post('api/posts/', data).then((res) => {
             if (res.status === 201) {
                 console.log('post created ')
-                getProfilePosts()
-                getProfileData()
+                getProfilePosts()   // in place of fetching all posts again , just add new post to profilePosts state (have to do )
+                setProfileData({...profileData,posts_count: profileData.posts_count+1})
             }
         }).catch((error) => {
             console.log(error.response.data)

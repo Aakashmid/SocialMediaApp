@@ -12,10 +12,7 @@ export const fetchUserProfile = async (id) => {
     }
 };
 
-
-
 /////////////////////////////////////////////////////////// post related
-
 
 // like a post 
 export const LikePost = async (userId) => {
@@ -80,6 +77,14 @@ export const fetchComments = async (post_id) => {  // post_id
     }
 }
 
+export const createComment = async (post_id, comment_data) => {
+    try {
+        const response = await api.post(`/api/posts/${post_id}/comments/`, comment_data);
+        return await response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 //////////// follower related /////////////////
 
