@@ -2,22 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Topbar from '../Components/Topbar'
 import SharePost from '../Components/SharePost'
-import {  ProfileDataContext } from '../Components/Contexts/ProfileContext'
+import { ProfileDataContext } from '../Components/Contexts/ProfileContext'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
 import ProfilePosts from '../Components/profile/ProfilePosts'
 import { followUser, unfollowUser } from '../Components/apiService'
+import { Button } from '@mui/material'
 
 const Profile = () => {
 
+    const { profileData, setProfileData } = useContext(ProfileDataContext)   // profile data is current user profile data , fetching it form profileContext
     const [profile, setProfile] = useState({});
     const [isCUProfile, setisCUProfile] = useState(false); // is currentuserprofie
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
-    const {profileData,setProfileData} = useContext(ProfileDataContext)
-    
+
     const navigate = useNavigate()
 
     const { id } = useParams()
@@ -26,7 +27,7 @@ const Profile = () => {
     const getProfileData = async () => {
         try {
             const res = await api.get(`api/users/${id}/`)
-                setProfile(res.data);
+            setProfile(res.data);
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
@@ -50,7 +51,7 @@ const Profile = () => {
             if (res.status === 201) {
                 console.log('post created ')
                 getProfilePosts()   // in place of fetching all posts again , just add new post to profilePosts state (have to do )
-                setProfileData({...profileData,posts_count: profileData.posts_count+1})
+                setProfileData({ ...profileData, posts_count: profileData.posts_count + 1 })
             }
         }).catch((error) => {
             console.log(error.response.data)
@@ -78,16 +79,16 @@ const Profile = () => {
     const handleFollow = async (userId) => {
         if (profile.isFollowed) {
             const response = await unfollowUser(userId);
-            setProfile({...profile,followers_count:profile.followers_count-1,isFollowed:false})
-            if (profile.id !=profileData.id){
-                setProfileData({...profileData,followings_count:profileData.followings_count-1})
+            setProfile({ ...profile, followers_count: profile.followers_count - 1, isFollowed: false })
+            if (profile.id != profileData.id) {
+                setProfileData({ ...profileData, followings_count: profileData.followings_count - 1 })
             }
             console.log(response)
         } else {
             const response = await followUser(userId);
-            setProfile({...profile,followers_count:profile.followers_count+1,isFollowed:true})
-            if (profile.id !=profileData.id){
-                setProfileData({...profileData,followings_count:profileData.followings_coun+1})
+            setProfile({ ...profile, followers_count: profile.followers_count + 1, isFollowed: true })
+            if (profile.id != profileData.id) {
+                setProfileData({ ...profileData, followings_count: profileData.followings_coun + 1 })
             }
             console.log(response)
         }
@@ -118,7 +119,7 @@ const Profile = () => {
                             <p className="profile-bio mt-2 text-center ">{profile.bio}</p>
                             <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
                                 <div className="profile-followers">
-                                    <Link className=''  to={`${profile.followers_count > 0 ? 'followers' : ''}`}>
+                                    <Link className='' to={`${profile.followers_count > 0 ? 'followers' : ''}`}>
                                         <p className="font-semibold  text-center">{profile.followers_count}</p>
                                         <p className="text-center text-sm text-gray-500">Followers</p>
                                     </Link>
@@ -138,8 +139,9 @@ const Profile = () => {
                         {isCUProfile &&
                             <div className='px-4 mx-auto lg:w-2/3 xl:2-1/2 '>
                                 <div className="grid grid-cols-2 gap-5 py-2 mb-4">
-                                    <button className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>Edit Profile</button>
-                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className=' hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
+                                    {/* profile buttons  */}
+                                    <Link className='block  hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white text-center' to={`/profile/${profileData.username}/edit`}>Edit Profile</Link>
+                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className='cursor-pointer hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
                                 </div>
                                 {showShare &&
                                     <div className="relative py-4">

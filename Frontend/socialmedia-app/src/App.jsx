@@ -11,6 +11,7 @@ import { Login, Profile, Registration, Home } from './Components/index'
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 import { ProfileDataContext } from './Components/Contexts/ProfileContext';
 import FollowersFollowings from './Components/profile/FollowersFollowings';
+import EditProfile from './Components/profile/EditProfile';
 
 function App() {
   const { profileData, setProfileData } = useContext(ProfileDataContext);
@@ -45,6 +46,9 @@ function App() {
           } />
           <Route path='/profile/:id/:str' element={
             <ProtectedRoute><FollowersFollowings /></ProtectedRoute>
+          } />
+          <Route path='/profile/:username/edit' element={
+            <ProtectedRoute><EditProfile /></ProtectedRoute>
           } />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<RegisterAndLogout />} />

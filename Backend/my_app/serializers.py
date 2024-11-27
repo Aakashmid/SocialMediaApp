@@ -39,9 +39,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     followings_count=serializers.SerializerMethodField()
     isFollowed=serializers.SerializerMethodField()
     profileImg=serializers.SerializerMethodField()
+    email=serializers.SerializerMethodField()
     class Meta:
         model=Profile
-        fields=['id','bio','username','profileImg','full_name','date_of_birth','gender','posts_count','date_joined','isFollowed','followers_count','followings_count'] 
+        fields=['id','bio','username','email','profileImg','full_name','date_of_birth','gender','posts_count','date_joined','isFollowed','followers_count','followings_count'] 
     
     def get_posts_count(self,profile):
         return profile.posts.count()
@@ -51,6 +52,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_username(self,profile):
         return profile.user.username
 
+    def get_email(self,profile):
+        return profile.user.email
     def get_followers_count(self,profile):
         return profile.followers.count()
     

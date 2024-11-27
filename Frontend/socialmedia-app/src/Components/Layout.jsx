@@ -16,9 +16,11 @@ export default function Layout({ children }) {
                 <div className="md:w-[650px] mx-auto lg:flex-[4] lg:ml-[25%] lg:px-12 ">
                     {firstChild}
                 </div>
-                <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
-                    {secondChild}
-                </div>
+                {secondChild &&
+                    <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
+                        {secondChild}
+                    </div>
+                }
             </div>
 
         </>
