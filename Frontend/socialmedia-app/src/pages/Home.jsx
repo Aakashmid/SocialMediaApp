@@ -4,7 +4,7 @@ import { HomePageLoader } from "../Components/Loader";
 import Layout from "../Components/Layout";
 import { ProfileDataContext } from "../Components/Contexts/ProfileContext";
 import { LoadingContext } from "../Components/Contexts/LoadingContext";
-import { fetchUserProfile } from "../Components/apiService";
+import {  useFetchUserProfile } from "../Components/apiService";
 import { USER_ID } from "../Components/constants";
 import Rightbar from "../Components/Rightbar";
 
@@ -14,6 +14,7 @@ export default function Home() {
   const { loading, setLoading } = useContext(LoadingContext);
   // const [ loading, setLoading ] = useState(false);
   const { profileData, setProfileData } = useContext(ProfileDataContext);
+  const fetchUserProfile  = useFetchUserProfile();    // custom hook 
   const user_id = localStorage.getItem(USER_ID);
 
 

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Layout from '../Layout'
 import { ArrowBack } from '@mui/icons-material'
 import { ProfileDataContext } from '../Contexts/ProfileContext'
-import { fetchUserFollowers, fetchUserFollowings, fetchUserProfile, followUser, unfollowUser } from '../apiService'
+import { fetchUserFollowers, fetchUserFollowings, useFetchUserProfile, followUser, unfollowUser } from '../apiService'
 import { PageTopBackArrow } from '../SmallComponents'
 
 
@@ -13,6 +13,7 @@ export default function FollowersFollowings() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);           // here data is user followings or followers
     const { profileData, setProfileData } = useContext(ProfileDataContext);
+    const fetchUserProfile = useFetchUserProfile();
 
 
     const handelFollowUnfollow = async (user) => {

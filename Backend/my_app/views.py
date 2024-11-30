@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema
 from django.http import Http404
 from rest_framework.viewsets import ModelViewSet,ViewSet
 from rest_framework.decorators import api_view,permission_classes
@@ -13,7 +14,7 @@ from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer
+from .serializers import ProfileSerializer,PostSerializer,CommentSerializer,UserSerializer , LoginSerializer
 from .models import Profile,Post,Like, Comment, Follower
 # Create your views here.
 
@@ -31,6 +32,10 @@ def custom_404_view(request,exception):
 
 
 # for authentication
+@extend_schema(
+        request=UserSerializer,
+        responses={200:UserSerializer,404:None}
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def signupHandler(request):
@@ -46,12 +51,15 @@ def signupHandler(request):
     return Response({'error':serializer.errors},status=status.HTTP_409_CONFLICT)
 
 
+@extend_schema(
+    request=LoginSerializer,
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def loginHandler(request):
     user=get_object_or_404(User,username=request.data['username'])
     if not user.check_password(request.data['password']):
-        return Response({'data':'not found'},status=status.HTTP_404_NOT_FOUND)
+        return Response({'error':'user not found'},status=status.HTTP_404_NOT_FOUND)
     
     token ,created=Token.objects.get_or_create(user=user)
     serializer=UserSerializer(instance=user)

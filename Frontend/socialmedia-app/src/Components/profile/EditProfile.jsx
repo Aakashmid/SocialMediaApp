@@ -27,7 +27,7 @@ export default function EditProfile() {
                         return <h1 key={index} >{value}</h1>
                     })}
                 </div> */}
-                <div className="page-center grid grid-rows-4 lg:grid-rows-2 lg:grid-cols-2 gap-5">
+                <div className="page-center grid grid-rows-4  gap-5">
                     <div className="page-center-top overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">
                         {/* <span className="p-2 top-4 right-4 absolute"><Edit/></span> */}
                         <label className="p-1 hover:bg-gray-200 top-4 right-4 absolute bg-white rounded-xl">
@@ -53,12 +53,12 @@ export default function EditProfile() {
                     <div className="bg-gray-100 rounded-lg py-2  h-10 my-2 ">
                         <form onSubmit={handleUpdate}></form>
                     </div>
-                    <div className="bg-gray-100 rounded-lg py-2  md:w-[650px]">
+                    {/* <div className="bg-gray-100 rounded-lg py-2  md:w-[650px]">
                         <form onSubmit={handleUpdate}></form>
                     </div>
                     <div className="bg-gray-100 rounded-lg py-2  h-10 my-2">
                         <form onSubmit={handleUpdate}></form>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </Layout >

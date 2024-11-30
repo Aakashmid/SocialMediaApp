@@ -8,7 +8,6 @@ import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
 import ProfilePosts from '../Components/profile/ProfilePosts'
 import { followUser, unfollowUser } from '../Components/apiService'
-import { Button } from '@mui/material'
 
 const Profile = () => {
 

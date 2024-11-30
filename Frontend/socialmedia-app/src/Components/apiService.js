@@ -1,15 +1,22 @@
 import api from "../Api"
+import {  useNavigate } from "react-router-dom";
+export const useFetchUserProfile = () => {
+    const navigate = useNavigate();
 
+    const fetchUserProfile = async (id) => {
+        try {
+            const response = await api.get(`/api/users/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+            if (error.response && error.response.status === 401) { // Correct error status check
+                navigate('/login');
+            }
+            throw error;
+        }
+    };
 
-export const fetchUserProfile = async (id) => {
-    // console.log(id);
-    try {
-        const response = await api.get(`/api/users/${id}`);
-        return response.data;  // Axios automatically parses JSON
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        throw error;
-    }
+    return fetchUserProfile;
 };
 
 /////////////////////////////////////////////////////////// post related

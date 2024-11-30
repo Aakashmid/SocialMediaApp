@@ -4,13 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { ProfileDataProvider } from './Components/Contexts/ProfileContext.jsx'
 import { LoadingProvider } from './Components/Contexts/LoadingContext.jsx'
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LoadingProvider>
-      <ProfileDataProvider>
-        <App />
-      </ProfileDataProvider>
-    </LoadingProvider>
+    <BrowserRouter>
+      <LoadingProvider>
+        <ProfileDataProvider>
+          <App />
+        </ProfileDataProvider>
+      </LoadingProvider>
+    </BrowserRouter>
   </StrictMode>,
 )

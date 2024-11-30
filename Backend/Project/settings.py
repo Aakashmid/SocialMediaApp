@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #external apps
+    'drf_spectacular',
     'corsheaders',
     'my_app',
     'rest_framework',
@@ -135,6 +137,9 @@ REST_FRAMEWORK = {
     # 'DEFAULT_FILTER_BACKENDS':(
     #     'django_filters.rest_framework.DjangoFilterBackend',
     # ),
+    
+    # drf - spectacular configuration
+     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 CORS_ALLOW_ALL_ORIGINS = True   # for development only 
@@ -142,3 +147,12 @@ CORS_ALLOW_ALL_ORIGINS = True   # for development only
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:5173',  # allow specific orign to make request
 # ]
+
+# drf_spectacular configuration
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Buzzline API Documentation',
+    'DESCRIPTION': 'Buzzline is a Social Media Application ',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    # OTHER SETTINGS
+}

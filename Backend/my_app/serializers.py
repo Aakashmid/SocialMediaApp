@@ -3,8 +3,13 @@ from django.contrib.auth.models import User
 from my_app.models import Comment,Like,Profile,Post,Follower
 from rest_framework.exceptions import ValidationError
 
-# ------------------------------------------------------------------------- #
+# ----------------------------USER RELATED SERIALIZER--------------------------------------------- #
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
 
+
+# inplace of userserializer use register serializer in register view 
 class UserSerializer(serializers.ModelSerializer):
     full_name  = serializers.CharField(write_only=True) 
     class Meta:

@@ -1,6 +1,5 @@
 import ProtectedRoute from './Components/Protectedroute';
 import {
-  BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
@@ -31,7 +30,7 @@ function App() {
   };
   return (
     <>
-      <Router>
+
         <Routes>
           <Route path="/" element={
             <ProtectedRoute>
@@ -54,7 +53,6 @@ function App() {
           <Route path='/register' element={<RegisterAndLogout />} />
           <Route path='/logout' element={<Logout />} />
         </Routes>
-      </Router>
     </>
   )
 }
