@@ -45,10 +45,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     isFollowed=serializers.SerializerMethodField()
     profileImg=serializers.SerializerMethodField()
     email=serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
     class Meta:
         model=Profile
         fields=['id','bio','username','email','profileImg','full_name','date_of_birth','gender','posts_count','date_joined','isFollowed','followers_count','followings_count'] 
     
+    def get_id(self,profile):
+        return profile.user.id
     def get_posts_count(self,profile):
         return profile.posts.count()
     def get_full_name(self,profile):

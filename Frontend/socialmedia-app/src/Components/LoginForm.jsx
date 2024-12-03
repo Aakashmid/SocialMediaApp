@@ -37,7 +37,6 @@ export default function LoginForm({ route, method }) {
     else {
       try {
         setIsLoading(true)
-
         const res = await api.post(route, payload);
         if (res && res.data) {
           localStorage.setItem(TOKEN, res.data.token)
@@ -46,7 +45,10 @@ export default function LoginForm({ route, method }) {
           navigate('/')
         }
       } catch (error) {
-        console.log(error.response.data)
+        if (error.response && error.response.status === 404) {
+          setShowError('User not found! ');
+        }
+        console.log(error)
       } finally {
         setIsLoading(false)
       }
@@ -59,7 +61,7 @@ export default function LoginForm({ route, method }) {
       <form onSubmit={handleSubmit} className="p-5  flex flex-col space-y-5 w-full shadow-md">
         {isLoading && <CircleLoader />}
         <div className="">
-          <p className="text-center text-red-600 mb-2">{showError}</p>
+          <p className="text-center text-red-600 mb-2">{showError || ''}</p>
           <h2 className="mb-10 text-center text-3xl font-semibold">{method === 'login' ? 'Login' : 'Signup'}</h2>
         </div>
         <div className="">

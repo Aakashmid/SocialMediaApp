@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import status 
-from rest_framework.generics import ListAPIView,RetrieveUpdateAPIView,ListCreateAPIView
+from rest_framework import generics
 from rest_framework.filters import SearchFilter
 
 from rest_framework.decorators import action
@@ -65,6 +65,13 @@ def loginHandler(request):
     serializer=UserSerializer(instance=user)
     return Response({'token':token.key,'user':serializer.data},status=status.HTTP_200_OK)
 
+@api_view(['DELETE'])
+def remove_account(request,user_id=None ):
+    user = request.user
+    if user_id and user.id == int(user_id):
+        User.objects.delete(user=user)
+        return Response({'status':"success",'message':'successfully deleted user account'})
+    return Response({'status':"failed",'message':'userid is incorrect '})
 
 @api_view(['POST'])
 def logoutHandler(request):
@@ -78,7 +85,7 @@ def logoutHandler(request):
 
 
 #  list searched users
-class ProfileListView(ListAPIView):
+class ProfileListView(generics.ListAPIView):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
 
@@ -86,7 +93,7 @@ class ProfileListView(ListAPIView):
     filter_backends=[SearchFilter]
 
 # profile view for getting profile data and updating profile
-class ProfileDetailView(RetrieveUpdateAPIView):
+class ProfileDetailView(generics.RetrieveUpdateAPIView):
     serializer_class=ProfileSerializer
     queryset=Profile.objects.all()
 
@@ -110,7 +117,7 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 # Follower model related request handler
 class FollowView(ViewSet):
     def follow(self,request,pk):
-        usertoFollow=get_object_or_404(Profile,id=pk)
+        usertoFollow=get_object_or_404(Profile,user=pk)
         follower=request.user.profile
         if usertoFollow == follower:
             return Response({"detail": "You cannot follow or unfollow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
@@ -121,7 +128,7 @@ class FollowView(ViewSet):
 
 
     def unfollow(self,request,pk):
-        toUnFollow=get_object_or_404(Profile,id=pk)
+        toUnFollow=get_object_or_404(Profile,user=pk)
         follower=request.user.profile
         if toUnFollow == follower:
             return Response({"detail": "You cannot follow or unfollow yourself!"}, status=status.HTTP_400_BAD_REQUEST)
@@ -130,14 +137,14 @@ class FollowView(ViewSet):
     
     # get all followers
     def followers(self,request,pk):
-        toFollwoing=get_object_or_404(Profile,id=pk)
+        toFollwoing=get_object_or_404(Profile,user=pk)
         data=[obj.follower for obj  in toFollwoing.followers.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
     # get all followings
 
     def followings(self,request,pk):
-        follower=get_object_or_404(Profile,id=pk)
+        follower=get_object_or_404(Profile,user=pk)
         data=[obj.toFollowing for obj in follower.followings.all()]
         serialize=ProfileSerializer(data,many=True,context={'request':request})
         return Response(serialize.data)
@@ -170,12 +177,13 @@ class FollowView(ViewSet):
         return Response(serializer.data)
 
   
-class ProfilePostsView(ListAPIView):
+class ProfilePostsView(generics.ListAPIView):
     serializer_class=PostSerializer
     def get_queryset(self):
-        creator=get_object_or_404(Profile,id=self.kwargs.get('user_id',None))
-        queryset=Post.objects.filter(creator=creator) #filter post by author
-        return queryset
+        user_id= self.kwargs.get('user_id',None)
+        if user_id is not None:
+            queryset=Post.objects.filter(creator=user_id) #filter post by author
+            return queryset
 
 
 class PostviewSet(ModelViewSet):
@@ -212,9 +220,16 @@ class PostviewSet(ModelViewSet):
         '''
         This view handles save a post and checks if the user has already saved it and unsave it 
         '''
-        pass
+        return Response({'detail':'Post  saved'})
 
-class  CommentListCreate(ListCreateAPIView):
+    @action(detail=False,methods=['get'],url_path='saved')
+    def get_saved_posts(self,request):
+        '''will return saved post of a user if has'''
+        return Response({'saved posts':[]})
+        # pass
+
+
+class  CommentListCreate(generics.ListCreateAPIView):
     serializer_class=CommentSerializer
     def get_queryset(self):
         """
@@ -223,7 +238,7 @@ class  CommentListCreate(ListCreateAPIView):
         postId=self.kwargs.get('postId',None)
         commentId=self.kwargs.get('commentId',None)
         if postId and  not Post.objects.filter(id=postId).first() :
-            raise  Http404("Post of given id does not exits")
+            raise  Http404("Post of given id does not exists")
         if commentId is None:
             queryset=Comment.objects.filter(post__id=postId).order_by( '-time')  # order by time in descending orderfetch all comments of a post 
         else:
@@ -232,16 +247,18 @@ class  CommentListCreate(ListCreateAPIView):
     
 
     def perform_create(self, serializer):
-        post = get_object_or_404(Post, id=self.kwargs['postId'])  # Get the Post by postId
-        user = get_object_or_404(Profile, user=self.request.user)  # Get the Profile of the current user
-        if self.kwargs.get('commentId', None) is not None:  # for handling reply on post 
+        user = get_object_or_404(Profile, user=self.request.user)        # Get the Profile object  of the current user
+        if self.kwargs.get('commentId', None) is not None:               # for handling reply on post 
             parent = get_object_or_404(Comment, id=self.kwargs['commentId'])
-            serializer.save(post=post, author=user, parent=parent)
+            serializer.save(post=parent.post, user=user, parent=parent)
         # Save the comment with the related post, author, and parent (if provided)
         else:
+            post = get_object_or_404(Post, id=self.kwargs['postId'])         # Get the Post by postId
             serializer.save(post=post, user=user)
 
-
+class CommentReplyUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class=CommentSerializer
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

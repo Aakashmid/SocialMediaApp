@@ -1,6 +1,10 @@
+import { useEffect } from "react";
 import LoginForm from "../Components/LoginForm";
 
 export default function Login() {
+    useEffect(() => {
+        localStorage.clear();
+    }, [])
     return (
         <div className="login-page min-h-[100vh] bg-gray-100 flex">
             <div className="login-page-wrapper flex   lg:space-x-[30px] items-center    mx-auto w-full  md:w-11/12 lg:w-[1200px] px-5 ">

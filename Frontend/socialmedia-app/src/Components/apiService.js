@@ -2,7 +2,6 @@ import api from "../Api"
 import {  useNavigate } from "react-router-dom";
 export const useFetchUserProfile = () => {
     const navigate = useNavigate();
-
     const fetchUserProfile = async (id) => {
         try {
             const response = await api.get(`/api/users/${id}`);
@@ -15,9 +14,9 @@ export const useFetchUserProfile = () => {
             throw error;
         }
     };
-
     return fetchUserProfile;
 };
+
 
 /////////////////////////////////////////////////////////// post related
 
@@ -47,6 +46,7 @@ export const GetPostDetail = async (id) => {
 }
 
 
+// update a post
 export const UpdatePost = async (id, post_data) => {
     try {
         const response = await api.put(`/api/posts/${id}`, post_data);
@@ -75,7 +75,7 @@ export const CreatePost = async (id, post_data) => {
 
 
 ///// Comment Related 
-export const fetchComments = async (post_id) => {  // post_id
+export const fetchComments = async (post_id) => {  // fetch comments of post of post_id
     try {
         const response = await api.get(`/api/posts/${post_id}/comments`);
         return await response.data;
@@ -91,6 +91,10 @@ export const createComment = async (post_id, comment_data) => {
     } catch (error) {
         throw error;
     }
+}
+
+export const deleteComment = async (comment_id) => {
+    
 }
 
 //////////// follower related /////////////////

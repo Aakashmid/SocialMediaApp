@@ -2,12 +2,13 @@
 from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
-from django.conf.urls import handler404
+# from django.conf.urls import handler404
 from django.conf.urls.static import static
 from my_app import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-handler404 = views.custom_404_view
+# handler404 = views.custom_404_view
+handler404 = 'my_app.views.custom_404_view'   # works only when debug is false
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,7 +23,6 @@ urlpatterns = [
     path('api/auth/login/', views.loginHandler),
     path('api/auth/logout/', views.logoutHandler),
     path('api/', include('my_app.urls')),
-
 
 ]
 

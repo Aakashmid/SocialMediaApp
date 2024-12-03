@@ -96,6 +96,7 @@ const Profile = () => {
     const Underline = () => {  // underlineComponent
         return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
     }
+
     return (
         <>
             <Topbar />
