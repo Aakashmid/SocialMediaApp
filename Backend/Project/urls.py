@@ -4,7 +4,7 @@ from django.urls import path,include
 from django.conf import settings
 # from django.conf.urls import handler404
 from django.conf.urls.static import static
-from my_app import views
+from user import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 # handler404 = views.custom_404_view

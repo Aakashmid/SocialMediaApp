@@ -1,5 +1,8 @@
 import api from "../Api"
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
+/////////////////////////////////////////////////////////////// user related endpoints
 export const useFetchUserProfile = () => {
     const navigate = useNavigate();
     const fetchUserProfile = async (id) => {
@@ -18,15 +21,16 @@ export const useFetchUserProfile = () => {
 };
 
 
-/////////////////////////////////////////////////////////// post related
+// delete user account
+
+
+//////////////////////////////////////////////////////////////////Post related
 
 // like a post 
 export const LikePost = async (userId) => {
     try {
         const res = await api.post(`/api/posts/${userId}/like/`);
-        if (res.status === 200) {
-            return res.data
-        }
+        return res.data
     } catch (error) {
         throw error
     }
@@ -50,9 +54,6 @@ export const GetPostDetail = async (id) => {
 export const UpdatePost = async (id, post_data) => {
     try {
         const response = await api.put(`/api/posts/${id}`, post_data);
-        if (response.status != 200) {
-            throw new Error('Failed to update post');
-        }
         return await response.data;
     } catch (error) {
         throw error;
@@ -84,6 +85,15 @@ export const fetchComments = async (post_id) => {  // fetch comments of post of 
     }
 }
 
+export const fetchReplies = async (comment_id) => {  // fetch replies of a comment
+    try {
+        const response = await api.get(`/api/comments/${post_id}/replies`);
+        return await response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const createComment = async (post_id, comment_data) => {
     try {
         const response = await api.post(`/api/posts/${post_id}/comments/`, comment_data);
@@ -94,7 +104,7 @@ export const createComment = async (post_id, comment_data) => {
 }
 
 export const deleteComment = async (comment_id) => {
-    
+
 }
 
 //////////// follower related /////////////////
