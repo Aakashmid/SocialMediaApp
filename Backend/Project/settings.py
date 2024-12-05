@@ -30,9 +30,12 @@ INSTALLED_APPS = [
     #external apps
     'drf_spectacular',
     'corsheaders',
-    'my_app',
     'rest_framework',
     'rest_framework.authtoken',
+    # project App
+    'user',
+    'comment',
+    'post'
 ]
 
 MIDDLEWARE = [
@@ -142,11 +145,13 @@ REST_FRAMEWORK = {
      'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-CORS_ALLOW_ALL_ORIGINS = True   # for development only 
 
+
+CORS_ALLOW_ALL_ORIGINS = True   # for development only 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:5173',  # allow specific orign to make request
 # ]
+
 
 # drf_spectacular configuration
 SPECTACULAR_SETTINGS = {

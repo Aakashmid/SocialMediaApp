@@ -29,6 +29,7 @@ class PostviewSet(viewsets.ModelViewSet):
             creator = get_object_or_404(Profile, user=self.request.user)
             serializer.save(creator=creator)
 
+
     @action(detail=True, methods=['post'],url_path='toggle-like')
     def like_post(self, request, pk=None):
         '''
@@ -43,13 +44,15 @@ class PostviewSet(viewsets.ModelViewSet):
             Like.objects.create(user=user,post=post)  # Create a new Like object
             liked = True
         return Response({'liked': liked}, status=status.HTTP_200_OK)
-    
+
+
     @action(detail=True,methods=['post']) 
     def save_post(self,request,pk=None):
         '''
         This view handles save a post and checks if the user has already saved it and unsave it 
         '''
         return Response({'detail':'Post  saved'})
+
 
     @action(detail=False,methods=['get'],url_path='saved')
     def get_saved_posts(self,request):

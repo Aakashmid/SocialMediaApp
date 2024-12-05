@@ -16,7 +16,6 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
-# Create your views here.
 
 
 @api_view(['GET', 'POST'])
@@ -93,6 +92,7 @@ class ProfileListView(generics.ListAPIView):
 
     search_fields=['bio','user__username']  # search profiles by username or bio
     filter_backends=[SearchFilter]
+
 
 # profile view for getting profile data and updating profile
 class ProfileDetailView(generics.RetrieveUpdateAPIView):

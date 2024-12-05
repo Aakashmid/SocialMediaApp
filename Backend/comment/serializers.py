@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from user.serializers import ProfileSerializer
 from post.models import Like
+from .models import Comment
 from rest_framework.exceptions import ValidationError
 
 
