@@ -4,7 +4,7 @@ import ProfilePopover from "./Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
 import { useContext, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
-import { ProfileDataContext } from "./Contexts/ProfileContext";
+import { ProfileDataContext } from "../Contexts/ProfileContext";
 
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);

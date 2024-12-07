@@ -1,12 +1,9 @@
 import { Close, MoreVert } from '@mui/icons-material'
 import React, { useContext, useEffect, useState } from 'react'
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import { formatDistanceToNow } from 'date-fns'
-import { Link } from 'react-router-dom'
 import { Post } from './PostDetail';
 import { createComment, fetchComments } from './apiService';
 import { CommentInput, CommentUserCard } from './CommentComponents';
-import { ProfileDataContext } from './Contexts/ProfileContext';
+import { ProfileDataContext } from '../Contexts/ProfileContext';
 
 export default function Comments({ post, closeComments }) {
     const [comments, setComments] = useState([]);

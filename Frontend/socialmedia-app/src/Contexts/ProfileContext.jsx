@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { USER_ID } from '../constants';
-import {  useFetchUserProfile } from '../apiService';
+import { USER_ID } from '../Components/constants';
+import { useFetchUserProfile } from '../Components/apiService';
 import { LoadingContext } from './LoadingContext';
 
 export const ProfileDataContext = createContext();

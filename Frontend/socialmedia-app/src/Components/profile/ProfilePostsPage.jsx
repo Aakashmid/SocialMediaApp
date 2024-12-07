@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 import { ArrowBack } from '@mui/icons-material';
 import Layout from '../Layout';
-import { ProfileDataContext } from '../Contexts/ProfileContext';
+import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 export default function ProfilePostsPage() {
     const location = useLocation();

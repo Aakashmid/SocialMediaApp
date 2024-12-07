@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ExitToApp, PersonOutline } from '@mui/icons-material'
-import { ProfileDataContext } from '../Contexts/ProfileContext'
+import { ProfileDataContext } from '../../Contexts/ProfileContext'
 
 
 export default function ProfilePopover({ popover }) {

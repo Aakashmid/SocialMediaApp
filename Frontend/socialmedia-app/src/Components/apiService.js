@@ -2,7 +2,7 @@ import api from "../Api"
 import { useNavigate } from "react-router-dom";
 
 
-/////////////////////////////////////////////////////////////// user related endpoints
+////////////////////////////////// User related endpoints ///////////////////////////////
 export const useFetchUserProfile = () => {
     const navigate = useNavigate();
     const fetchUserProfile = async (id) => {
@@ -21,31 +21,50 @@ export const useFetchUserProfile = () => {
 };
 
 
-// delete user account
-
-
-//////////////////////////////////////////////////////////////////Post related
-
-// like a post 
-export const LikePost = async (userId) => {
+export const updateProfile = async (user_id, profile_data) => {
     try {
-        const res = await api.post(`/api/posts/${userId}/like/`);
-        return res.data
+        const response = await api.put(`/api/users/${user_id}`, profile_data);
+        return response.data;
     } catch (error) {
-        throw error
+        console.error('Error updating profile:', error);
+        throw error;
     }
 }
 
+// delete user account
+
+
+
+/////////////////////// Post related ///////////////////////
+
 // get posts
-export const GetPostDetail = async (id) => {
+export const fetchPosts = async (post_id) => {
     try {
-        const response = await api.get(`/api/posts/${id}`);
-        if (response.status != 200) {
-            throw new Error('Failed to fetch post detail');
-        }
+        const response = await api.get(`/api/posts/`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// get post detail
+export const GetPostDetail = async (post_id) => {
+    try {
+        const response = await api.get(`/api/posts/${post_id}`);
         return await response.data;
     } catch (error) {
         throw error;
+    }
+}
+
+
+// like a post 
+export const LikePost = async (post_id) => {
+    try {
+        const res = await api.post(`/api/posts/${post_id}/toggle-like/`);
+        return res.data
+    } catch (error) {
+        throw error
     }
 }
 
@@ -62,23 +81,20 @@ export const UpdatePost = async (id, post_data) => {
 
 
 // create post
-export const CreatePost = async (id, post_data) => {
+export const CreatePost = async ( post_data) => {
     try {
         const response = await api.post(`/api/posts/`, post_data);
-        if (response.status != 201) {
-            throw new Error('Failed to create post');
-        }
-        return await response.data;
+        return response.data;
     } catch (error) {
         throw error;
     }
 }
 
 
-///// Comment Related 
-export const fetchComments = async (post_id) => {  // fetch comments of post of post_id
+///////////////////////////////// Comment Related  /////////////////////////////////
+export const fetchComments = async (post_id) => {  // fetch comments of a post of post_id
     try {
-        const response = await api.get(`/api/posts/${post_id}/comments`);
+        const response = await api.get(`/api/comments/posts/${post_id}/`);
         return await response.data;
     } catch (error) {
         throw error;
@@ -94,20 +110,39 @@ export const fetchReplies = async (comment_id) => {  // fetch replies of a comme
     }
 }
 
+
 export const createComment = async (post_id, comment_data) => {
     try {
-        const response = await api.post(`/api/posts/${post_id}/comments/`, comment_data);
+        const response = await api.post(`/api/comments/posts/${post_id}/`, comment_data);
         return await response.data;
     } catch (error) {
         throw error;
     }
 }
 
-export const deleteComment = async (comment_id) => {
 
+export const createReply = async (comment_id, reply_data) => {
+    try {
+        const response = await api.post(`/api/comments/${post_id}/replies/`, reply_data);
+        return await response.data;
+    } catch (error) {
+        throw error;
+    }
 }
 
-//////////// follower related /////////////////
+
+export const deleteComment = async (comment_id) => {
+    try {
+        const response = await api.delete(`/api/comments/${comment_id}/`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
+//////////////////////// follower related //////////////////////////
 
 // follow a user
 export const followUser = async (userId) => {

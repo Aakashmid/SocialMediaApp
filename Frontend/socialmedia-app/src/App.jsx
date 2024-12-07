@@ -7,10 +7,12 @@ import {
 import { Navigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { Login, Profile, Registration, Home } from './Components/index'
-import ProfilePostsPage from './Components/profile/ProfilePostsPage';
-import { ProfileDataContext } from './Components/Contexts/ProfileContext';
+
+
 import FollowersFollowings from './Components/profile/FollowersFollowings';
 import EditProfile from './Components/profile/EditProfile';
+import { ProfileDataContext } from './Contexts/ProfileContext';
+import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 
 function App() {
   const { profileData, setProfileData } = useContext(ProfileDataContext);

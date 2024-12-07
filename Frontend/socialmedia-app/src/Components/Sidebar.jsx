@@ -2,7 +2,7 @@ import { RssFeed, Chat, School, Event, WorkOutline, HelpOutline, Bookmark, PlayC
 import { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "../Api"
-import { ProfileDataContext } from "./Contexts/ProfileContext";
+import { ProfileDataContext } from "../Contexts/ProfileContext";
 import { fetchUserFollowings } from "./apiService";
 export default function Sidebar() {
   const [followings, setFollowings] = useState([]);

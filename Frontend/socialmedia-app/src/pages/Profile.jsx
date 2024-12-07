@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Topbar from '../Components/Topbar'
 import SharePost from '../Components/SharePost'
-import { ProfileDataContext } from '../Components/Contexts/ProfileContext'
+import { ProfileDataContext } from '../Contexts/ProfileContext'
 import api from '../Api'
 import Sidebar from '../Components/Sidebar'
 import { Close } from '@mui/icons-material'
@@ -56,6 +56,7 @@ const Profile = () => {
             console.log(error.response.data)
         })
     }
+
 
     // fetch profile data if the id in the url is not the same as the logged in user's id
     useEffect(() => {

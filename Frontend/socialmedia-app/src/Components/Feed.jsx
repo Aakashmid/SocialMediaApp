@@ -2,40 +2,30 @@ import { useEffect, useState } from "react";
 import SharePost from "./SharePost";
 import api from "../Api";
 import Posts from "./Posts";
+import { fetchPosts } from "./apiService";
 
 
 export default function Feed({ currentUser }) {
 
     const [posts, setPosts] = useState([])
-    const getPosts = () => {
-        api.get('api/posts/').then((res) => {
-            if (res.status === 200) {
-                console.log('ok')
-                setPosts(res.data)
-            }
-        }).catch((error) => {
-            console.log(error)
-        })
+    const getPosts =async () => {
+        try {
+            const data = await fetchPosts();
+            setPosts(data);
+        } catch (error) {
+            console.error(error);
+        }
         // console.log(posts);
     }
 
-    // Create post
-    const creatPost = (data) => {
-        api.post('api/posts/', data).then((res) => {
-            getPosts()
-        }).catch((error) => {
-            console.log(error.response.data)
-        })
-    }
 
     useEffect(() => {
         getPosts()
-        // console.log(posts)
     }, [])
     return (
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
-                <SharePost onShare={creatPost} />
+                <SharePost posts={posts} setPosts={setPosts} />
                 <div className="feed-posts mt-5">
                     <Posts posts={posts} />
                 </div>

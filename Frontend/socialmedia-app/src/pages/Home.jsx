@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import Feed from "../Components/Feed";
 import { HomePageLoader } from "../Components/Loader";
 import Layout from "../Components/Layout";
-import { ProfileDataContext } from "../Components/Contexts/ProfileContext";
-import { LoadingContext } from "../Components/Contexts/LoadingContext";
 import {  useFetchUserProfile } from "../Components/apiService";
 import { USER_ID } from "../Components/constants";
 import Rightbar from "../Components/Rightbar";
+import { LoadingContext } from "../Contexts/LoadingContext";
+import { ProfileDataContext } from "../Contexts/ProfileContext";
+
 
 
 
@@ -18,7 +19,7 @@ export default function Home() {
   const user_id = localStorage.getItem(USER_ID);
 
 
-  const fetchdata = async () => {
+  const fetchProfielData = async () => {
     try {
       setLoading(true);
       const data = await fetchUserProfile(user_id);
@@ -32,7 +33,7 @@ export default function Home() {
   ////// incomplete , has to modify 
   useEffect(() => {
     if (!profileData || Object.keys(profileData).length === 0) {
-      fetchdata();
+      fetchProfielData();
     }
   }, [profileData, setLoading]);
 

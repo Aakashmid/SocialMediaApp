@@ -1,9 +1,23 @@
 import { useContext, useState } from "react"
 import { PermMedia } from '@mui/icons-material'
-import { ProfileDataContext } from "./Contexts/ProfileContext"
+import { ProfileDataContext } from "../Contexts/ProfileContext"
+import { CreatePost } from "./apiService"
 
-export default function SharePost({ onShare }) {
+export default function SharePost({ posts, setPosts }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })
+
+
+    // Create post
+    const sharePost = async (data) => {
+        try {
+            const post_data = await CreatePost(data);
+            setPosts([...posts,post_data]);
+        } catch (error) {
+            console.error(error)
+        }
+        
+    }
+
 
     const handleFileChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.files[0] })
@@ -12,9 +26,9 @@ export default function SharePost({ onShare }) {
     const handleChange = (e) => { // post description
         setFormData({ ...formData, [e.target.name]: e.target.value })
         // console.log(formData);
-
     }
 
+    // handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
         if (formData.text === '' || formData.postImg === '') {
@@ -23,9 +37,9 @@ export default function SharePost({ onShare }) {
             const data = new FormData();
             data.append('text', formData.text);
             data.append('postImg', formData.postImg);
-            onShare(data);
-            // clear the form data
+            sharePost(data);
         }
+        // clear the form data
         setFormData({ text: '', postImg: '' })
     };
 
