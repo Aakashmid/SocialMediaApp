@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
-import Posts from '../Posts'
+import PostList from '../post/PostList';
 import { Link, useLocation } from 'react-router-dom'
 
 import { ArrowBack } from '@mui/icons-material';
-import Layout from '../Layout';
+import Layout from '../../Layout/Layout';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 export default function ProfilePostsPage() {
@@ -29,7 +29,7 @@ export default function ProfilePostsPage() {
                         </div>
                     </div>
                     <div className="mt-5">
-                        <Posts posts={posts} />
+                        <PostList posts={posts} />
                     </div>
                 </div>
             </Layout>

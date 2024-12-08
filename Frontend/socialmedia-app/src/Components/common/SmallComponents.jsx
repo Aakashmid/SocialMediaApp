@@ -17,6 +17,6 @@ export const PageTopBackArrow = ({ pageHeading, id }) => {
 
 export const ButtonPrimary = ({ onclick, text }) => {
     return <div>
-        <button onClick={onclick} className='bg-blue-600 text-white rounded-md  px-3 py-1'>{text}</button>
+        <button type='button' onClick={onclick} className='bg-blue-600 text-white rounded-md  px-3 py-1'>{text}</button>
     </div>
 }

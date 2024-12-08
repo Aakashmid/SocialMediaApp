@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Layout from '../Layout'
-import { fetchUserFollowers, fetchUserFollowings, useFetchUserProfile, followUser, unfollowUser } from '../apiService'
-import { PageTopBackArrow } from '../SmallComponents'
+import Layout from '../../Layout/Layout'
+import { fetchUserFollowers, fetchUserFollowings, useFetchUserProfile, followUser, unfollowUser } from '../../services/apiService'
+import { PageTopBackArrow } from '../common/SmallComponents'
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 

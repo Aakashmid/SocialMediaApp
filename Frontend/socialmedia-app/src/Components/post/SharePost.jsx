@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import { PermMedia } from '@mui/icons-material'
-import { ProfileDataContext } from "../Contexts/ProfileContext"
-import { CreatePost } from "./apiService"
+import { ProfileDataContext } from "../../Contexts/ProfileContext"
+import { CreatePost } from "../../services/apiService"
 
 export default function SharePost({ posts, setPosts }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })

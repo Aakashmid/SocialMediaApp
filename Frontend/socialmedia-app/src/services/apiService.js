@@ -21,9 +21,19 @@ export const useFetchUserProfile = () => {
 };
 
 
-export const updateProfile = async (user_id, profile_data) => {
+export const partialUpdateUserProfile = async (user_id,data) => {
     try {
-        const response = await api.put(`/api/users/${user_id}`, profile_data);
+        const response = await api.patch(`/api/users/${user_id}/`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        throw error;
+    }
+}
+
+export const updateUserProfile = async (user_id, data) => {
+    try {
+        const response = await api.put(`/api/users/${user_id}/`, data);
         return response.data;
     } catch (error) {
         console.error('Error updating profile:', error);

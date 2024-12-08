@@ -1,4 +1,4 @@
-import ProtectedRoute from './Components/Protectedroute';
+import ProtectedRoute from './routes/Protectedroute';
 import {
   Routes,
   Route

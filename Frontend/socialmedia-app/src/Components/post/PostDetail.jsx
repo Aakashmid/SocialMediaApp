@@ -2,7 +2,7 @@ import { MoreVert, Sort } from "@mui/icons-material";
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import Comments from "./Comments";
+import Comments from "../Comments";
 import { useEffect, useState } from "react";
 
 // this post detail component

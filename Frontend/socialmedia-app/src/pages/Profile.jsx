@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import Topbar from '../Components/Topbar'
-import SharePost from '../Components/SharePost'
+import Topbar from '../Components/common/Topbar'
+import SharePost from '../Components/post/SharePost'
 import { ProfileDataContext } from '../Contexts/ProfileContext'
 import api from '../Api'
-import Sidebar from '../Components/Sidebar'
+import Sidebar from '../Components/common/Sidebar'
 import { Close } from '@mui/icons-material'
 import ProfilePosts from '../Components/profile/ProfilePosts'
-import { followUser, unfollowUser } from '../Components/apiService'
+import { followUser, unfollowUser } from '../services/apiService'
 
 const Profile = () => {
 

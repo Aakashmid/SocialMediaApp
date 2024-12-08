@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import SharePost from "./SharePost";
-import api from "../Api";
-import Posts from "./Posts";
-import { fetchPosts } from "./apiService";
+import SharePost from "../post/SharePost";
+import api from "../../Api";
+import Posts from "../post/PostList";
+import { fetchPosts } from "../../services/apiService";
 
 
 export default function Feed({ currentUser }) {

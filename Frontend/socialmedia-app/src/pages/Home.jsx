@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import Feed from "../Components/Feed";
+import Feed from "../Components/home/Feed";
 import { HomePageLoader } from "../Components/Loader";
-import Layout from "../Components/Layout";
-import {  useFetchUserProfile } from "../Components/apiService";
+import Layout from "../Layout/Layout";
+import {  useFetchUserProfile } from "../services/apiService";
 import { USER_ID } from "../Components/constants";
-import Rightbar from "../Components/Rightbar";
+import Rightbar from "../Components/common/Rightbar";
 import { LoadingContext } from "../Contexts/LoadingContext";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
 
@@ -12,6 +12,7 @@ import { ProfileDataContext } from "../Contexts/ProfileContext";
 
 
 export default function Home() {
+
   const { loading, setLoading } = useContext(LoadingContext);
   // const [ loading, setLoading ] = useState(false);
   const { profileData, setProfileData } = useContext(ProfileDataContext);

@@ -1,6 +1,6 @@
 import React from 'react'
-import Topbar from './Topbar'
-import Sidebar from './Sidebar';
+import Topbar from '../Components/common/Topbar'
+import Sidebar from '../Components/common/Sidebar';
 
 export default function Layout({ children }) {
     const [firstChild, secondChild] = React.Children.toArray(children);

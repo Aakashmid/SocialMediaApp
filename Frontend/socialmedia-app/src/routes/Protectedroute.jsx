@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { TOKEN } from "./constants";
+import { TOKEN } from "../Components/constants";
 import { CircularProgress } from "@mui/material";
 
 function ProtectedRoute({ children }) {

@@ -1,7 +1,7 @@
 import { Close, MoreVert } from '@mui/icons-material'
 import React, { useContext, useEffect, useState } from 'react'
-import { Post } from './PostDetail';
-import { createComment, fetchComments } from './apiService';
+import { Post } from './post/PostDetail';
+import { createComment, fetchComments } from '../services/apiService';
 import { CommentInput, CommentUserCard } from './CommentComponents';
 import { ProfileDataContext } from '../Contexts/ProfileContext';
 
