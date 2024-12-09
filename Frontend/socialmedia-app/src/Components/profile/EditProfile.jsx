@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Layout from '../../Layout/Layout'
-import { PageTopBackArrow, ButtonPrimary } from '../common/SmallComponents'
+import { AddPhotoAlternate } from '@mui/icons-material';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { AddPhotoAlternate, Camera, Edit } from '@mui/icons-material';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
+import Layout from '../../Layout/Layout';
 import { partialUpdateUserProfile } from '../../services/apiService';
+import { ButtonPrimary, PageTopBackArrow } from '../common/SmallComponents';
 
 
 export const FormInput = ({ label_text, handleChange, field_name, input_value, placeholder, field_type }) => {
@@ -14,9 +14,9 @@ export const FormInput = ({ label_text, handleChange, field_name, input_value, p
     </label>
 }
 export default function EditProfile() {
-    const { profileData, setProfileData } = useContext(ProfileDataContext);
-    // console.log(profileData)
-    // console.log(profileData.full_name);
+    const { profileData, setProfileData } = useContext(ProfileDataContext);     // gettign profile data from ProfileDataContext
+
+    // initialize edit profile form data
     const [formData, setFormData] = useState({
         username: '',
         full_name: '',
@@ -26,23 +26,41 @@ export default function EditProfile() {
         profileImg: ''
     });
 
-
     const { username } = useParams();
 
 
-    const handleUpdateProfileImg = async () =>{
+    // function to update profile Image
+    const handleUpdateProfileImg = async () => {
+        const profileFormData = new FormData();
         try {
-            const response = await partialUpdateUserProfile(profileData.id , {profileImg:formData.profileImg});
+            profileFormData.append('profileImg', formData.profileImg);
+            const response = await partialUpdateUserProfile(profileData.id, profileFormData);
             console.log(response);
+            setProfileData({ ...response });
         } catch (error) {
             console.error(error);
         }
     }
-    // handle update function to handle profile update 
+
+
+    // function to update profile
     const handleUpdateProfile = async () => {
-        console.log(formData)
+        const profileDataFormData = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key !== 'profileImg') {
+                profileDataFormData.append(key, value);
+            }
+        });
+        try {
+            const respose = await partialUpdateUserProfile(profileData.id, profileDataFormData);
+            console.log(respose);
+            setProfileData({ ...respose });
+        } catch (error) {
+            console.error(error);
+        }
     }
 
+    // handling changes in input 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -53,6 +71,7 @@ export default function EditProfile() {
 
 
     useEffect(() => {
+        // set profile formData if profileData is changed
         if (profileData) {
             setFormData({
                 username: profileData.username || '',
@@ -62,7 +81,6 @@ export default function EditProfile() {
                 date_of_birth: profileData.date_of_birth || '',
                 profileImg: profileData.profileImg || ''
             });
-            // console.log(profileData)
         }
         // console.log(first)
     }, [profileData]);
@@ -72,11 +90,6 @@ export default function EditProfile() {
                 <div className="page-top">
                     <PageTopBackArrow pageHeading={"Edit profile"} id={profileData.id} />
                 </div>
-                {/* <div className="page-center">
-                    {Object.keys(profileData).map((value, index) => {
-                        return <h1 key={index} >{value}</h1>
-                    })}
-                </div> */}
                 <div className="page-center pb-10 flex flex-col space-y-6">
                     <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">
                         {/* <span className="p-2 top-4 right-4 absolute"><Edit/></span> */}
@@ -86,16 +99,20 @@ export default function EditProfile() {
                         </label>
                         <div className="">
                             <img src="/src/assets/post/3.jpeg" className='cover-img w-full h-28 object-cover' alt="..." />
-                            <img src={formData.profileImg} className='profile-img w-24 h-24 rounded-[50%] absolute left-[10%] top-14 object-cover  border-4 border-white' alt="" />
+                            <img src={
+                                typeof formData.profileImg === 'object' && formData.profileImg instanceof File
+                                    ? URL.createObjectURL(formData.profileImg) // Create URL if it's a File object
+                                    : formData.profileImg
+                            } className='profile-img w-24 h-24 rounded-[50%] absolute left-[10%] top-14 object-cover  border-4 border-white' alt="" />
                         </div>
                         <div className='mt-10 ml-[10%] flex flex-col '>
                             <h1 className='font-medium text-lg'>Your Photo</h1>
                             <p className="text-sm">this will be displayed to you profile</p>
                             <div className="flex space-x-[20px] mt-2">
                                 <label className='px-4 py-1 outline rounded-md outline-1 cursor-pointer bg-white hover:transform hover:bg-blue-100 hover:duration-500'>Upload New
-                                    <input type="file" className='hidden' name='profileImg' onChange={handleFileChange} />
+                                    <input type="file" accept="image/*" className='hidden' name='profileImg' onChange={handleFileChange} required />
                                 </label>
-                                {/* <button onClick={()=>handleUpdateProfile()} className='bg-blue-600 text-white rounded-md  px-3 py-1'>Save</button> */}
+
                                 <ButtonPrimary onclick={() => handleUpdateProfileImg()} text="Save" />
                             </div>
                         </div>
@@ -111,17 +128,11 @@ export default function EditProfile() {
                             {/* <FormInput label_text={'Full Name'} field_name='full_name' input_value={formData.full_name} placeholder={'Enter full name'} handleChange={handleChange} /> */}
                             <label htmlFor="bio" className='font-medium'>
                                 Bio
-                                <textarea onChange={handleChange} className='text-sm w-full focus:outline-none text-[15px] p-2 rounded-md h-20'  name="bio" id="" value={formData.bio} placeholder='write about yourself...'></textarea>
+                                <textarea onChange={handleChange} className='text-sm w-full focus:outline-none text-[15px] p-2 rounded-md h-20' name="bio" id="" value={formData.bio} placeholder='write about yourself...'></textarea>
                             </label>
-                            <ButtonPrimary  onclick={() => handleUpdateProfile()}  text="Update" />
+                            <ButtonPrimary onclick={() => handleUpdateProfile()} text="Update" />
                         </form>
                     </div>
-                    {/* <div className="bg-gray-100 rounded-lg py-2  md:w-[650px]">
-                        <form onSubmit={handleUpdate}></form>
-                    </div>
-                    <div className="bg-gray-100 rounded-lg py-2  h-10 my-2">
-                        <form onSubmit={handleUpdate}></form>
-                    </div> */}
                 </div>
             </div>
         </Layout >

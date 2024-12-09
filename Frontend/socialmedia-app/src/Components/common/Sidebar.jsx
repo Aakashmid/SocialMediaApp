@@ -22,6 +22,8 @@ export default function Sidebar() {
     }
   }
 
+
+  // reusable followingUser card component
   const FollowingUser= ({ user }) => {
     return (
       <li className="sidebarFriend">
@@ -44,7 +46,7 @@ export default function Sidebar() {
   }, [profileData]);
 
   return (
-    <div className="sidebar-container lg:w-1/4 w-[60%] sm:w-[45%] md:w-[40%] fixed z-10">
+    <div className="sidebar-container lg:w-1/4 w-[60%] sm:w-[45%] md:w-[40%] fixed z-20">
       <div className="sidebar-wrapper py-3  px-5  h-[100vh] overflow-y-scroll custom-scrollbar bg-white ">
         <ul className="sideBar-list flex flex-col space-y-1">
           <li className="hover:bg-blue-200">

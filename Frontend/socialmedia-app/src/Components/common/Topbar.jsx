@@ -2,15 +2,30 @@ import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import ProfilePopover from "../Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
 
 export default function Topbar() {
-    const [showProPopover, setShowProPopover] = useState(false);
+    const [showProPopover, setShowProPopover] = useState(false);    // profpopover - profile popover 
     const [showSidebar, setShowSidebar] = useState(false);
     const [isClickable, setIsClickable] = useState(false);
     const {profileData} = useContext(ProfileDataContext);
+
+    useEffect(()=>{
+         // Toggle the body's overflow style based on isBgBlur  state
+         if (showSidebar) {
+             document.body.style.overflow = showSidebar ? 'hidden' : 'auto';
+         }
+         else if (showProPopover) {
+             document.body.style.overflow = showProPopover? 'hidden' : 'auto';
+         }
+
+         // Cleanup function to reset overflow when component unmounts
+         return () => {
+             document.body.style.overflow = 'auto';
+         };
+    },[showProPopover, showSidebar])
     return (<>
         <header>
             <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
@@ -67,7 +82,10 @@ export default function Topbar() {
 
         {/* for small screen -  sidebar */}
         {showSidebar &&
+            <>
             <Sidebar />
+            <span className="hide-sidebar-bg bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-0" onClick={()=>setShowSidebar(!showSidebar)}></span>
+            </>
         }
 
     </>

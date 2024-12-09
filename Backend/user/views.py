@@ -106,6 +106,13 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
         else:
             raise ValueError("username is required")
         
+     # Pass additional context to the serializer
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request  # Pass the request object
+        return context
+
+
     # have to modify update (for fullname etc)
     def perform_update(self, serializer):
         instance=self.get_object()
@@ -113,7 +120,7 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
             raise PermissionDenied("You don't have permission to change this data !")
         if serializer.is_valid():
             user=self.request.user
-            serializer.save(user=user)
+            serializer.save(user=user )
 
 
 # Follower model related request handler

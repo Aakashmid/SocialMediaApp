@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile,Follower
-from rest_framework.exceptions import ValidationError
-
+import os
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -44,7 +43,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     followers_count=serializers.SerializerMethodField()
     followings_count=serializers.SerializerMethodField()
     isFollowed=serializers.SerializerMethodField()
-    profileImg=serializers.SerializerMethodField()
+    # profileImg=serializers.SerializerMethodField()
     email=serializers.SerializerMethodField()
     id = serializers.SerializerMethodField()
     class Meta:
@@ -74,33 +73,41 @@ class ProfileSerializer(serializers.ModelSerializer):
         if request.user.is_anonymous:  # this line is just for development 
             return False 
         return True if Follower.objects.filter(toFollowing=profile,follower=request.user.profile)   else False
-    def get_profileImg(self, profile):
-        request = self.context.get('request')
-        if profile.profileImg:
-            return request.build_absolute_uri(profile.profileImg.url)
-        return None
+    # def get_profileImg(self, profile):
+        # request = self.context.get('request')
+        # if profile.profileImg:
+        #     return request.build_absolute_uri(profile.profileImg.url)
+        # return None
     
+
+    def validate(self, attrs):
+        profileImg = attrs.get('profileImg', None)
+        if profileImg:
+            # Check MIME type (requires file-like object)
+            if hasattr(profileImg, 'content_type') and not profileImg.content_type.startswith('image/'):
+                raise serializers.ValidationError("Uploaded file is not a valid image.")
+            
+            # Check file extension
+            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif' ,'.webp',]
+            ext = os.path.splitext(profileImg.name)[1].lower()
+            if ext not in valid_extensions:
+                raise serializers.ValidationError("Uploaded file must be an image (JPG, PNG, GIF).")
+        
+        return attrs
+
     def update(self, profile_instance, validated_data):
         # update full_name if provided
         full_name=self.initial_data.get("full_name",None)
+        print(validated_data)
         if full_name is not None:
             first_name,last_name = full_name.split(" ",1)
             profile_instance.user.first_name,profile_instance.user.last_name=first_name.title(),last_name.title()
             profile_instance.user.save()
 
-        # update profile_img if provided
-        profileImg=self.initial_data.get('profileImg',None)
-        if profileImg is not None:
-            if not profileImg.content_type.startswith('image/'):
-                raise ValidationError("Uploaded file is not an image.")
-            # Optionally check the file extension
-            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
-            if not any(profileImg.name.lower().endswith(ext) for ext in valid_extensions):
-                raise ValidationError("Uploaded file must be an image (JPG, PNG, GIF).")
-            else:
-                profile_instance.profileImg=profileImg
+
         if validated_data.get('bio',None) is not None:
             profile_instance.bio=validated_data.get('bio')
+
         profile_instance.save()
-        return profile_instance
+        return super().update(profile_instance,validated_data)   # calling default update for author fiels which not required custom logic
     
