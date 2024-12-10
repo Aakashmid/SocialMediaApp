@@ -6,5 +6,7 @@ router=DefaultRouter()
 
 router.register('',views.PostviewSet,basename='Post')
 urlpatterns = [
+    path('<int:post_id>/save-unsave/',views.SaveUnsavePostView.as_view() , name='post-save-unsave'),
+    path('saved-posts/',views.SavedPostsListView.as_view() ,name="list-saved-posts"),
     path('', include(router.urls)),
 ]

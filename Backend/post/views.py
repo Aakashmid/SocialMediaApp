@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
-from .serializers import PostSerializer
-from .models import Post , Like
+from .serializers import PostSerializer , SavePostSerializer
+from rest_framework import generics
+from rest_framework.views import APIView
+from .models import Post , Like , SavedPost
 from user.models import Profile
 
 # from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets 
 from rest_framework.filters import SearchFilter
 
 # from rest_framework.permissions import AllowAny,IsAuthenticated
@@ -46,16 +48,38 @@ class PostviewSet(viewsets.ModelViewSet):
         return Response({'liked': liked}, status=status.HTTP_200_OK)
 
 
-    @action(detail=True,methods=['post']) 
-    def save_post(self,request,pk=None):
-        '''
-        This view handles save a post and checks if the user has already saved it and unsave it 
-        '''
-        return Response({'detail':'Post  saved'})
 
 
-    @action(detail=False,methods=['get'],url_path='saved')
-    def get_saved_posts(self,request):
-        '''will return saved post of a user if has'''
-        return Response({'saved posts':[]})
-        # pass
+#  view for handling save a post  and  list saved post like functionality 
+class SaveUnsavePostView(APIView):
+    def post(self,request , *args, **kwargs):
+        post_id = kwargs.get('post_id',None)
+        user = request.user.profile  #  here user is profile object
+        # if post_id is not None:
+        if SavedPost.objects.filter(post= post_id , user = user).exists():
+            SavedPost.objects.get(post=post_id,user=user).delete()
+            return Response({'detail':'unsaved post successfully','isSaved':False})
+        else:
+            try:
+                post = Post.objects.get(pk=post_id)
+                SavedPost.objects.create(post=post,user=user)
+                return Response({'detail':'saved post successfully','isSaved':True})
+            except Post.DoesNotExist:
+                return Response({'detail':'post not found'},status=status.HTTP_404_NOT_FOUND)
+
+        
+class SavedPostsListView(APIView):
+    def get(self,request, *args, **kwargs):
+        user = request.user.profile  #  here user is profile object of authenticated user
+        if SavedPost.objects.filter(user = user).exists():
+            saved_posts = SavedPost.objects.filter(user=request.user.profile)
+            posts = [obj.post for obj in saved_posts]
+            serializer = PostSerializer(posts, many=True,context={'request':request})
+            return Response(serializer.data)
+        else:
+            return Response([])
+    
+    
+    
+    # def list(self, request):
+   

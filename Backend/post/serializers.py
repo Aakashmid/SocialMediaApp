@@ -1,13 +1,14 @@
 from rest_framework import serializers 
 from rest_framework.exceptions import ValidationError
-from .models import Post , Like
-from user.serializers import ProfileSerializer
+from .models import Post , Like , SavedPost
+from user.serializers import PostProfileReadSerializer
 
 class PostSerializer(serializers.ModelSerializer):
     comments_count=serializers.SerializerMethodField()
     likes_count=serializers.SerializerMethodField()
     isLiked=serializers.SerializerMethodField()
-    creator=ProfileSerializer(read_only=True)
+    # creator=ProfileSerializer(read_only=True)
+    creator = PostProfileReadSerializer(read_only= True)
     class Meta:
         model=Post
         fields=['id','creator','text','postImg', 'comments_count','likes_count','isLiked','is_public', 'publish_time','updated_time']
@@ -26,3 +27,9 @@ class PostSerializer(serializers.ModelSerializer):
         elif Like.objects.filter(post=post, user=request.user.profile).exists():
             return True
         return False
+
+
+class SavePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= SavedPost
+        fields = '__all__'

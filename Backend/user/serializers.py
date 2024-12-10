@@ -69,10 +69,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         return profile.followings.count()
     
     def get_isFollowed(self,profile): # find where a profile is followed by current user
-        request= self.context.get('request')
-        if request.user.is_anonymous:  # this line is just for development 
-            return False 
-        return True if Follower.objects.filter(toFollowing=profile,follower=request.user.profile)   else False
+        request= self.context.get('request',None)
+        if request is None:
+            return False
+        return True if Follower.objects.filter(toFollowing=profile,follower=request.user.profile).exists()   else False
+    
     # def get_profileImg(self, profile):
         # request = self.context.get('request')
         # if profile.profileImg:
@@ -111,3 +112,33 @@ class ProfileSerializer(serializers.ModelSerializer):
         profile_instance.save()
         return super().update(profile_instance,validated_data)   # calling default update for author fiels which not required custom logic
     
+
+
+### create serializer  for profile which is used within post data
+
+class PostProfileReadSerializer(serializers.ModelSerializer):  # here profile is creator of a post
+    '''
+    profile read serializer which is used in post data 
+    '''
+    isFollowed = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
+    username=serializers.SerializerMethodField()
+    full_name=serializers.SerializerMethodField()
+    class Meta:
+        model = Profile
+        fields = ['id', 'username', 'full_name' , 'isFollowed']
+
+    def get_isFollowed(self,profile): # find where a profile is followed by current user
+        request= self.context.get('request',None)
+        if request is None:
+            return False
+        return True if Follower.objects.filter(toFollowing=profile,follower=request.user.profile).exists()   else False
+    
+    def get_id(self, profile):
+        return profile.user.id
+    
+    def get_full_name(self,profile):
+        return profile.user.first_name + ' ' + profile.user.last_name
+
+    def get_username(self,profile):
+        return profile.user.username
