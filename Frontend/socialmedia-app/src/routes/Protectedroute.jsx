@@ -9,7 +9,7 @@ function ProtectedRoute({ children }) {
         auth().catch(() => setIsAuthorized(false))
     }, []);
 
-    // checking where use is authenticated or not
+    // checking where user is authenticated or not
     const auth = async () => {
         const token = localStorage.getItem(TOKEN);
         if (!token) {

@@ -5,7 +5,7 @@ import { createComment, fetchComments } from '../services/apiService';
 import { CommentInput, CommentUserCard } from './CommentComponents';
 import { ProfileDataContext } from '../Contexts/ProfileContext';
 
-export default function Comments({ post, closeComments }) {
+export default function Comments({ post, closeComments , setCommentsCount }) {
     const [comments, setComments] = useState([]);
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     // function to get all comments of a post 
@@ -28,6 +28,7 @@ export default function Comments({ post, closeComments }) {
             const data= await createComment(post.id,comment_data);
             console.log(data);
             setComments([...comments,data])
+            setCommentsCount(post.comments_count + 1) // update comment count when new comment is added
         } catch (error) {
             console.log(error);
         }
@@ -56,7 +57,7 @@ export default function Comments({ post, closeComments }) {
                     })}
                 </div>
             </div>
-            <div className="comment-input border-t border-gray-400 absolute   bottom-20  left-0 bg-gray-800 w-full h-20  ">
+            <div className="comment-input border-t  absolute   bottom-20  left-0 bg-[#F8F9FA] w-full h-20  ">
                 <CommentInput onComment={handleComment} user={profileData} />
             </div>
         </div>

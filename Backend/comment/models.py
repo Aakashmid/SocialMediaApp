@@ -1,7 +1,4 @@
 from django.db import models
-# from user.models import Profile
-# from post.models import Post
-# Create your models here.
 
 class Comment(models.Model):
     user=models.ForeignKey('user.Profile',on_delete=models.CASCADE)

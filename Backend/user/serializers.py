@@ -126,7 +126,7 @@ class PostProfileReadSerializer(serializers.ModelSerializer):  # here profile is
     full_name=serializers.SerializerMethodField()
     class Meta:
         model = Profile
-        fields = ['id', 'username', 'full_name' , 'isFollowed']
+        fields = ['id', 'username', 'full_name' , 'isFollowed','profileImg']
 
     def get_isFollowed(self,profile): # find where a profile is followed by current user
         request= self.context.get('request',None)

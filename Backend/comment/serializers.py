@@ -7,21 +7,21 @@ from rest_framework.exceptions import ValidationError
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    replies=serializers.SerializerMethodField()
-    likes=serializers.SerializerMethodField()
+    replies_count=serializers.SerializerMethodField()
+    likes_count=serializers.SerializerMethodField()
     isLiked=serializers.SerializerMethodField()
     user=ProfileSerializer(read_only=True)
     class Meta:
         model=Comment
-        fields=['id','user','post','text','parent','replies','likes','isLiked']
+        fields=['id','user','post','text','parent','replies_count','likes_count','isLiked']
         extra_kwargs={'user':{'read_only':True},'parent':{'read_only':True},'post':{'read_only':True}}
 
-    def get_replies(self,comment):
+    def get_replies_count(self,comment):
         '''get replies count'''
         replies=Comment.objects.filter(parent=comment).count()
         return replies
     
-    def get_likes(self,comment):
+    def get_likes_count(self,comment):
         '''get likes count'''
         likes=Like.objects.filter(comment=comment).count()
         return likes

@@ -4,12 +4,32 @@ import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import Comments from "../Comments";
 import { useEffect, useState } from "react";
+import api from "../../Api";
 
 // this post detail component
 export const Post = ({ post, handleCommentsToggle }) => {
     ///  this is post card 
-    const [likeCount, setLikeCount] = useState(post.likes);
-    const likeHandler = () => {
+    const [likeCount, setLikeCount] = useState(post.likes_count);
+    const [isLiked, setisLiked] = useState(post.isLiked);
+    const likeHandler = async () => {
+        // setLikeCount(prevCount => prevCount + 1);  
+        try {
+            await api.post(`/api/posts/${post.id}/toggle-like/`);
+
+            if (isLiked) {
+                setLikeCount(prevCount => prevCount - 1);
+                setisLiked(false);
+            }
+            else {
+                setLikeCount(prevCount => prevCount + 1);
+                setisLiked(true);
+            }
+            console.log(likeCount)
+        }
+        catch (error) {
+            console.error(error);
+        }
+        // setLikeCount(2);  
         console.log('liked')
     }
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
@@ -34,17 +54,18 @@ export const Post = ({ post, handleCommentsToggle }) => {
             <div className="postLeftBottom flex space-x-2 items-center">
                 <img className='likeIcon w-6 h-6  cursor-pointer' src="/src/assets/like.png" onClick={likeHandler} alt="" />
                 <img className='likeIcon w-6 h-6  cursor-pointer' src="/src/assets/heart.png" onClick={likeHandler} alt="" />
-                <span className='postlikeCounter text-[15px]'>{post.likes > 0 && `${post.likes} people like it`}</span>
+                {/* <span className='postlikeCounter text-[15px]'>{post.likes > 0 && `${post.likes} people like it`}</span> */}
+                <span className='postlikeCounter text-[15px]'>{likeCount > 0 && `${likeCount} people liked it`}</span>
             </div>
 
             {handleCommentsToggle ?
                 <div className="postRightBottom">
-                    <span onClick={() => handleCommentsToggle()} className="postComment  cursor-pointer text-[15px]  ">
-                        {post.comments > 0 && `${post.comments}`}  <ChatBubbleOutlineIcon />
+                    <span onClick={() => handleCommentsToggle()} className="postComment  cursor-pointer text-[15px]   ">
+                        <ChatBubbleOutlineIcon />  {post.comments_count > 0 && ` ${post.comments_count} comments`}
                     </span>
                 </div> : (<div className="postRightBottom">
-                    <span className="postComment  cursor-pointer text-[15px]  ">
-                        {post.comments > 0 && `${post.comments}`}  <ChatBubbleOutlineIcon />
+                    <span className="postComment  cursor-pointer text-[15px]   ">
+                        <ChatBubbleOutlineIcon />  {post.comments_count > 0 && ` ${post.comments_count} comments`}
                     </span>
                 </div>)
             }
@@ -58,6 +79,7 @@ export const Post = ({ post, handleCommentsToggle }) => {
 export default function PostDetail({ post }) {
     const [isBgBlur, setIsBgBlur] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const [commentsCount, setCommentsCount] = useState(post.comments_count);
 
     const handleCommentsToggle = () => {
         setIsBgBlur(!isBgBlur);
@@ -72,6 +94,8 @@ export default function PostDetail({ post }) {
             document.body.style.overflow = 'auto';
         };
     }), [isBgBlur]
+
+
     return (
         <>
             {isBgBlur &&
@@ -81,7 +105,7 @@ export default function PostDetail({ post }) {
                 <Post post={post} handleCommentsToggle={handleCommentsToggle} />
                 {showComments &&
                     <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-[10%]  left-1/2 -translate-x-1/2 xl:w-[45%] lg:w-[60%] md:w-[75%] w-full  h-full z-40">
-                        <Comments closeComments={handleCommentsToggle} post={post} />
+                        <Comments  setCommentsCount={setCommentsCount} closeComments={handleCommentsToggle} post={post} />
                     </div>
                 }
             </div>
