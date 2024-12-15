@@ -2,38 +2,62 @@ import { Send } from '@mui/icons-material';
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ProfileDataContext } from '../Contexts/ProfileContext';
+import { createComment } from '../services/apiService';
+import { CommentsContext } from '../Contexts/CommentContext';
 
-export const CommentInput = ({ user, onComment }) => {
+export const CommentInput = ({ user, post, isReply, setReplies, setRepliesCount }) => {  // here some props are for replies and some for comments
+    const { setComments, setCommentsCount } = useContext(CommentsContext);
     const navigate = useNavigate();
-    const [commentText, setCommentText] = useState("");
-    const handleCommentTextChange = (e) => {
-        setCommentText(e.target.value);
-        // console.log(commentText);
+    const [inputText, setInputText] = useState("");
+    const handleInputTextChange = (e) => {
+        setInputText(e.target.value);
+        // console.log(inputText);
     }
 
-    // handle it for replay also 
-    const handleSubmit = () => {
+    // handle comment or reply sending
+    const handleSubmit = async () => {
         console.log('handleSubmit');
-        if (commentText != "") {
-            var data = new FormData();
-            data.append('text', commentText);
-            // data.append('text',commentText);
-            onComment(data);
-            setCommentText("");
+        if (inputText != "") {
+            var message = new FormData();
+            message.append('text', inputText);
+            try {
+                if (isReply) {
+                    console.log('reply posted');
+                }
+                else {
+                    const newComment = await createComment(post.id, message);
+                    setComments((prevComments) => [...prevComments, newComment]);
+                    setCommentsCount((prevCount) => prevCount + 1) // update comment count when new comment is added
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            // data.append('text',inputText);
+            // onComment(data);
+            setInputText("");
         }
-        // else{
-        //     console.log()
-        // }
     }
+
     return <>
         <div className="py-2 px-3 flex items-center space-x-3">
             <div className="current-user-img" onClick={() => navigate(`/profile/${user.id}`)}>
-                <img src={user.profileImg} className="user-profileImg w-8 h-8 border rounded-[50%] object-cover" alt=".." />
+                {/* <img src={user.profileImg} className="user-profileImg w-8 h-8 border rounded-[50%] object-cover" alt=".." /> */}
+
             </div>
             <div className="bg-gray-200 commment-input-form flex-grow flex items-center rounded-lg overflow-hidden ">
-                <input onKeyUp={(e) => { if (e.key === "Enter") { handleSubmit() } }} type="text" className='bg-gray-200 w-full p-2 outline-none' onChange={handleCommentTextChange} value={commentText} />
-                <button onClick={() => handleSubmit()} type='submit' className='sent-btn p-1 '><span className=""><Send className={`${commentText !== "" ? 'text-bgPrimary' : 'text-gray-500'}`} /></span></button>
+                <input onKeyUp={(e) => { if (e.key === "Enter") { handleSubmit() } }} type="text" className='bg-gray-200 w-full p-2 outline-none' onChange={handleInputTextChange} value={inputText} />
+                <button onClick={() => handleSubmit()} type='submit' className='sent-btn p-1 '><span className=""><Send className={`${inputText !== "" ? 'text-bgPrimary' : 'text-gray-500'}`} /></span></button>
             </div>
+            {/* <form onSubmit={handleSubmit} className="text-input-form">
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    placeholder={placeholder}
+                    className="text-input"
+                />
+                <button type="submit" className="submit-button">Submit</button>
+            </form> */}
         </div>
     </>
 }
@@ -43,6 +67,7 @@ export const CommentInput = ({ user, onComment }) => {
 // todo of this function - give option to like comment, reply , and remove comment option for commented user 
 export const CommentUserCard = ({ comment }) => {
     const { profileData } = useContext(ProfileDataContext);
+    const [replies, setReplies]
     const navigate = useNavigate();
     return (
         <div className='flex space-x-4'>
@@ -67,7 +92,7 @@ export const CommentUserCard = ({ comment }) => {
                     }
                 </div>
                 {
-                    <CommentInput/>
+                    // <CommentInput />
                 }
             </div>
         </div>

@@ -3,12 +3,14 @@ import { formatDistanceToNow } from 'date-fns';
 import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import Comments from "../Comments";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../../Api";
+import { CommentsContext } from "../../Contexts/CommentContext";
 
 // this post detail component
-export const Post = ({ post, handleCommentsToggle }) => {
+export const Post = ({ post, handleCommentsToggle  }) => {
     ///  this is post card 
+    const {commentsCount, setCommentsCount} = useContext(CommentsContext);
     const [likeCount, setLikeCount] = useState(post.likes_count);
     const [isLiked, setisLiked] = useState(post.isLiked);
     const likeHandler = async () => {
@@ -32,6 +34,7 @@ export const Post = ({ post, handleCommentsToggle }) => {
         // setLikeCount(2);  
         console.log('liked')
     }
+    console.log(commentsCount);
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
     return <>
         <div className="post-card-top  flex items-center justify-between">
@@ -61,11 +64,11 @@ export const Post = ({ post, handleCommentsToggle }) => {
             {handleCommentsToggle ?
                 <div className="postRightBottom">
                     <span onClick={() => handleCommentsToggle()} className="postComment  cursor-pointer text-[15px]   ">
-                        <ChatBubbleOutlineIcon />  {post.comments_count > 0 && ` ${post.comments_count} comments`}
+                        <ChatBubbleOutlineIcon />  {commentsCount > 0 && ` ${commentsCount} comments`}
                     </span>
                 </div> : (<div className="postRightBottom">
                     <span className="postComment  cursor-pointer text-[15px]   ">
-                        <ChatBubbleOutlineIcon />  {post.comments_count > 0 && ` ${post.comments_count} comments`}
+                        <ChatBubbleOutlineIcon /> {commentsCount > 0 && ` ${commentsCount} comments`}
                     </span>
                 </div>)
             }
@@ -79,7 +82,6 @@ export const Post = ({ post, handleCommentsToggle }) => {
 export default function PostDetail({ post }) {
     const [isBgBlur, setIsBgBlur] = useState(false);
     const [showComments, setShowComments] = useState(false);
-    const [commentsCount, setCommentsCount] = useState(post.comments_count);
 
     const handleCommentsToggle = () => {
         setIsBgBlur(!isBgBlur);
@@ -102,10 +104,10 @@ export default function PostDetail({ post }) {
                 <span onClick={() => handleCommentsToggle()} className="w-[100vw] h-[140vh] fixed bg-gray-600 -top-10  left-0 z-30 opacity-40"></span>
             }
             <div id={"post" + post.id} className="post-card p-4 custom-shodow-b rounded-lg  flex-col flex space-y-5 lg:space-y-6">
-                <Post post={post} handleCommentsToggle={handleCommentsToggle} />
+                <Post post={post}  handleCommentsToggle={handleCommentsToggle} />
                 {showComments &&
                     <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-[10%]  left-1/2 -translate-x-1/2 xl:w-[45%] lg:w-[60%] md:w-[75%] w-full  h-full z-40">
-                        <Comments  setCommentsCount={setCommentsCount} closeComments={handleCommentsToggle} post={post} />
+                        <Comments   closeComments={handleCommentsToggle} post={post} />
                     </div>
                 }
             </div>

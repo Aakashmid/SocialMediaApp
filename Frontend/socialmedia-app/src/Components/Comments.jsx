@@ -4,39 +4,26 @@ import { Post } from './post/PostDetail';
 import { createComment, fetchComments } from '../services/apiService';
 import { CommentInput, CommentUserCard } from './CommentComponents';
 import { ProfileDataContext } from '../Contexts/ProfileContext';
+import { CommentsContext } from '../Contexts/CommentContext';
 
-export default function Comments({ post, closeComments , setCommentsCount }) {
-    const [comments, setComments] = useState([]);
-    const { profileData, setProfileData } = useContext(ProfileDataContext);
+export default function Comments({ post, closeComments  }) {
+    const {comments, setComments} = useContext(CommentsContext);
+    const { profileData } = useContext(ProfileDataContext);
+
     // function to get all comments of a post 
     const getComments = async (post_id) => {
         try {
             const data = await fetchComments(post_id);
-            console.log(data)
             setComments(data);
         } catch (error) {
             console.error(error);
         }
     }
 
-
-
-    // function to handle comment on a post 
-    const handleComment = async (comment_data) =>{
-        // console.log('handliing comment on post')
-        try {
-            const data= await createComment(post.id,comment_data);
-            console.log(data);
-            setComments([...comments,data])
-            setCommentsCount(post.comments_count + 1) // update comment count when new comment is added
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     useEffect(() => {
         getComments(post.id);
     }, [post])
+    
     return (
         <div className=' h-full w-full flex flex-col '>
             <div className="flex justify-between items-center">
@@ -58,7 +45,7 @@ export default function Comments({ post, closeComments , setCommentsCount }) {
                 </div>
             </div>
             <div className="comment-input border-t  absolute   bottom-20  left-0 bg-[#F8F9FA] w-full h-20  ">
-                <CommentInput onComment={handleComment} user={profileData} />
+                <CommentInput  user={profileData} post={post}  />
             </div>
         </div>
     )
