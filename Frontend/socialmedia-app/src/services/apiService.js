@@ -130,10 +130,20 @@ export const createComment = async (post_id, comment_data) => {
     }
 }
 
+//  handle like to comment or reply 
+export const likeCommentReply = async (comment_id) => {
+    try {
+        const res = await api.post(`/api/comments/${comment_id}/like/`);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 export const createReply = async (comment_id, reply_data) => {
     try {
-        const response = await api.post(`/api/comments/${post_id}/replies/`, reply_data);
+        const response = await api.post(`/api/comments/${comment_id}/replies/`, reply_data);
         return await response.data;
     } catch (error) {
         throw error;
@@ -141,6 +151,7 @@ export const createReply = async (comment_id, reply_data) => {
 }
 
 
+// function to delete a comment or reply ( reply is taking as a comment object whose parent is a comment )
 export const deleteComment = async (comment_id) => {
     try {
         const response = await api.delete(`/api/comments/${comment_id}/`);

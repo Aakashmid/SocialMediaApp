@@ -13,6 +13,7 @@ export const Post = ({ post, handleCommentsToggle  }) => {
     const {commentsCount, setCommentsCount} = useContext(CommentsContext);
     const [likeCount, setLikeCount] = useState(post.likes_count);
     const [isLiked, setisLiked] = useState(post.isLiked);
+    
     const likeHandler = async () => {
         // setLikeCount(prevCount => prevCount + 1);  
         try {
@@ -34,7 +35,7 @@ export const Post = ({ post, handleCommentsToggle  }) => {
         // setLikeCount(2);  
         console.log('liked')
     }
-    console.log(commentsCount);
+   
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
     return <>
         <div className="post-card-top  flex items-center justify-between">

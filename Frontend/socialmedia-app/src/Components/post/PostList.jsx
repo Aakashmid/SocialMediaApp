@@ -6,7 +6,7 @@ export default function PostList({ posts }) {
         <div className="posts  flex flex-col space-y-4">
             {posts.map((post) => {
                 return (
-                    <CommentsContextProvider initialCommentsCount={post.comments_count}>   {/* for mananging comments related states*/}
+                    <CommentsContextProvider key={post.id} initialCommentsCount={post.comments_count}>   {/* for mananging comments related states*/}
                         <PostDetail key={post.id} post={post} />
                     </CommentsContextProvider>
                 )
