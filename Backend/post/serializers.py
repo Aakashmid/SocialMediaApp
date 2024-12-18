@@ -15,7 +15,7 @@ class PostSerializer(serializers.ModelSerializer):
         extra_kwargs={'creator':{'read_only':True},'isLiked':{'read_only':True}}
     
     def get_comments_count(self,post):
-        return post.comments.count()
+        return post.comments.filter(parent=None).count()
     
     def get_likes_count(self,post):
         return post.likes.count()

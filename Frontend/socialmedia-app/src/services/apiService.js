@@ -113,7 +113,7 @@ export const fetchComments = async (post_id) => {  // fetch comments of a post o
 
 export const fetchReplies = async (comment_id) => {  // fetch replies of a comment
     try {
-        const response = await api.get(`/api/comments/${post_id}/replies`);
+        const response = await api.get(`/api/comments/${comment_id}/replies`);
         return await response.data;
     } catch (error) {
         throw error;

@@ -38,7 +38,7 @@ export default function Comments({ post, closeComments  }) {
                 <div className="p-2">
                     <Post post={post} />
                 </div>
-                <div className="comments-wrapper flex space-y-2 flex-col py-3 xl:px-6 lg:px-2 ">
+            <div className="comments-wrapper flex space-y-2 flex-col py-3 xl:px-6 lg:px-2 ">
                     {comments.map((comment) => {
                         return <CommentUserCard key={comment.id} comment={comment} />
                     })}

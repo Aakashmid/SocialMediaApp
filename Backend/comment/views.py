@@ -25,7 +25,7 @@ class  CommentListCreate(generics.ListCreateAPIView):
         if postId and  not Post.objects.filter(id=postId).first() :
             raise  Http404("Post of given id does not exists")
         if commentId is None:
-            queryset=Comment.objects.filter(post__id=postId).order_by( '-time')  # order by time in descending orderfetch all comments of a post 
+            queryset=Comment.objects.filter(post__id=postId,parent=None).order_by( '-time')  # order by time in descending orderfetch all comments of a post 
         else:
             queryset=Comment.objects.filter(parent=self.kwargs['commentId']) # fetch replies of comment 
         return queryset
