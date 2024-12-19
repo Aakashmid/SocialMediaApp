@@ -1,77 +1,13 @@
-import { Send } from '@mui/icons-material';
+import { useContext, useState } from "react";
+import { ProfileDataContext } from "../../Contexts/ProfileContext";
+import { CommentsContext } from "../../Contexts/CommentContext";
+import { useNavigate } from "react-router-dom";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { CommentsContext } from '../Contexts/CommentContext';
-import { ProfileDataContext } from '../Contexts/ProfileContext';
-import { createComment, createReply, deleteComment, fetchReplies, likeCommentReply } from '../services/apiService';
-// todo of this function - give option to like comment, reply , and remove comment option for commented user 
+import { deleteComment, fetchReplies, likeCommentReply } from "../../services/apiService";
+import CommentInputForm from "./CommentInputForm";
 
-
-export const CommentInput = ({ post, replyProps = {} }) => {  // here some props are for replies and some for comments
-    // Destructure with default values
-    const {
-        isReply = false,
-        setReplies = () => [],
-        setRepliesCount = () => 0,
-        comment_id = null
-    } = replyProps;
-    const { setComments, setCommentsCount } = useContext(CommentsContext);
-    const { profileData: user } = useContext(ProfileDataContext);
-    const navigate = useNavigate();
-    const [inputText, setInputText] = useState("");
-    const handleInputTextChange = (e) => {
-        setInputText(e.target.value);
-        // console.log(inputText);
-    }
-
-    // handle comment or reply sending
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log('handleSubmit');
-        if (inputText != "") {
-            var message = new FormData();
-            message.append('text', inputText);
-            try {
-                if (isReply) {
-                    const newReply = await createReply(comment_id, message);
-                    console.log('reply posted');
-                    setReplies((prevReplies) => [...prevReplies, newReply]);
-                    setRepliesCount((prevCount) => prevCount + 1) // update reply count when new reply is added
-                }
-                else {
-                    const newComment = await createComment(post.id, message);
-                    setComments((prevComments) => [...prevComments, newComment]);
-                    setCommentsCount((prevCount) => prevCount + 1) // update comment count when new comment is added
-                }
-            } catch (error) {
-                console.log(error);
-            }
-            // data.append('text',inputText);
-            // onComment(data);
-            setInputText("");
-        }
-    }
-
-    return <>
-        <div className={`${isReply ? 'py-2  flex items-center space-x-2' : 'py-2 px-3 flex items-center space-x-3'}`} >
-            <div className="current-user-img" onClick={() => navigate(`/profile/${user.id}`)}>
-                <img src={user.profileImg} className={`${isReply ? 'user-profileImg w-6 h-6 border rounded-[50%] object-cover' : "user-profileImg w-8 h-8 border rounded-[50%] object-cover"}`} alt=".." />
-
-            </div>
-            <form onSubmit={handleSubmit} className="text-input-form bg-gray-200 input-form flex-grow flex items-center rounded-lg overflow-hidden">
-                {/* <input onKeyUp={(e) => { if (e.key === "Enter") { handleSubmit(e) } }} type="text" className={`${isReply ? 'bg-gray-200 w-full px-2 text-sm font-normal py-[3px] outline-none' : 'bg-gray-200 w-full p-2 outline-none'}`} onChange={handleInputTextChange} value={inputText} /> */}
-                <input type="text" className={`${isReply ? 'bg-gray-200 w-full px-2 text-sm font-normal py-[3px] outline-none' : 'bg-gray-200 w-full p-2 outline-none'}`} onChange={handleInputTextChange} value={inputText} />
-                <button type='submit' className='sent-btn p-1 '><span className=""><Send fontSize={`${isReply ? 'small' : 'medium'}`} className={`${inputText !== "" ? 'text-bgPrimary' : 'text-gray-500'}`} /></span></button>
-            </form>
-        </div>
-    </>
-}
-
-
-
-export const CommentUserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
+const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
     const { profileData } = useContext(ProfileDataContext);
     const { setComments, setCommentsCount } = useContext(CommentsContext);
     const [replies, setReplies] = useState([]);
@@ -140,8 +76,8 @@ export const CommentUserCard = ({ comment , setParentReplies, setParentRepliesCo
                 <img src={comment.user.profileImg} className="w-6 h-6 object-cover rounded-[50%]" alt=".." />
             </div>
             <div className="flex flex-col w-full">
-                <p className={`${comment.parent > 0 && 'text-sm'} font-medium`}>{comment.user.username}</p>
-                <p className="text-sm">{comment.text}</p>
+                <p className={`${comment.parent > 0 && 'text-[15px] '} font-medium`}>{comment.user.username}</p>
+                <p className={`${comment.parent > 0 ? 'text-[13px]':'text-sm'} font-normal`}>{comment.text}</p>
                 <div className="mt-1 flex space-x-4">
                     {/* Like Button */}
                     <div className="like-div flex items-center space-x-1">
@@ -191,14 +127,14 @@ export const CommentUserCard = ({ comment , setParentReplies, setParentRepliesCo
                 {showReplies && (
                     <div className="replies-wrapper flex flex-col py-2 space-y-2">
                         {replies.map((reply) => (
-                            <CommentUserCard key={reply.id} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount}/>
+                            <UserCard key={reply.id} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount}/>
                         ))}
                     </div>
                 )}
 
                 {/* Reply Input */}
                 {showReplyInput && (
-                    <CommentInput
+                    <CommentInputForm
                         replyProps={{
                             isReply: true,
                             setReplies,
@@ -212,3 +148,4 @@ export const CommentUserCard = ({ comment , setParentReplies, setParentRepliesCo
     );
 };
 
+export default UserCard;

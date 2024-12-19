@@ -1,10 +1,11 @@
 import { Close, MoreVert } from '@mui/icons-material'
 import React, { useContext, useEffect, useState } from 'react'
-import { Post } from './post/PostDetail';
-import { createComment, fetchComments } from '../services/apiService';
-import { CommentInput, CommentUserCard } from './CommentComponents';
-import { ProfileDataContext } from '../Contexts/ProfileContext';
-import { CommentsContext } from '../Contexts/CommentContext';
+import { Post } from '../post/PostDetail';
+import {  fetchComments } from '../../services/apiService';
+import { ProfileDataContext } from '../../Contexts/ProfileContext';
+import { CommentsContext } from '../../Contexts/CommentContext';
+import CommentInputForm from './CommentInputForm';
+import UserCard from './UserCard';
 
 export default function Comments({ post, closeComments  }) {
     const {comments, setComments} = useContext(CommentsContext);
@@ -40,12 +41,12 @@ export default function Comments({ post, closeComments  }) {
                 </div>
             <div className="comments-wrapper flex space-y-2 flex-col py-3 xl:px-6 lg:px-2 ">
                     {comments.map((comment) => {
-                        return <CommentUserCard key={comment.id} comment={comment} />
+                        return <UserCard key={comment.id} comment={comment} />
                     })}
                 </div>
             </div>
             <div className="comment-input border-t  absolute   bottom-20  left-0 bg-[#F8F9FA] w-full h-20  ">
-                <CommentInput  user={profileData} post={post}  />
+                <CommentInputForm  user={profileData} post={post}  />
             </div>
         </div>
     )

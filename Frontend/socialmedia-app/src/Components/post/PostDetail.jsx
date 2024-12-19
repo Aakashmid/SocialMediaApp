@@ -2,10 +2,11 @@ import { MoreVert, Sort } from "@mui/icons-material";
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import Comments from "../Comments";
+
 import { useContext, useEffect, useState } from "react";
 import api from "../../Api";
 import { CommentsContext } from "../../Contexts/CommentContext";
+import Comments from "../comment/Comments";
 
 // this post detail component
 export const Post = ({ post, handleCommentsToggle  }) => {
