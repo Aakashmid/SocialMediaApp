@@ -58,7 +58,7 @@ const Profile = () => {
     }
 
 
-    // fetch profile data if the id in the url is not the same as the logged in user's id
+    // fetch profile data if the id in the url is not the same as the logged in user's id (get profile data of whose profile is viewing )
     useEffect(() => {
         if (profileData.id != id) {
             getProfileData()
@@ -69,6 +69,7 @@ const Profile = () => {
         }
         getProfilePosts()
     }, [id, profileData])
+
 
     // handling when clicked to a post on profile page
     const handleOnclickPost = (id) => {
@@ -83,14 +84,14 @@ const Profile = () => {
             if (profile.id != profileData.id) {
                 setProfileData({ ...profileData, followings_count: profileData.followings_count - 1 })
             }
-            console.log(response)
+            // console.log(response)
         } else {
             const response = await followUser(userId);
             setProfile({ ...profile, followers_count: profile.followers_count + 1, isFollowed: true })
             if (profile.id != profileData.id) {
-                setProfileData({ ...profileData, followings_count: profileData.followings_coun + 1 })
+                setProfileData({ ...profileData, followings_count: profileData.followings_count + 1 })
             }
-            console.log(response)
+            // console.log(response)
         }
     }
 
@@ -121,18 +122,18 @@ const Profile = () => {
                             <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
                                 <div className="profile-followers">
                                     <Link className='' to={`${profile.followers_count > 0 ? 'followers' : ''}`}>
-                                        <p className="font-semibold  text-center">{profile.followers_count}</p>
+                                        <p className="font-semibold  text-center">{profile.followers_count || 0}</p>
                                         <p className="text-center text-sm text-gray-500">Followers</p>
                                     </Link>
                                 </div>
                                 <div className="profile-followings">
                                     <Link className='' to={`${profile.followings_count > 0 ? 'followings' : ''}`}>
-                                        <p className="font-semibold  text-center">{profile.followings_count}</p>
+                                        <p className="font-semibold  text-center">{profile.followings_count || 0}</p>
                                         <p className="text-center text-sm text-gray-500">Followings</p>
                                     </Link>
                                 </div>
                                 <div className="profile-posts-count">
-                                    <p className="font-semibold text-center">{profile.posts_count}</p>
+                                    <p className="font-semibold text-center">{profile.posts_count ||0}</p>
                                     <p className="text-center text-sm text-gray-500">Posts</p>
                                 </div>
                             </div>

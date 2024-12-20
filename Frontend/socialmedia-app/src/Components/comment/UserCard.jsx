@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
-import { ProfileDataContext } from "../../Contexts/ProfileContext";
-import { CommentsContext } from "../../Contexts/CommentContext";
-import { useNavigate } from "react-router-dom";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CommentsContext } from "../../Contexts/CommentContext";
+import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import { deleteComment, fetchReplies, likeCommentReply } from "../../services/apiService";
 import CommentInputForm from "./CommentInputForm";
 
@@ -76,7 +76,7 @@ const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
                 <img src={comment.user.profileImg} className="w-6 h-6 object-cover rounded-[50%]" alt=".." />
             </div>
             <div className="flex flex-col w-full">
-                <p className={`${comment.parent > 0 && 'text-[15px] '} font-medium`}>{comment.user.username}</p>
+                <p onClick={() => navigate(`/profile/${comment.user.id}`)} className={`${comment.parent > 0 && 'text-[15px] '} font-medium cursor-pointer`}>{comment.user.username}</p>
                 <p className={`${comment.parent > 0 ? 'text-[13px]':'text-sm'} font-normal`}>{comment.text}</p>
                 <div className="mt-1 flex space-x-4">
                     {/* Like Button */}

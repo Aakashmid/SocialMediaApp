@@ -5,49 +5,44 @@ import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Per
 import { useContext, useEffect, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
+import SearchInputForm1 from "../Topbar/SearchInputForm1";
+import SearchInputForm2 from "../Topbar/SearchInputForm2";
 
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);    // profpopover - profile popover 
     const [showSidebar, setShowSidebar] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
     const [isClickable, setIsClickable] = useState(false);
-    const {profileData} = useContext(ProfileDataContext);
+    const { profileData } = useContext(ProfileDataContext);
 
-    useEffect(()=>{
-         // Toggle the body's overflow style based on isBgBlur  state
-         if (showSidebar) {
-             document.body.style.overflow = showSidebar ? 'hidden' : 'auto';
-         }
-         else if (showProPopover) {
-             document.body.style.overflow = showProPopover? 'hidden' : 'auto';
-         }
+    useEffect(() => {
+        // Toggle the body's overflow style based on isBgBlur  state
+        if (showSidebar) {
+            document.body.style.overflow = showSidebar ? 'hidden' : 'auto';
+        }
+        else if (showProPopover) {
+            document.body.style.overflow = showProPopover ? 'hidden' : 'auto';
+        }
 
-         // Cleanup function to reset overflow when component unmounts
-         return () => {
-             document.body.style.overflow = 'auto';
-         };
-    },[showProPopover, showSidebar])
+        // Cleanup function to reset overflow when component unmounts
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [showProPopover, showSidebar])
     return (<>
         <header>
             <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
                 <div className='flex items-center topbar-left'>
                     <div className="lg:hidden mr-2">
-                        {showSidebar ? <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>
-                            : <span className="w-fit" onClick={() => setShowSidebar(!showSidebar)}><MenuIcon htmlColor="white" /></span>
+                        {showSidebar ? <span className="w-fit cursor-pointer " onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>
+                            : <span className="w-fit cursor-pointer " onClick={() => setShowSidebar(!showSidebar)}><MenuIcon htmlColor="white" /></span>
                         }
                     </div>
 
                     <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
                 </div>
                 <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
-                    <div className="searchBar bg-white rounded-[30px] px-2  flex items-center md:w-[300px] lg:w-[400px] xl:w-[500px]">
-                        {/* search bar form */}
-                        <form action="#" className="w-full flex items-center">
-                            <span className="py-1  cursor-pointer px-2">
-                                <SearchRounded className="hover:text-blue-800" />
-                            </span>
-                            <input type="text" name="query" className="search-query bg-transparent focus:outline-none px-2 text-sm py-[6px] flex-grow " placeholder="Search post or friend  " />
-                        </form>
-                    </div>
+                    <SearchInputForm1 />
                     <div className="topbar-links flex space-x-3 text-white">
                         <Link to={'/'} >Homepage</Link>
                         <Link to={'/'} >Timeline</Link>
@@ -60,9 +55,16 @@ export default function Topbar() {
                         <li className="topbar-icon cursor-pointer"><NotificationsRounded htmlColor="white" className="hover:text-blue-50 " /></li>
                     </ul>
 
-                    <div className="search-btn md:hidden">
-                        <button className="">
-                            <SearchRounded htmlColor="white" fontSize="large" />
+                    <div className="search-bar flex  space-x-2 md:hidden">
+
+                        {showSearch &&
+                            <div  className="search-bar-small-screen top-0 left-0 fixed w-full h-fit md:hidden">
+                                <SearchInputForm2 close={() => setShowSearch(!showSearch)} />
+                            </div>
+                        }
+
+                        <button onClick={() => setShowSearch(!showSearch)}>
+                            <SearchRounded className="active:text-gray-200" htmlColor="white" fontSize="large" />
                         </button>
                     </div>
 
@@ -83,8 +85,8 @@ export default function Topbar() {
         {/* for small screen -  sidebar */}
         {showSidebar &&
             <>
-            <Sidebar />
-            <span className="hide-sidebar-bg bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-0" onClick={()=>setShowSidebar(!showSidebar)}></span>
+                <Sidebar />
+                <span className="hide-sidebar-bg bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-0" onClick={() => setShowSidebar(!showSidebar)}></span>
             </>
         }
 

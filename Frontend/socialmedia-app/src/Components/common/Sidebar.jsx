@@ -30,6 +30,8 @@ const Sidebar = () => {
     }
   }, [profileData?.id]);
 
+
+  
   useEffect(() => {
     getFollowings();
   }, [getFollowings]);
