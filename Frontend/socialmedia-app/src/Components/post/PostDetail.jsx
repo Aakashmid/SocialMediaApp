@@ -7,14 +7,60 @@ import { useContext, useEffect, useState } from "react";
 import api from "../../Api";
 import { CommentsContext } from "../../Contexts/CommentContext";
 import Comments from "../comment/Comments";
+import PostOptionMenu from "./PostOptionMenu";
+import { SavePost } from "../../services/apiService";
 
-// this post detail component
-export const Post = ({ post, handleCommentsToggle  }) => {
-    ///  this is post card 
-    const {commentsCount, setCommentsCount} = useContext(CommentsContext);
+// this post card component
+export const Post = ({ initialPost, handleCommentsToggle }) => {
+    const { commentsCount, setCommentsCount } = useContext(CommentsContext);
+    const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+    const [post, setPost] = useState(initialPost);
     const [likeCount, setLikeCount] = useState(post.likes_count);
     const [isLiked, setisLiked] = useState(post.isLiked);
-    
+
+    const handleSave = async () => {
+        setPost((prevPost) => ({
+            ...prevPost,
+            isSaved: !prevPost.isSaved
+        }));
+
+        try {
+            const res = await SavePost(post.id);
+            // console.log(res);
+        } catch (error) {
+            setPost((prevPost) => ({
+                ...prevPost,
+                isSaved: !prevPost.isSaved
+            }));
+            console.error(error);
+        }
+    };
+
+
+
+    const handleReport = () => {
+        // Logic to report the post
+        console.log('Reporting post');
+    };
+
+    const handleShare = () => {
+        // Logic to share the post
+        console.log('Sharing post');
+    };
+
+
+    const handleRemovPost = async () => {
+        try {
+            const res =
+                console.log('Post deleted');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+    const handleUpdatePost = async () => { };
+
     const likeHandler = async () => {
         // setLikeCount(prevCount => prevCount + 1);  
         try {
@@ -36,7 +82,7 @@ export const Post = ({ post, handleCommentsToggle  }) => {
         // setLikeCount(2);  
         console.log('liked')
     }
-   
+
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
     return <>
         <div className="post-card-top  flex items-center justify-between">
@@ -47,8 +93,18 @@ export const Post = ({ post, handleCommentsToggle  }) => {
                 </Link>
                 <span className="published time text-xs">{postPublishTime} </span>
             </div>
-            <div className="postTopRight p-1 cursor-pointer">
-                <MoreVert fontSize="small" />
+            <div className="postTopRight relative">
+                <span className=" cursor-pointer p-1" onClick={() => setShowOptionsMenu(!showOptionsMenu)}>
+                    <MoreVert fontSize="small" />
+                </span>
+                {showOptionsMenu && (
+                    <div
+                        className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 ${showOptionsMenu ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"
+                            }`}
+                    >
+                        <PostOptionMenu post={post} onReport={handleReport} onSave={handleSave} onShare={handleShare} onRemove={handleRemovPost} onUpdate={handleUpdatePost} />
+                    </div>
+                )}
             </div>
         </div>
         <div className="card-center">
@@ -106,10 +162,10 @@ export default function PostDetail({ post }) {
                 <span onClick={() => handleCommentsToggle()} className="w-[100vw] h-[140vh] fixed bg-gray-600 -top-10  left-0 z-30 opacity-40"></span>
             }
             <div id={"post" + post.id} className="post-card p-4 custom-shodow-b rounded-lg  flex-col flex space-y-5 lg:space-y-6">
-                <Post post={post}  handleCommentsToggle={handleCommentsToggle} />
+                <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} />
                 {showComments &&
                     <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-[10%]  left-1/2 -translate-x-1/2 xl:w-[45%] lg:w-[60%] md:w-[75%] w-full  h-full z-40">
-                        <Comments   closeComments={handleCommentsToggle} post={post} />
+                        <Comments closeComments={handleCommentsToggle} post={post} />
                     </div>
                 }
             </div>

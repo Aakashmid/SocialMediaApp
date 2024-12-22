@@ -2,6 +2,7 @@ import { CommentsContextProvider } from "../../Contexts/CommentContext"
 import PostDetail from "./PostDetail"
 // list all posts
 export default function PostList({ posts }) {
+    // const posts
     return (
         <div className="posts  flex flex-col space-y-4">
             {posts.map((post) => {

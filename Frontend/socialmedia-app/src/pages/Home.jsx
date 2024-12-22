@@ -1,54 +1,51 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import Feed from "../Components/home/Feed";
 import { HomePageLoader } from "../Components/Loader";
 import Layout from "../Layout/Layout";
-import {  useFetchUserProfile } from "../services/apiService";
+import { useFetchUserProfile } from "../services/apiService";
 import { USER_ID } from "../Components/constants";
 import Rightbar from "../Components/common/Rightbar";
 import { LoadingContext } from "../Contexts/LoadingContext";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
 
-
-
-
 export default function Home() {
-
   const { loading, setLoading } = useContext(LoadingContext);
-  // const [ loading, setLoading ] = useState(false);
   const { profileData, setProfileData } = useContext(ProfileDataContext);
-  const fetchUserProfile  = useFetchUserProfile();    // custom hook 
-  const user_id = localStorage.getItem(USER_ID);
+  const fetchUserProfile = useFetchUserProfile(); // Custom hook
+  const userId = localStorage.getItem(USER_ID);
 
+  /**
+   * Fetch user profile data if not already available.
+   */
+  const fetchProfileData = useCallback(async () => {
+    if (!userId) return;
 
-  const fetchProfielData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const data = await fetchUserProfile(user_id);
+      const data = await fetchUserProfile(userId);
       setProfileData(data);
-      setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch profile data:', error);
-    } 
-  }
+      console.error("Failed to fetch profile data:", error);
+    } finally {
+      setLoading(false); // Ensure loading state is always updated
+    }
+  }, [fetchUserProfile, setProfileData, setLoading, userId]);
 
-  ////// incomplete , has to modify 
+  // Fetch profile data on component mount if not already fetched
   useEffect(() => {
     if (!profileData || Object.keys(profileData).length === 0) {
-      fetchProfielData();
+      fetchProfileData();
     }
-  }, [profileData, setLoading]);
+  }, [profileData, fetchProfileData]);
 
   if (loading) {
     return <HomePageLoader />;
   }
-  else {
-    return (
-      <>
-        <Layout>
-          <Feed />
-          <Rightbar />
-        </Layout>
-      </>
-    )
-  }
+
+  return (
+    <Layout>
+      <Feed />
+      <Rightbar />
+    </Layout>
+  );
 }

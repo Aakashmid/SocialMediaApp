@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .serializers import PostSerializer , SavePostSerializer
+from .serializers import PostSerializer 
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Post , Like , SavedPost
@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status, viewsets 
 from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 # from rest_framework.permissions import AllowAny,IsAuthenticated
 # from rest_framework.exceptions import PermissionDenied
@@ -22,6 +24,8 @@ class PostviewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     search_fields = ['text', 'creator__user__username']  # has to add tags
     filter_backends = [SearchFilter]
+    # filter_backends = [DjangoFilterBackend,SearchFilter]  # for filter also 
+    # filterset_fields = ['creator__user__username']  # create custom filters for custom fields like followers count etc .
 
     def perform_create(self, serializer):
         '''

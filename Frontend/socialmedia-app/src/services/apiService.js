@@ -21,7 +21,7 @@ export const useFetchUserProfile = () => {
 };
 
 
-export const partialUpdateUserProfile = async (user_id,data) => {
+export const partialUpdateUserProfile = async (user_id, data) => {
     try {
         const response = await api.patch(`/api/users/${user_id}/`, data);
         return response.data;
@@ -45,10 +45,21 @@ export const partialUpdateUserProfile = async (user_id,data) => {
 
 
 
+export const fetchUserPosts = async (user_id) => {
+    try {
+        const response = await api.get(`api/users/${user_id}/posts`)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 /////////////////////// Post related ///////////////////////
 
 // get posts
-export const fetchPosts = async (post_id) => {
+export const fetchPosts = async () => {
     try {
         const response = await api.get(`/api/posts/`);
         return response.data;
@@ -56,6 +67,8 @@ export const fetchPosts = async (post_id) => {
         throw error;
     }
 }
+
+
 
 // get post detail
 export const GetPostDetail = async (post_id) => {
@@ -91,7 +104,7 @@ export const UpdatePost = async (id, post_data) => {
 
 
 // create post
-export const CreatePost = async ( post_data) => {
+export const CreatePost = async (post_data) => {
     try {
         const response = await api.post(`/api/posts/`, post_data);
         return response.data;
@@ -99,6 +112,29 @@ export const CreatePost = async ( post_data) => {
         throw error;
     }
 }
+
+// save a post
+export const SavePost = async (post_id) => {
+    try {
+        const response = await api.post(`/api/posts/${post_id}/toggle-save/`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+// get saved post 
+export const fetchSavedPosts = async () => {
+    try {
+        const response = await api.get('/api/posts/saved-posts/');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 
 
 ///////////////////////////////// Comment Related  /////////////////////////////////
@@ -160,6 +196,9 @@ export const deleteComment = async (comment_id) => {
         throw error;
     }
 }
+
+
+
 
 
 

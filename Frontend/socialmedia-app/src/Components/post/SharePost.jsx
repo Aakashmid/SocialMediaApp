@@ -3,7 +3,7 @@ import { PermMedia } from '@mui/icons-material'
 import { ProfileDataContext } from "../../Contexts/ProfileContext"
 import { CreatePost } from "../../services/apiService"
 
-export default function SharePost({ posts, setPosts }) {
+export default function SharePost({ posts, setPosts, onShare }) {
     const [formData, setFormData] = useState({ text: '', postImg: '' })
 
 
@@ -11,11 +11,11 @@ export default function SharePost({ posts, setPosts }) {
     const sharePost = async (data) => {
         try {
             const post_data = await CreatePost(data);
-            setPosts([...posts,post_data]);
+            setPosts([...posts, post_data]);
         } catch (error) {
             console.error(error)
         }
-        
+
     }
 
 
@@ -37,7 +37,12 @@ export default function SharePost({ posts, setPosts }) {
             const data = new FormData();
             data.append('text', formData.text);
             data.append('postImg', formData.postImg);
-            sharePost(data);
+            if (onShare) {
+                onShare(data);  // if onShare hanlde is given then use it else use default
+            }
+            else {
+                sharePost(data);
+            }
         }
         // clear the form data
         setFormData({ text: '', postImg: '' })

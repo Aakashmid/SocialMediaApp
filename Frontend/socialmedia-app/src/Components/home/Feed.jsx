@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import SharePost from "../post/SharePost";
 import api from "../../Api";
-import Posts from "../post/PostList";
+import PostList from "../post/PostList";
 import { fetchPosts } from "../../services/apiService";
 
 
-export default function Feed({ currentUser }) {
+export default function Feed() {
 
     const [posts, setPosts] = useState([])
-    const getPosts =async () => {
+    const getPosts = async () => {
         try {
             const data = await fetchPosts();
             setPosts(data);
@@ -19,6 +19,12 @@ export default function Feed({ currentUser }) {
     }
 
 
+    // // function to update posts state when removed a post
+    // const handleRemovePost = (post_id) => {
+    //     const updatedPosts = posts.filter(post => post.id !== post_id)
+    //     setPosts(updatedPosts)
+    // }
+
     useEffect(() => {
         getPosts()
     }, [])
@@ -27,9 +33,10 @@ export default function Feed({ currentUser }) {
             <div className="feed-wrapper">
                 <SharePost posts={posts} setPosts={setPosts} />
                 <div className="feed-posts mt-5">
-                    <Posts posts={posts} />
+                    <PostList posts={posts} />
                 </div>
             </div>
         </div>
     )
 }
+

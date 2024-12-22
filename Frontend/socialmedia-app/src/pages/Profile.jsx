@@ -7,7 +7,7 @@ import api from '../Api'
 import Sidebar from '../Components/common/Sidebar'
 import { Close } from '@mui/icons-material'
 import ProfilePosts from '../Components/profile/ProfilePosts'
-import { followUser, unfollowUser } from '../services/apiService'
+import { CreatePost, fetchUserPosts, followUser, unfollowUser } from '../services/apiService'
 
 const Profile = () => {
 
@@ -17,15 +17,18 @@ const Profile = () => {
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
+    const [savedPosts, setSavedPosts] = useState([]);
 
     const navigate = useNavigate()
 
-    const { id } = useParams()
+    const { id: profileUserId } = useParams(); // users's profile id w
 
 
+    // get profile data if profile is not current user's profile
     const getProfileData = async () => {
         try {
-            const res = await api.get(`api/users/${id}/`)
+            const res = await api.get(`api/users/${profileUserId}/`)
+            console.log('ok')
             setProfile(res.data);
         } catch (error) {
             console.error('Error fetching profile data:', error);
@@ -34,33 +37,27 @@ const Profile = () => {
 
     const getProfilePosts = async () => {
         try {
-            const res = await api.get(`api/users/${id}/posts`)
-            if (res.status === 200) {
-                setProfilePosts(res.data)
-            } else {
-                console.error('Error fetching  posts:', res.status);
-            }
+            const data = await fetchUserPosts(profileUserId);
+            setProfilePosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
     }
 
-    const creatPost = (data, page) => {
-        api.post('api/posts/', data).then((res) => {
-            if (res.status === 201) {
-                console.log('post created ')
-                getProfilePosts()   // in place of fetching all posts again , just add new post to profilePosts state (have to do )
-                setProfileData({ ...profileData, posts_count: profileData.posts_count + 1 })
-            }
-        }).catch((error) => {
-            console.log(error.response.data)
-        })
+    const handleCreatePost = async (post_data) => {
+        try {
+            const newPost = await CreatePost(post_data);
+            setProfileData({ ...profileData, posts_count: profileData.posts_count + 1 })
+            setProfilePosts((prevPosts) => [...prevPosts, newPost]);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
-    // fetch profile data if the id in the url is not the same as the logged in user's id (get profile data of whose profile is viewing )
+    // fetch profile data if the profile user_id in the url is not the same as the logged in user's id (get profile data of whose profile is viewing )
     useEffect(() => {
-        if (profileData.id != id) {
+        if (profileData.id != profileUserId) {
             getProfileData()
             // console.log(profile)
         } else {
@@ -68,7 +65,7 @@ const Profile = () => {
             setProfile(profileData);
         }
         getProfilePosts()
-    }, [id, profileData])
+    }, [profileUserId, profileData])
 
 
     // handling when clicked to a post on profile page
@@ -133,7 +130,7 @@ const Profile = () => {
                                     </Link>
                                 </div>
                                 <div className="profile-posts-count">
-                                    <p className="font-semibold text-center">{profile.posts_count ||0}</p>
+                                    <p className="font-semibold text-center">{profile.posts_count || 0}</p>
                                     <p className="text-center text-sm text-gray-500">Posts</p>
                                 </div>
                             </div>
@@ -148,7 +145,7 @@ const Profile = () => {
                                 {showShare &&
                                     <div className="relative py-4">
                                         <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute -top-4 bg-gray-50 p-1 hover:bg-gray-200'><Close /></span>
-                                        <SharePost onShare={creatPost} />
+                                        <SharePost onShare={handleCreatePost} />
                                     </div>}
                             </div>
                         }
@@ -163,6 +160,7 @@ const Profile = () => {
                         </div>
                         <div className="profile-feed ">
                             {feedOP === 'posts' && <ProfilePosts posts={profilePosts} onclickPost={handleOnclickPost} />}
+                            {feedOP === 'saved' && <ProfilePosts posts={savedPosts} onclickPost={handleOnclickPost} />}
                         </div>
                     </div>
                 </div>
