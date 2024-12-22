@@ -70,6 +70,7 @@ export const fetchPosts = async () => {
 
 
 
+
 // get post detail
 export const GetPostDetail = async (post_id) => {
     try {

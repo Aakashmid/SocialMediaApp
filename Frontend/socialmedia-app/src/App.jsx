@@ -33,28 +33,31 @@ function App() {
   return (
     <>
 
-        <Routes>
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          } />
-          <Route path='/profile/:id' element={
-            <ProtectedRoute><Profile /></ProtectedRoute>
-          } />
-          <Route path='/profile/:id/posts/:id' element={
-            <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
-          } />
-          <Route path='/profile/:id/:str' element={
-            <ProtectedRoute><FollowersFollowings /></ProtectedRoute>
-          } />
-          <Route path='/profile/:username/edit' element={
-            <ProtectedRoute><EditProfile /></ProtectedRoute>
-          } />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<RegisterAndLogout />} />
-          <Route path='/logout' element={<Logout />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } />
+        <Route path='/profile/:id' element={
+          <ProtectedRoute><Profile /></ProtectedRoute>
+        } />
+        <Route path='/profile/:id/posts/:id' element={
+          <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
+        } />
+        <Route path='/profile/:id/saved-posts/:id' element={
+          <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
+        } />
+        <Route path='/profile/:id/:str' element={
+          <ProtectedRoute><FollowersFollowings /></ProtectedRoute>
+        } />
+        <Route path='/profile/:username/edit' element={
+          <ProtectedRoute><EditProfile /></ProtectedRoute>
+        } />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<RegisterAndLogout />} />
+        <Route path='/logout' element={<Logout />} />
+      </Routes>
     </>
   )
 }

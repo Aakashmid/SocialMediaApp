@@ -1,6 +1,6 @@
 import { useContext, useEffect, useCallback } from "react";
 import Feed from "../Components/home/Feed";
-import { HomePageLoader } from "../Components/Loader";
+import { HomePageLoader } from "../components/Loader";
 import Layout from "../Layout/Layout";
 import { useFetchUserProfile } from "../services/apiService";
 import { USER_ID } from "../Components/constants";

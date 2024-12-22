@@ -15,6 +15,7 @@ export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpda
     <div className='bg-white w-full p-2 shadow-lg'>
       <ul className='options flex flex-col space-y-1'>
         {options.map((option, index) => (
+          option.text &&
           <li key={index} onClick={option.action} className='flex space-x-2 items-center cursor-pointer hover:bg-gray-200  px-2 py-[6px] rounded-md'>
             <span className='icon'>
               <option.Icon />

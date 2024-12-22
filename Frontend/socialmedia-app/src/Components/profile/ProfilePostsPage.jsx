@@ -8,8 +8,8 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
-    const {profileData,setProfileData} = useContext(ProfileDataContext);
-    const { posts, postid, profileId } = location.state || [];  //here profileId  of post creator
+    const { profileData, setProfileData } = useContext(ProfileDataContext);
+    const { posts, postid, profileId } = location.state || [];  //here profileId is  of post creator
     useEffect(() => {
         if (postid) {
             const element = document.getElementById(postid);
@@ -18,6 +18,11 @@ export default function ProfilePostsPage() {
             }
         }
     }, [postid]);
+
+
+    const isFromSaved = location.pathname.includes('/saved-posts/');
+    const pageTitle = isFromSaved ? "Saved Posts" : "Posts";
+
     return (
         <>
             <Layout>
@@ -25,7 +30,7 @@ export default function ProfilePostsPage() {
                     <div className="page-top">
                         <div className="flex items-center space-x-6">
                             <Link to={`/profile/${profileId}`} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link>
-                            <h2 className='text-lg xl:text-xl font-medium'>{profileData.id === profileId ? 'My posts' : profileData.username + '\'s posts'}</h2>
+                            <h2 className='text-lg xl:text-xl font-medium'>{profileData.id === profileId ? `My ${pageTitle}` : profileData.username + `\'s ${pageTitle}`}</h2>
                         </div>
                     </div>
                     <div className="mt-5">

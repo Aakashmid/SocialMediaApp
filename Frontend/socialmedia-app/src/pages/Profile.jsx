@@ -6,41 +6,56 @@ import { ProfileDataContext } from '../Contexts/ProfileContext'
 import api from '../Api'
 import Sidebar from '../Components/common/Sidebar'
 import { Close } from '@mui/icons-material'
-import ProfilePosts from '../Components/profile/ProfilePosts'
-import { CreatePost, fetchUserPosts, followUser, unfollowUser } from '../services/apiService'
+import { CreatePost, fetchSavedPosts, fetchUserPosts, followUser, unfollowUser } from '../services/apiService'
+import ProfileHeader from '../components/profile/ProfileHeader'
+import ProfileStats from '../components/profile/ProfileStats'
+import ProfileFeed from '../components/profile/ProfileFeed'
+import ProfileActions from '../Components/profile/ProfileActions'
+import useProfileData from '../hooks/useProfileData'
 
 const Profile = () => {
-
-    const { profileData, setProfileData } = useContext(ProfileDataContext)   // profile data is current user profile data , fetching it form profileContext
-    const [profile, setProfile] = useState({});
-    const [isCUProfile, setisCUProfile] = useState(false); // is currentuserprofie
+    const [loading, setLoading] = useState(false);
+    const { profileData, setProfileData } = useContext(ProfileDataContext)   // profile data is current user profile data , fetching it from profileContext
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setfeedOp] = useState('posts')  // initialize profile feed options , defaul posts
     const [profilePosts, setProfilePosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
 
+    const { id: profileUserId } = useParams(); // users's profile id w
     const navigate = useNavigate()
 
-    const { id: profileUserId } = useParams(); // users's profile id w
+    //  using custom hook to get profile data for profilepage
+    const { profile, setProfile, isCUProfile } = useProfileData(profileUserId, profileData);
 
 
-    // get profile data if profile is not current user's profile
-    const getProfileData = async () => {
-        try {
-            const res = await api.get(`api/users/${profileUserId}/`)
-            console.log('ok')
-            setProfile(res.data);
-        } catch (error) {
-            console.error('Error fetching profile data:', error);
+
+    const getProfilePosts = async () => {
+        if (profilePosts.length === 0) {
+            setLoading(true);
+            try {
+                const data = await fetchUserPosts(profileUserId);
+                setProfilePosts(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+            finally {
+                setLoading(false);
+            }
         }
     }
 
-    const getProfilePosts = async () => {
-        try {
-            const data = await fetchUserPosts(profileUserId);
-            setProfilePosts(data);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
+    const getSavedPosts = async () => {
+        if (savedPosts.length === 0) {
+            setLoading(true);
+            try {
+                const data = await fetchSavedPosts();
+                setSavedPosts(data);
+            } catch (error) {
+                console.error('Error fetching saved posts:', error);
+            }
+            finally {
+                setLoading(false);
+            }
         }
     }
 
@@ -55,24 +70,29 @@ const Profile = () => {
     }
 
 
-    // fetch profile data if the profile user_id in the url is not the same as the logged in user's id (get profile data of whose profile is viewing )
+    // Fetch posts or saved posts when feedOP changes 
     useEffect(() => {
-        if (profileData.id != profileUserId) {
-            getProfileData()
-            // console.log(profile)
-        } else {
-            setisCUProfile(true);
-            setProfile(profileData);
+        if (feedOP === 'posts') {
+            getProfilePosts();
         }
-        getProfilePosts()
-    }, [profileUserId, profileData])
+        else if (feedOP === 'saved') {
+            getSavedPosts();
+        }
+    }, [feedOP, profileUserId]);
 
 
-    // handling when clicked to a post on profile page
     const handleOnclickPost = (id) => {
-        navigate(`posts/${id}`, { state: { posts: profilePosts, postid: "post" + id, profileId: profile.id } })
-    };
+        const posts = feedOP === 'posts' ? profilePosts : savedPosts;
+        const postUrl = feedOP === 'saved' ? `saved-posts/${id}` : `posts/${id}`;
 
+        navigate(postUrl, {
+            state: {
+                posts: posts,
+                postid: "post" + id,
+                profileId: profile.id
+            }
+        });
+    };
     // handle follow a user   // have to work on it 
     const handleFollow = async (userId) => {
         if (profile.isFollowed) {
@@ -92,9 +112,6 @@ const Profile = () => {
         }
     }
 
-    const Underline = () => {  // underlineComponent
-        return <><span className="absolute h-[2px] bg-black w-10/12 -bottom-1 left-1/2 -translate-x-1/2"></span></>
-    }
 
     return (
         <>
@@ -110,59 +127,15 @@ const Profile = () => {
                             <img src={profile.profileImg} className='profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white' alt="" />
                             <div className="w-full h-16"></div>
                         </div>
-                        <div className="profileInfo ">
-                            <p className={`flex  justify-center ${!isCUProfile && 'space-x-4 items-center'} `}>
-                                <span className="profile-Name text-xl font-semibold ">{profile.username}</span>
-                                {!isCUProfile && <><button onClick={() => handleFollow(profile.id)} className='follow-unfollow-btn  rounded text-sm px-1 py-[2px] bg-gray-700 text-white'>{profile.isFollowed ? "Following" : "Follow"}</button></>}
-                            </p>
-                            <p className="profile-bio mt-2 text-center ">{profile.bio}</p>
-                            <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
-                                <div className="profile-followers">
-                                    <Link className='' to={`${profile.followers_count > 0 ? 'followers' : ''}`}>
-                                        <p className="font-semibold  text-center">{profile.followers_count || 0}</p>
-                                        <p className="text-center text-sm text-gray-500">Followers</p>
-                                    </Link>
-                                </div>
-                                <div className="profile-followings">
-                                    <Link className='' to={`${profile.followings_count > 0 ? 'followings' : ''}`}>
-                                        <p className="font-semibold  text-center">{profile.followings_count || 0}</p>
-                                        <p className="text-center text-sm text-gray-500">Followings</p>
-                                    </Link>
-                                </div>
-                                <div className="profile-posts-count">
-                                    <p className="font-semibold text-center">{profile.posts_count || 0}</p>
-                                    <p className="text-center text-sm text-gray-500">Posts</p>
-                                </div>
-                            </div>
-                        </div>
+                        <ProfileHeader profile={profile} isCUProfile={isCUProfile} handleFollow={handleFollow} />
+                        <ProfileStats profile={profile} />
+
                         {isCUProfile &&
-                            <div className='px-4 mx-auto lg:w-2/3 xl:2-1/2 '>
-                                <div className="grid grid-cols-2 gap-5 py-2 mb-4">
-                                    {/* profile buttons  */}
-                                    <Link className='block  hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white text-center' to={`/profile/${profileData.username}/edit`}>Edit Profile</Link>
-                                    {!showShare && <button onClick={() => setShowShare(!showShare)} className='cursor-pointer hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
-                                </div>
-                                {showShare &&
-                                    <div className="relative py-4">
-                                        <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute -top-4 bg-gray-50 p-1 hover:bg-gray-200'><Close /></span>
-                                        <SharePost onShare={handleCreatePost} />
-                                    </div>}
-                            </div>
+                            <ProfileActions showShare={showShare} setShowShare={setShowShare} handleCreatePost={handleCreatePost} profileData={profileData} />
                         }
                     </div>
-                    <div className="profile-center lg:w-2/3">
-                        <div className="profile-feed-contaier px-4 pt-2 pb-1">
-                            <div className="border-b  flex justify-around  py-1">
-                                <button className={`text-lg px-6 relative ${feedOP === 'posts' && 'font-semibold'}`} onClick={() => setfeedOp('posts')}>Posts {feedOP === 'posts' && <Underline />}</button>
-                                <button className={`text-lg px-6 relative ${feedOP === 'videos' && 'font-semibold'}`} onClick={() => setfeedOp('videos')}>Videos {feedOP === 'videos' && <Underline />}</button>
-                                <button className={`text-lg px-6 relative ${feedOP === 'saved' && 'font-semibold'}`} onClick={() => setfeedOp('saved')}>Saved {feedOP === 'saved' && <Underline />}</button>
-                            </div>
-                        </div>
-                        <div className="profile-feed ">
-                            {feedOP === 'posts' && <ProfilePosts posts={profilePosts} onclickPost={handleOnclickPost} />}
-                            {feedOP === 'saved' && <ProfilePosts posts={savedPosts} onclickPost={handleOnclickPost} />}
-                        </div>
-                    </div>
+                    <ProfileFeed setFeedOp={setfeedOp} feedOP={feedOP} profilePosts={profilePosts} savedPosts={savedPosts} loading={loading} handleOnclickPost={handleOnclickPost} />
+
                 </div>
             </div>
         </>
