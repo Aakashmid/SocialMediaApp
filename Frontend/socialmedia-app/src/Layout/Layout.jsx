@@ -13,14 +13,12 @@ export default function Layout({ children }) {
                 <div className="hidden lg:block ">
                     <Sidebar />
                 </div>
-                <div className="md:w-[650px] mx-auto lg:flex-[4] lg:ml-[25%] lg:px-12 ">
+                <div className="md:w-[650px] mx-auto lg:w-[45%] lg:ml-[25%] lg:px-12 ">
                     {firstChild}
                 </div>
-                {/* {secondChild && */}
-                    <div className="hidden lg:block lg:flex-[2] xl:flex-[2.5]">
-                        {secondChild}
-                    </div>
-                {/* } */}
+                <div className="hidden lg:block lg:w-[25%] xl:w-[25%]">
+                    {secondChild}
+                </div>
             </div>
 
         </>

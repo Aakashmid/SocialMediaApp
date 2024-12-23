@@ -1,3 +1,5 @@
+import { use, useEffect } from "react";
+
 const ProfileHeader = ({ profile, isCUProfile, handleFollow }) => {
     return (
         <div className="profileInfo">

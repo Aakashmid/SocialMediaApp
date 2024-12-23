@@ -7,13 +7,14 @@ const useProfileData = (profileUserId, profileData) => {
     const fetchUserProfile = useFetchUserProfile();  // method for making api request for fetching user profile data
     useEffect(() => {
         const fetchProfileData = async () => {
-            if (profileData.id !== profileUserId) {
+            if (profileData.id !== parseInt(profileUserId)) {
                 try {
                     const data = await fetchUserProfile(profileUserId);
                     setProfile(data);
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
                 }
+                setIsCUProfile(false);
             } else {
                 setIsCUProfile(true);
                 setProfile(profileData);
