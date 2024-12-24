@@ -75,7 +75,7 @@ export const fetchPosts = async () => {
 export const GetPostDetail = async (post_id) => {
     try {
         const response = await api.get(`/api/posts/${post_id}`);
-        return await response.data;
+        return response.data;
     } catch (error) {
         throw error;
     }

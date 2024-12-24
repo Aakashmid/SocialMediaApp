@@ -13,16 +13,17 @@ import FollowersFollowings from './Components/profile/FollowersFollowings';
 import EditProfile from './Components/profile/EditProfile';
 import { ProfileDataContext } from './Contexts/ProfileContext';
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
+import NotFound from './Components/NotFound';
+import EditPostPage from './Components/post/EditPostPage';
 
 function App() {
-  const { profileData, setProfileData } = useContext(ProfileDataContext);
+  const { setProfileData } = useContext(ProfileDataContext);
   const Logout = () => {
     useEffect(() => {
       localStorage.clear();
       setProfileData({});
     }, [setProfileData]);
 
-    // return <Navigate to="/login" replace />;
     return <Navigate to="/login" />;
   };
 
@@ -32,31 +33,23 @@ function App() {
   };
   return (
     <>
-
       <Routes>
-        <Route path="/" element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        } />
-        <Route path='/profile/:id' element={
-          <ProtectedRoute><Profile /></ProtectedRoute>
-        } />
-        <Route path='/profile/:id/posts/:id' element={
-          <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
-        } />
-        <Route path='/profile/:id/saved-posts/:id' element={
-          <ProtectedRoute><ProfilePostsPage /></ProtectedRoute>
-        } />
-        <Route path='/profile/:id/:str' element={
-          <ProtectedRoute><FollowersFollowings /></ProtectedRoute>
-        } />
-        <Route path='/profile/:username/edit' element={
-          <ProtectedRoute><EditProfile /></ProtectedRoute>
-        } />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<RegisterAndLogout />} />
-        <Route path='/logout' element={<Logout />} />
+        <Route element={<ProtectedRoute />}>
+          {/* All protected routes go here */}
+          <Route path="/" element={<Home />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile/:id/posts/:id" element={<ProfilePostsPage />} />
+          <Route path="/profile/:id/saved-posts/:id" element={<ProfilePostsPage />} />
+          <Route path="/profile/:id/:str" element={<FollowersFollowings />} />
+          <Route path="/profile/:username/edit" element={<EditProfile />} />
+          <Route path="/post/:str/edit" element={<EditPostPage />} />
+        </Route>
+
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )

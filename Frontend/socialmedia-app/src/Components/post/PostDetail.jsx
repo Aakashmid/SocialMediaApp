@@ -1,6 +1,6 @@
 import { MoreVert } from "@mui/icons-material";
 import { formatDistanceToNow } from 'date-fns';
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useContext, useEffect, useState } from "react";
 import api from "../../Api";
@@ -8,17 +8,17 @@ import { CommentsContext } from "../../Contexts/CommentContext";
 import Comments from "../comment/Comments";
 import PostOptionMenu from "./PostOptionMenu";
 import { SavePost } from "../../services/apiService";
-import EditPostModal from "./EditPostModal";
+
 
 const Post = ({ initialPost, handleCommentsToggle }) => {
     const { commentsCount } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
 
     const [post, setPost] = useState(initialPost);
-    const [showEditModal, setShowEditModal] = useState(false);
     const [likeCount, setLikeCount] = useState(post.likes_count);
     const [isLiked, setIsLiked] = useState(post.isLiked);
 
+    const navigate = useNavigate();
 
     const handleSave = async () => {
         setPost(prevPost => ({ ...prevPost, isSaved: !prevPost.isSaved }));
@@ -64,9 +64,21 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
             console.error(error);
         }
     };
+    const createSlug = (post) => {
+        const creatorName = post.creator.username || 'user';
+        const combinedString = `${creatorName}-${post.text}`;
+
+        return combinedString
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .substring(0, 60); // Increased length to accommodate username
+    };
+
 
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
-
     return (
         <>
             <div className="post-card-top flex items-center justify-between">
@@ -89,7 +101,7 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                                 onSave={handleSave}
                                 onShare={handleShare}
                                 onRemove={handleRemovePost}
-                                onUpdate={() => setShowEditModal((prev) => !prev)}
+                                onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
                                 onClose={() => setShowOptionsMenu((prev) => !prev)}
                             />
                         </div>
@@ -116,18 +128,6 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                     </span>
                 </div>
             </div>
-            {showEditModal && (
-                <>
-                    <span className="fixed -top-6 left-0 w-full h-full bg-gray-600 opacity-30 z-30" onClick={() => setShowEditModal(false)}></span>
-                    <div className="w-full h-full flex justify-center items-end fixed top-0 left-0 z-40 p-1">
-                        <EditPostModal
-                            post={post}
-                            onClose={() => setShowEditModal(false)}
-                            onUpdate={handleUpdatePost}
-                        />
-                    </div>
-                </>
-            )}
         </>
     );
 };

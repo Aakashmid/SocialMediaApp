@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { TOKEN } from "../Components/constants";
 import { CircularProgress } from "@mui/material";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute() {
     const [isAuthorized, setIsAuthorized] = useState(null);
     useEffect(() => {
         auth().catch(() => setIsAuthorized(false))
@@ -25,7 +25,7 @@ function ProtectedRoute({ children }) {
         return <div className="flex justify-center mt-10"><CircularProgress /></div>; // Or any other loading indicator
     }
 
-    return isAuthorized ? children : <Navigate to="/login" />;  // if isAuthorized then go to the children page else to login 
+    return isAuthorized ? <Outlet /> : <Navigate to="/login" />;  // if isAuthorized then go to the children page else to login 
 }
 
 export default ProtectedRoute;

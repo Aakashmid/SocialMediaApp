@@ -25,11 +25,12 @@ const Profile = () => {
     const [savedPosts, setSavedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const { id: profileUserId } = useParams(); // Profile user ID from URL params
+    const profileUserId = parseInt(useParams().id);
     const navigate = useNavigate();
 
     // Using custom hook for profile data
     const { profile, setProfile, isCUProfile } = useProfileData(profileUserId, profileData);
+
 
     const getProfilePosts = async () => {
         setLoading(true);

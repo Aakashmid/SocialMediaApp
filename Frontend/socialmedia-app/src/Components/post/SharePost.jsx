@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom"
 export default function SharePost({ posts, setPosts, onShare }) {
     const [formData, setFormData] = useState({
         text: '',
-        postImg: '',
-        is_public: true
+        postImg: ''
     })
 
     const { profileData } = useContext(ProfileDataContext);
@@ -33,10 +32,6 @@ export default function SharePost({ posts, setPosts, onShare }) {
         setFormData(prev => ({ ...prev, [name]: value }));
     }
 
-    const handlePublicToggle = (e) => {
-        setFormData(prev => ({ ...prev, is_public: e.target.checked }));
-    }
-
     const validateForm = () => {
         if (!formData.text || !formData.postImg) {
             alert('Description and Post image are required!');
@@ -58,8 +53,7 @@ export default function SharePost({ posts, setPosts, onShare }) {
 
         setFormData({
             text: '',
-            postImg: '',
-            is_public: true
+            postImg: ''
         });
     };
 
@@ -96,15 +90,6 @@ export default function SharePost({ posts, setPosts, onShare }) {
                             />
                         </label>
                         <div className="flex items-center space-x-4">
-                            <label className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    name="is_public"
-                                    checked={formData.is_public}
-                                    onChange={handlePublicToggle}
-                                />
-                                <span className="text-[15px]">Public</span>
-                            </label>
                             <button
                                 type="submit"
                                 className="bg-green-700 rounded-md px-3 py-1 text-white"

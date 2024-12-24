@@ -1,6 +1,6 @@
 import { AddPhotoAlternate } from '@mui/icons-material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import Layout from '../../Layout/Layout';
 import { partialUpdateUserProfile } from '../../services/apiService';
@@ -13,6 +13,8 @@ export const FormInput = ({ label_text, handleChange, field_name, input_value, p
         <input required type={`${field_type ? field_type : 'text'}`} name={field_name} id={field_name} value={input_value} onChange={handleChange} className="text-sm w-full focus:outline-none text-[15px] p-2 rounded-md" placeholder={`${placeholder ? placeholder : ''}`} />
     </label>
 }
+
+
 export default function EditProfile() {
     const { profileData, setProfileData } = useContext(ProfileDataContext);     // gettign profile data from ProfileDataContext
 
@@ -84,11 +86,12 @@ export default function EditProfile() {
         }
         // console.log(first)
     }, [profileData]);
+
     return (
         <Layout>
-            <div className={`edit-profile-page-wrapper p-5`}>
+            <div className='edit-profile-page-wrapper p-5'>
                 <div className="page-top">
-                    <PageTopBackArrow pageHeading={"Edit profile"} id={profileData.id} />
+                    <PageTopBackArrow pageHeading={"Edit profile"} backTo={`/profile/${profileData.id}`} />
                 </div>
                 <div className="page-center pb-10 flex flex-col space-y-6">
                     <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">
