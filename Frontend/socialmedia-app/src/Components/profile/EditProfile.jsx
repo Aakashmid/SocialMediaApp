@@ -91,7 +91,7 @@ export default function EditProfile() {
         <Layout>
             <div className='edit-profile-page-wrapper p-5'>
                 <div className="page-top">
-                    <PageTopBackArrow pageHeading={"Edit profile"} backTo={`/profile/${profileData.id}`} />
+                    <PageTopBackArrow pageHeading={"Edit profile"} backTo={-1} />
                 </div>
                 <div className="page-center pb-10 flex flex-col space-y-6">
                     <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">

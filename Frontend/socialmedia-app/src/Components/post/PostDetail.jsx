@@ -10,7 +10,7 @@ import PostOptionMenu from "./PostOptionMenu";
 import { SavePost } from "../../services/apiService";
 
 
-const Post = ({ initialPost, handleCommentsToggle }) => {
+const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
     const { commentsCount } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
 
@@ -32,14 +32,10 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
 
     const handleReport = () => console.log('Reporting post');
     const handleShare = () => console.log('Sharing post');
-    const handleRemovePost = async () => {
-        try {
-            console.log('Post deleted');
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
+
+
+    //  incompolete
     const handleUpdatePost = async (post_data) => {
         if (post_data) {
             try {
@@ -64,6 +60,9 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
             console.error(error);
         }
     };
+
+
+    // createing  post slug for url
     const createSlug = (post) => {
         const creatorName = post.creator.username || 'user';
         const combinedString = `${creatorName}-${post.text}`;
@@ -100,7 +99,7 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                                 onReport={handleReport}
                                 onSave={handleSave}
                                 onShare={handleShare}
-                                onRemove={handleRemovePost}
+                                onRemove={() => onRemovePost(post)}
                                 onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
                                 onClose={() => setShowOptionsMenu((prev) => !prev)}
                             />
@@ -133,7 +132,7 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
 };
 
 
-const PostDetail = ({ post }) => {
+const PostDetail = ({ post, onRemovePost }) => {
     const [isBgBlur, setIsBgBlur] = useState(false);
     const [showComments, setShowComments] = useState(false);
 
@@ -158,7 +157,7 @@ const PostDetail = ({ post }) => {
                 />
             )}
             <div id={`post${post.id}`} className="post-card p-4 custom-shodow-b rounded-lg flex-col flex space-y-5 lg:space-y-6">
-                <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} />
+                <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} onRemovePost={onRemovePost} />
                 {showComments && (
                     <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-[10%] left-1/2 -translate-x-1/2 xl:w-[45%] lg:w-[60%] md:w-[75%] w-full h-full z-40">
                         <Comments closeComments={handleCommentsToggle} post={post} />

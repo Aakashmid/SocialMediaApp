@@ -7,7 +7,7 @@ export const ProfileDataContext = createContext();
 
 export const ProfileDataProvider = ({ children }) => {
     const [profileData, setProfileData] = useState({});
-    const fetchUserProfile  = useFetchUserProfile();    // custom hook 
+    const fetchUserProfile = useFetchUserProfile();    // custom hook 
     const { loading, setLoading } = useContext(LoadingContext);
     const userId = localStorage.getItem(USER_ID);
     useEffect(() => {

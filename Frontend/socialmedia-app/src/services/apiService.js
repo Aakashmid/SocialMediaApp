@@ -114,6 +114,18 @@ export const CreatePost = async (post_data) => {
     }
 }
 
+
+// delet apost 
+export const DeletePost = async (post_id) => {
+    try {
+        const response = await api.delete(`/api/posts/${post_id}/`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 // save a post
 export const SavePost = async (post_id) => {
     try {

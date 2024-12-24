@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PostList from '../post/PostList';
 import { Link, useLocation } from 'react-router-dom'
 
@@ -9,7 +9,8 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 export default function ProfilePostsPage() {
     const location = useLocation();
     const { profileData, setProfileData } = useContext(ProfileDataContext);
-    const { posts, postid, profileId } = location.state || [];  //here profileId is  of post creator
+    const { posts: initialPosts, postid, profileId } = location.state || [];  //here profileId is  of post creator
+    const [posts, setPosts] = useState(initialPosts);
     useEffect(() => {
         if (postid) {
             const element = document.getElementById(postid);
@@ -34,7 +35,7 @@ export default function ProfilePostsPage() {
                         </div>
                     </div>
                     <div className="mt-5">
-                        <PostList posts={posts} />
+                        <PostList posts={posts} setPosts={setPosts} />
                     </div>
                 </div>
             </Layout>

@@ -130,6 +130,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (feedOP === "posts") {
+            console.log('fetched psost')
             getProfilePosts();
         } else if (feedOP === "saved") {
             getSavedPosts();

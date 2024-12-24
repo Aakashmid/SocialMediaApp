@@ -4,7 +4,7 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext"
 import { CreatePost } from "../../services/apiService"
 import { useNavigate } from "react-router-dom"
 
-export default function SharePost({ posts, setPosts, onShare }) {
+export default function SharePost({ setPosts, onShare }) {
     const [formData, setFormData] = useState({
         text: '',
         postImg: ''

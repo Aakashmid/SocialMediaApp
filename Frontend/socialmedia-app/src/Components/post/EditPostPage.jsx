@@ -74,7 +74,7 @@ const EditPostPage = () => {
         <Layout>
             <div className="edit-post-wrapper p-5">
                 <div className="page-top">
-                    <PageTopBackArrow pageHeading={"Edit Post"} backTo={'/'} />
+                    <PageTopBackArrow pageHeading={"Edit Post"} backTo={-1} />
                 </div>
 
                 <div className="page-center pb-10 flex flex-col space-y-6">
