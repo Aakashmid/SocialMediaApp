@@ -6,8 +6,6 @@ const ProfileFeed = ({
     feedOP,
     setFeedOp,
     loading,
-    profilePosts,
-    savedPosts,
     handleOnclickPost
 }) => {
 
@@ -40,20 +38,20 @@ const ProfileFeed = ({
                 </div>
             </div>
             <div className="profile-feed">
-                {feedOP === 'posts' && (
+                {(feedOP === 'posts' || feedOP === 'saved') && (
                     <ProfilePosts
                         loading={loading}
-                        posts={profilePosts}
+                        // posts={profilePosts}
                         onclickPost={handleOnclickPost}
                     />
                 )}
-                {feedOP === 'saved' && (
+                {/* {feedOP === 'saved' && (
                     <ProfilePosts
                         loading={loading}
                         posts={savedPosts}
                         onclickPost={handleOnclickPost}
                     />
-                )}
+                )} */}
             </div>
         </div>
     );

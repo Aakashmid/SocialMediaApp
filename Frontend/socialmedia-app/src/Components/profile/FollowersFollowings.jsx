@@ -100,7 +100,7 @@ export default function FollowersFollowings() {
             }
         }
         getFollowersOrFollowings(id);
-    }, [id,profileData.id])
+    }, [id, profileData.id])
 
 
 
@@ -117,9 +117,9 @@ export default function FollowersFollowings() {
     return (
         <>
             <Layout>
-                {loading  || !profile.id? <>Loading  ...</> :
+                {loading || !profile.id ? <>Loading  ...</> :
                     <div className={`${str}-page-wrapper p-5`}>
-                        <PageTopBackArrow pageHeading={getpageHeading()} id={id} />
+                        <PageTopBackArrow pageHeading={getpageHeading()} backTo={-1} />
                         <div className="">
                             {data.map(user => {
                                 return user.id != profileData.id && <UserCard user={user} key={user.id} />

@@ -12,6 +12,7 @@ import { SavePost } from "../../services/apiService";
 
 const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
     const { commentsCount } = useContext(CommentsContext);
+    const { setPosts } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
 
     const [post, setPost] = useState(initialPost);
@@ -22,6 +23,7 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
 
     const handleSave = async () => {
         setPost(prevPost => ({ ...prevPost, isSaved: !prevPost.isSaved }));
+        // setPosts((prevPosts )=>{})
         try {
             await SavePost(post.id);
         } catch (error) {
@@ -82,7 +84,7 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
         <>
             <div className="post-card-top flex items-center justify-between">
                 <div className="profile flex items-center space-x-3 cursor-pointer">
-                    <Link to={`/profile/${post.creator.id}`} className="flex space-x-3 items-center">
+                    <Link to={`/profile/${post.creator.username}`} state={{ userId: post.creator.id }} className="flex space-x-3 items-center">
                         <img src={post.creator.profileImg} className="user-profileImg w-8 h-8 border rounded-[50%] object-cover" alt="Profile" />
                         <span className="username">{post.creator.username}</span>
                     </Link>

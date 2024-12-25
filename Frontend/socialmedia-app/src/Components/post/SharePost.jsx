@@ -1,10 +1,12 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { PermMedia } from '@mui/icons-material'
 import { ProfileDataContext } from "../../Contexts/ProfileContext"
 import { CreatePost } from "../../services/apiService"
 import { useNavigate } from "react-router-dom"
 
 export default function SharePost({ setPosts, onShare }) {
+    const [showAlert, setShowAlert] = useState(false);
+    // const [showAlert, setShowAlert] = useState(true);
     const [formData, setFormData] = useState({
         text: '',
         postImg: ''
@@ -17,6 +19,7 @@ export default function SharePost({ setPosts, onShare }) {
         try {
             const post_data = await CreatePost(data);
             setPosts(prevPosts => [...prevPosts, post_data]);
+            setShowAlert(true);
         } catch (error) {
             console.error('Error creating post:', error);
         }
@@ -56,13 +59,22 @@ export default function SharePost({ setPosts, onShare }) {
             postImg: ''
         });
     };
+    useEffect(() => {
+        if (showAlert) {
+            setTimeout(() => setShowAlert(false), 3000);
+        }
+    }, [showAlert]);
 
     return (
         <div className="share-container custom-shodow-b p-4 rounded-xl">
+            <div className={`message-alert fixed bottom-5 bg-green-500 text-white px-4 py-2 rounded-md transition-all duration-500 ${showAlert ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'}`}>
+                Post created successfully!
+            </div>
+
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="share-top flex space-x-2">
                     <img
-                        onClick={() => navigate(`/profile/${profileData.id}`)}
+                        onClick={() => navigate(`/profile/${profileData.username}`)}
                         src={profileData.profileImg}
                         alt="Profile"
                         className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer"

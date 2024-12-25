@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Topbar from "../Components/common/Topbar";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
 import Sidebar from "../Components/common/Sidebar";
@@ -16,6 +16,7 @@ import ProfileStats from "../components/profile/ProfileStats";
 import ProfileFeed from "../components/profile/ProfileFeed";
 import ProfileActions from "../Components/profile/ProfileActions";
 import useProfileData from "../hooks/useProfileData";
+import { PostProvider } from "../Contexts/PostContext";
 
 const Profile = () => {
     const { profileData, setProfileData } = useContext(ProfileDataContext); // Current user's profile data
@@ -25,8 +26,23 @@ const Profile = () => {
     const [savedPosts, setSavedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const profileUserId = parseInt(useParams().id);
+    const { state } = useLocation();
+    const { username } = useParams();
+
+    const profileUserId = state?.userId ? parseInt(state.userId) : profileData?.id || null;
+
     const navigate = useNavigate();
+
+    // for sending to 404 page 
+    useEffect(() => {
+        if (!state?.userId) {
+            if (username !== profileData?.username) {
+                navigate('/404')
+            }
+        }
+    }, [state, username, profileData, navigate])
+
+
 
     // Using custom hook for profile data
     const { profile, setProfile, isCUProfile } = useProfileData(profileUserId, profileData);
@@ -58,6 +74,7 @@ const Profile = () => {
         // }
     };
 
+
     const handleCreatePost = async (post_data) => {
         try {
             const newPost = await CreatePost(post_data);
@@ -71,15 +88,8 @@ const Profile = () => {
         }
     };
 
-    // Fetch posts or saved posts when feed option changes
-    useEffect(() => {
-        if (feedOP === "posts") {
-            getProfilePosts();
-        } else if (feedOP === "saved") {
-            getSavedPosts();
-        }
-    }, [feedOP, profileUserId]);
 
+    // click post handler to go to the profile posts page
     const handleOnclickPost = (id) => {
         const posts = feedOP === "posts" ? profilePosts : savedPosts;
         const postUrl = feedOP === "saved" ? `saved-posts/${id}` : `posts/${id}`;
@@ -129,11 +139,13 @@ const Profile = () => {
 
 
     useEffect(() => {
-        if (feedOP === "posts") {
-            console.log('fetched psost')
-            getProfilePosts();
-        } else if (feedOP === "saved") {
-            getSavedPosts();
+        if (profileUserId !== null) {
+            if (feedOP === "posts" && profilePosts.length === 0) {
+                console.log('fetched psost')
+                getProfilePosts();
+            } else if (feedOP === "saved" && savedPosts.length === 0) {
+                getSavedPosts();
+            }
         }
     }, [profileUserId, feedOP]);
 
@@ -144,46 +156,49 @@ const Profile = () => {
                 <div className="hidden lg:block">
                     <Sidebar />
                 </div>
-                <div className="profile-wrapper w-full md:w-[650px] md:mx-auto md:shadow-lg min-h-[100vh] flex-[5] lg:ml-[25%]">
-                    <div className="profile-top">
-                        <div className="profileCover relative">
-                            <img
-                                src="/src/assets/post/3.jpeg"
-                                className="cover-img w-full h-36 object-cover"
-                                alt="..."
+                <PostProvider value={{
+                    posts: feedOP === "posts" ? profilePosts : savedPosts,
+                    setPosts: feedOP === "posts" ? setProfilePosts : setSavedPosts
+                }}>
+                    <div className="profile-wrapper w-full md:w-[650px] md:mx-auto md:shadow-lg min-h-[100vh] flex-[5] lg:ml-[25%]">
+                        <div className="profile-top">
+                            <div className="profileCover relative">
+                                <img
+                                    src="/src/assets/post/3.jpeg"
+                                    className="cover-img w-full h-36 object-cover"
+                                    alt="..."
+                                />
+                                <img
+                                    src={profile.profileImg || "/default-profile.png"} // Fallback for missing image
+                                    className="profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white"
+                                    alt=""
+                                />
+                                <div className="w-full h-16"></div>
+                            </div>
+                            <ProfileHeader
+                                profile={profile}
+                                isCUProfile={isCUProfile}
+                                handleFollow={handleFollow}
                             />
-                            <img
-                                src={profile.profileImg || "/default-profile.png"} // Fallback for missing image
-                                className="profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white"
-                                alt=""
-                            />
-                            <div className="w-full h-16"></div>
-                        </div>
-                        <ProfileHeader
-                            profile={profile}
-                            isCUProfile={isCUProfile}
-                            handleFollow={handleFollow}
-                        />
-                        <ProfileStats profile={profile} />
+                            <ProfileStats profile={profile} />
 
-                        {isCUProfile && (
-                            <ProfileActions
-                                showShare={showShare}
-                                setShowShare={setShowShare}
-                                handleCreatePost={handleCreatePost}
-                                profileData={profileData}
-                            />
-                        )}
+                            {isCUProfile && (
+                                <ProfileActions
+                                    showShare={showShare}
+                                    setShowShare={setShowShare}
+                                    handleCreatePost={handleCreatePost}
+                                    profileData={profileData}
+                                />
+                            )}
+                        </div>
+                        <ProfileFeed
+                            setFeedOp={setFeedOp}
+                            feedOP={feedOP}
+                            loading={loading}
+                            handleOnclickPost={handleOnclickPost}
+                        />
                     </div>
-                    <ProfileFeed
-                        setFeedOp={setFeedOp}
-                        feedOP={feedOP}
-                        profilePosts={profilePosts}
-                        savedPosts={savedPosts}
-                        loading={loading}
-                        handleOnclickPost={handleOnclickPost}
-                    />
-                </div>
+                </PostProvider>
             </div>
         </>
     );

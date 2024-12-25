@@ -7,7 +7,7 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import { deleteComment, fetchReplies, likeCommentReply } from "../../services/apiService";
 import CommentInputForm from "./CommentInputForm";
 
-const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
+const UserCard = ({ comment, setParentReplies, setParentRepliesCount }) => {
     const { profileData } = useContext(ProfileDataContext);
     const { setComments, setCommentsCount } = useContext(CommentsContext);
     const [replies, setReplies] = useState([]);
@@ -38,11 +38,11 @@ const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
             const res = await likeCommentReply(comment_id);
             setLikesCount((prev) => (res.liked ? prev + 1 : prev - 1));
             setIsLiked(res.liked);
-            const newCount = res.liked? likesCount+1:likesCount-1;
+            const newCount = res.liked ? likesCount + 1 : likesCount - 1;
             // // Update like count in parent comments
             setComments((prevComments) =>
                 prevComments.map((c) =>
-                    c.id === comment_id ? { ...c, likes_count:newCount, isLiked: res.liked } : c
+                    c.id === comment_id ? { ...c, likes_count: newCount, isLiked: res.liked } : c
                 )
             );
         } catch (error) {
@@ -56,8 +56,8 @@ const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
             await deleteComment(comment_id);
             if (comment.parent > 0) {
                 // Update parent replies when a reply is deleted
-                setParentReplies((prevReplies)=>prevReplies.filter((r)=>r.id != comment_id));
-                setParentRepliesCount((prev)=>prev-1);
+                setParentReplies((prevReplies) => prevReplies.filter((r) => r.id != comment_id));
+                setParentRepliesCount((prev) => prev - 1);
                 // setReplies((prevReplies) => prevReplies.filter((r) => r.id !== comment_id));
                 // setRepliesCount((prev) => prev - 1);
             } else {
@@ -72,12 +72,12 @@ const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
 
     return (
         <div className="flex space-x-4">
-            <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate(`/profile/${comment.user.id}`)}>
+            <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate(`/profile/${comment.user.username}`, { state: { userId: comment.user.id } })}>
                 <img src={comment.user.profileImg} className="w-6 h-6 object-cover rounded-[50%]" alt=".." />
             </div>
             <div className="flex flex-col w-full">
                 <p onClick={() => navigate(`/profile/${comment.user.id}`)} className={`${comment.parent > 0 && 'text-[15px] '} font-medium cursor-pointer`}>{comment.user.username}</p>
-                <p className={`${comment.parent > 0 ? 'text-[13px]':'text-sm'} font-normal`}>{comment.text}</p>
+                <p className={`${comment.parent > 0 ? 'text-[13px]' : 'text-sm'} font-normal`}>{comment.text}</p>
                 <div className="mt-1 flex space-x-4">
                     {/* Like Button */}
                     <div className="like-div flex items-center space-x-1">
@@ -127,7 +127,7 @@ const  UserCard = ({ comment , setParentReplies, setParentRepliesCount }) => {
                 {showReplies && (
                     <div className="replies-wrapper flex flex-col py-2 space-y-2">
                         {replies.map((reply) => (
-                            <UserCard key={reply.id} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount}/>
+                            <UserCard key={reply.id} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount} />
                         ))}
                     </div>
                 )}

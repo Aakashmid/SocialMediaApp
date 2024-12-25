@@ -62,7 +62,7 @@ export default function PostList() {
     return (
         <div className="posts  flex flex-col space-y-4">
 
-            <div className="fixed top-4 right-4 z-30">
+            <div className="fixed bottom-5  z-30">
                 {isDeleted && (
                     <div className="bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
                         Post deleted successfully!

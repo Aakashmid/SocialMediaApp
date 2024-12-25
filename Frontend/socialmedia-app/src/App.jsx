@@ -35,23 +35,29 @@ function App() {
     <>
       <Routes>
         <Route element={<ProtectedRoute />}>
-          {/* All protected routes go here */}
+          {/* Protected routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/profile/:id/posts/:id" element={<ProfilePostsPage />} />
-          <Route path="/profile/:id/saved-posts/:id" element={<ProfilePostsPage />} />
-          <Route path="/profile/:id/:str" element={<FollowersFollowings />} />
-          <Route path="/profile/:username/edit" element={<EditProfile />} />
+          <Route path="/profile">
+            {/* here str is profile username */}
+            <Route path=":username" element={<Profile />} />
+            <Route path=":str/posts/:id" element={<ProfilePostsPage />} />
+            <Route path=":str/saved-posts/:id" element={<ProfilePostsPage />} />
+            <Route path=":str/:str" element={<FollowersFollowings />} />
+            <Route path=":username/edit" element={<EditProfile />} />
+          </Route>
           <Route path="/post/:str/edit" element={<EditPostPage />} />
         </Route>
 
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<RegisterAndLogout />} />
-        <Route path="/logout" element={<Logout />} />
+        {/* Auth routes */}
+        <Route path="/auth">
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<RegisterAndLogout />} />
+          <Route path="logout" element={<Logout />} />
+        </Route>
+
+        {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
-      </Routes>
-    </>
+      </Routes>    </>
   )
 }
 
