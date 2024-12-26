@@ -40,9 +40,9 @@ function App() {
           <Route path="/profile">
             {/* here str is profile username */}
             <Route path=":username" element={<Profile />} />
-            <Route path=":str/posts/:id" element={<ProfilePostsPage />} />
-            <Route path=":str/saved-posts/:id" element={<ProfilePostsPage />} />
-            <Route path=":str/:str" element={<FollowersFollowings />} />
+            <Route path=":username/posts/:id" element={<ProfilePostsPage />} />
+            <Route path=":username/saved-posts/:id" element={<ProfilePostsPage />} />
+            <Route path=":username/:str" element={<FollowersFollowings />} />
             <Route path=":username/edit" element={<EditProfile />} />
           </Route>
           <Route path="/post/:str/edit" element={<EditPostPage />} />

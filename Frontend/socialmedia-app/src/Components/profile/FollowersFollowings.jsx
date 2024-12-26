@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import Layout from '../../Layout/Layout'
 import { fetchUserFollowers, fetchUserFollowings, useFetchUserProfile, followUser, unfollowUser } from '../../services/apiService'
 import { PageTopBackArrow } from '../common/SmallComponents'
@@ -7,12 +7,15 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 
 export default function FollowersFollowings() {
-    const { id, str } = useParams();  // str is string represent whether this page is for followers or followings of  user
+    const { str } = useParams();  // str is string represent whether this page is for followers or followings of  user
     const [profile, setProfile] = useState({});
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);           // here data is user followings or followers
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     const fetchUserProfile = useFetchUserProfile();
+
+    const state = useLocation().state;
+    const id = state?.userId ? parseInt(state.userId) : profileData?.id || null;  // here id is id  of user whose followers or followings we are showing
 
 
     const handelFollowUnfollow = async (user) => {
@@ -50,10 +53,11 @@ export default function FollowersFollowings() {
                         <img src={user.profileImg} className='w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer' alt="..." />
                         <h4 className='username font-normal text-xl'>{user.username}</h4>
                     </div>
-                    <div className="card-button">
-                        {/* <button } className='bg-gray-800  text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 cursor-pointer'>{}Follow</button> */}
-                        <button id={`followBtn${user.id}`} onClick={() => handelFollowUnfollow(user, str)} className='bg-bg1  text-white px-3 py-1 md:py-[6px] lg:py-[] rounded-md font-medium cursor-pointer'>{user.isFollowed ? "Following" : "Follow"}</button>
-                    </div>
+                    {user.id !== profileData.id &&
+                        <div className="card-button">
+                            <button id={`followBtn${user.id}`} onClick={() => handelFollowUnfollow(user, str)} className='bg-bg1  text-white px-3 py-1 md:py-[6px] lg:py-[] rounded-md font-medium cursor-pointer'>{user.isFollowed ? "Following" : "Follow"}</button>
+                        </div>
+                    }
                 </div>
             </>
         )
@@ -80,6 +84,7 @@ export default function FollowersFollowings() {
         }
     }
 
+    // fetch followers or followings of user
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -122,7 +127,7 @@ export default function FollowersFollowings() {
                         <PageTopBackArrow pageHeading={getpageHeading()} backTo={-1} />
                         <div className="">
                             {data.map(user => {
-                                return user.id != profileData.id && <UserCard user={user} key={user.id} />
+                                return <UserCard user={user} key={user.id} />
                             })}
                             {/* <User */}
                         </div>

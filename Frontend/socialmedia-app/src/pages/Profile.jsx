@@ -22,6 +22,10 @@ const Profile = () => {
     const { profileData, setProfileData } = useContext(ProfileDataContext); // Current user's profile data
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setFeedOp] = useState("posts"); // Default to posts
+    const [fetchedFeedOps, setFetchedFeedOps] = useState({
+        posts: false,
+        saved: false,
+    });
     const [profilePosts, setProfilePosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -35,13 +39,13 @@ const Profile = () => {
 
     // for sending to 404 page 
     useEffect(() => {
-        if (!state?.userId) {
-            if (username !== profileData?.username) {
+        if (profileData && profileData.username) {
+            const shouldRedirectTo404 = !state?.userId && username && username !== profileData?.username
+            if (shouldRedirectTo404) {
                 navigate('/404')
             }
         }
     }, [state, username, profileData, navigate])
-
 
 
     // Using custom hook for profile data
@@ -139,16 +143,29 @@ const Profile = () => {
 
 
     useEffect(() => {
+        // Reset fetchedFeedOps whenever profileUserId changes
+        setFetchedFeedOps({
+            posts: false,
+            saved: false,
+        });
+    }, [profileUserId]);
+
+    useEffect(() => {
+        // Fetch profile data and posts when profileUserId changes and for same profile fetching it only once
         if (profileUserId !== null) {
-            if (feedOP === "posts" && profilePosts.length === 0) {
-                console.log('fetched psost')
-                getProfilePosts();
-            } else if (feedOP === "saved" && savedPosts.length === 0) {
-                getSavedPosts();
+            if (feedOP === "posts" && !fetchedFeedOps.posts) {
+                console.log("Fetching profile posts...");
+                getProfilePosts().then(() => {
+                    setFetchedFeedOps((prev) => ({ ...prev, posts: true }));
+                });
+            } else if (feedOP === "saved" && !fetchedFeedOps.saved) {
+                console.log("Fetching saved posts...");
+                getSavedPosts().then(() => {
+                    setFetchedFeedOps((prev) => ({ ...prev, saved: true }));
+                });
             }
         }
-    }, [profileUserId, feedOP]);
-
+    }, [profileUserId, feedOP, fetchedFeedOps]);
     return (
         <>
             <Topbar />
@@ -196,6 +213,7 @@ const Profile = () => {
                             feedOP={feedOP}
                             loading={loading}
                             handleOnclickPost={handleOnclickPost}
+                            isCUProfile={isCUProfile}
                         />
                     </div>
                 </PostProvider>

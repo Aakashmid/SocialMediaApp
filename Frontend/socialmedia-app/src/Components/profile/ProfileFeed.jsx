@@ -6,7 +6,8 @@ const ProfileFeed = ({
     feedOP,
     setFeedOp,
     loading,
-    handleOnclickPost
+    handleOnclickPost,
+    isCUProfile,
 }) => {
 
     const Underline = () => (
@@ -29,12 +30,14 @@ const ProfileFeed = ({
                     >
                         Videos {feedOP === 'videos' && <Underline />}
                     </button>
-                    <button
-                        className={`text-lg px-6 relative ${feedOP === 'saved' && 'font-semibold'}`}
-                        onClick={() => setFeedOp('saved')}
-                    >
-                        Saved {feedOP === 'saved' && <Underline />}
-                    </button>
+                    {isCUProfile &&
+                        <button
+                            className={`text-lg px-6 relative ${feedOP === 'saved' && 'font-semibold'}`}
+                            onClick={() => setFeedOp('saved')}
+                        >
+                            Saved {feedOP === 'saved' && <Underline />}
+                        </button>
+                    }
                 </div>
             </div>
             <div className="profile-feed">

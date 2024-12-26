@@ -31,7 +31,7 @@ const Sidebar = () => {
   }, [profileData?.id]);
 
 
-  
+
   useEffect(() => {
     getFollowings();
   }, [getFollowings]);
@@ -40,7 +40,7 @@ const Sidebar = () => {
   const FollowingUser = ({ user }) => (
     <li className="sidebarFriend">
       <Link
-        to={`/profile/${user.id}`}
+        to={`/profile/${user.username}`} state={{ userId: user.id }}
         className="flex space-x-4 items-center p-1"
       >
         <img

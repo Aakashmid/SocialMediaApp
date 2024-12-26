@@ -25,7 +25,7 @@ function ProtectedRoute() {
         return <div className="flex justify-center mt-10"><CircularProgress /></div>; // Or any other loading indicator
     }
 
-    return isAuthorized ? <Outlet /> : <Navigate to="/login" />;  // if isAuthorized then go to the children page else to login 
+    return isAuthorized ? <Outlet /> : <Navigate to="/auth/login" />;  // if isAuthorized then go to the children page else to login 
 }
 
 export default ProtectedRoute;

@@ -47,7 +47,7 @@ export const partialUpdateUserProfile = async (user_id, data) => {
 
 export const fetchUserPosts = async (user_id) => {
     try {
-        const response = await api.get(`api/users/${user_id}/posts`)
+        const response = await api.get(`api/posts/profile-posts/${user_id}`)
         return response.data;
     } catch (error) {
         throw error;

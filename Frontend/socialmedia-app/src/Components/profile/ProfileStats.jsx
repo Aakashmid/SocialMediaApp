@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const StatItem = ({ count = 0, label, link }) => {
+const StatItem = ({ count = 0, label, link, state }) => {
     const content = (
         <>
             <p className="font-semibold text-center">{count}</p>
@@ -10,7 +10,8 @@ const StatItem = ({ count = 0, label, link }) => {
 
     return link && count > 0 ? (
         <div className={`profile-${label.toLowerCase()}`}>
-            <Link to={link}>{content}</Link>
+            <Link to={link} state={state} >{content}</Link>
+            {/* <Link to={link}  >{content}</Link> */}
         </div>
     ) : (
         <div className={`profile-${label.toLowerCase()}`}>{content}</div>
@@ -20,8 +21,8 @@ const StatItem = ({ count = 0, label, link }) => {
 const ProfileStats = ({ profile }) => {
     return (
         <div className="profile-stats mt-2 py-4 flex justify-center space-x-10">
-            <StatItem count={profile.followers_count} label="Followers" link="followers" />
-            <StatItem count={profile.followings_count} label="Followings" link="followings" />
+            <StatItem count={profile.followers_count} label="Followers" link="followers" state={{ userId: profile.id }} />
+            <StatItem count={profile.followings_count} label="Followings" link="followings" state={{ userId: profile.id }} />
             <StatItem count={profile.posts_count} label="Posts" />
         </div>
     )
