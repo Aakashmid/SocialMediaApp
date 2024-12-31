@@ -8,6 +8,7 @@ import { PageTopBackArrow } from '../common/SmallComponents';
 // import { toast } from 'react-toastify';
 
 const EditPostPage = () => {
+
     const [postFormData, setPostFormData] = useState({
         text: '',
         postImg: ''

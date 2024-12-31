@@ -62,15 +62,15 @@ const Sidebar = () => {
             { label: "Chat", Icon: Chat, path: "/" },
             { label: "Videos", Icon: PlayCircleFilledOutlined, path: "/" },
             { label: "Groups", Icon: Group, path: "/" },
-            { label: "Bookmarks", Icon: Bookmark, path: "/" },
+            { label: "Bookmarks", Icon: Bookmark, path: `/profile/${profileData?.username}/saved-posts/`, state: { isSavedPosts: true } },
             { label: "Questions", Icon: HelpOutline, path: "/" },
             { label: "Job", Icon: WorkOutline, path: "/" },
             { label: "Event", Icon: Event, path: "/" },
             { label: "Courses", Icon: School, path: "/" },
-          ].map(({ label, Icon, path }) => (
+          ].map(({ label, Icon, path, state }) => (
             <li key={label} className="hover:bg-blue-200 rounded-lg">
               <Link
-                to={path}
+                to={path} state={state}
                 className="py-[5px] px-2 flex items-center space-x-4"
               >
                 <Icon />

@@ -1,5 +1,5 @@
-import { MoreVert } from "@mui/icons-material";
-import { formatDistanceToNow } from 'date-fns';
+import { Close, MoreVert } from "@mui/icons-material";
+import { formatDistanceToNow, set } from 'date-fns';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useContext, useEffect, useState } from "react";
@@ -8,24 +8,61 @@ import { CommentsContext } from "../../Contexts/CommentContext";
 import Comments from "../comment/Comments";
 import PostOptionMenu from "./PostOptionMenu";
 import { SavePost } from "../../services/apiService";
+import { PostContext } from "../../Contexts/PostContext";
 
 
 const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
     const { commentsCount } = useContext(CommentsContext);
-    const { setPosts } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
-
+    const { posts, setPosts } = useContext(PostContext);
     const [post, setPost] = useState(initialPost);
     const [likeCount, setLikeCount] = useState(post.likes_count);
     const [isLiked, setIsLiked] = useState(post.isLiked);
 
     const navigate = useNavigate();
 
+    // const [showAlert, setShowAlert] = useState(true);
+    const [showAlert, setShowAlert] = useState({ show: false, message: '' });
+
+    const AlertPopover = () => {
+        useEffect(() => {
+            if (showAlert) {
+                const timer = setTimeout(() => {
+                    setShowAlert(false);
+                }, 2000);
+                return () => clearTimeout(timer);
+            }
+        }, [showAlert]);
+
+        return (
+            <div
+                className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-3 rounded-md shadow-lg z-50 transition-opacity duration-300 ease-in-out ${showAlert.show ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            >
+                <div className="flex items-center gap-2">
+                    <span>{showAlert.message}</span>
+                </div>
+            </div>
+        );
+    };
+
+
+    // incomplete
     const handleSave = async () => {
+        const postId = post.id;
         setPost(prevPost => ({ ...prevPost, isSaved: !prevPost.isSaved }));
-        // setPosts((prevPosts )=>{})
+
         try {
-            await SavePost(post.id);
+            await SavePost(postId);
+            // Only update the specific post in the list
+            // setPosts(prevPosts => {
+            //     const postIndex = prevPosts.findIndex(p => p.id === postId);
+            //     if (postIndex === -1) return prevPosts;
+
+            //     const newPosts = [...prevPosts];
+            //     newPosts[postIndex] = { ...newPosts[postIndex], isSaved: !newPosts[postIndex].isSaved };
+            //     return newPosts;
+            // });
+            setShowAlert({ show: true, message: !post.isSaved ? 'Post saved successfully!' : 'Post removed from saved posts.' });
         } catch (error) {
             setPost(prevPost => ({ ...prevPost, isSaved: !prevPost.isSaved }));
             console.error(error);
@@ -82,6 +119,7 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
     return (
         <>
+            <AlertPopover />
             <div className="post-card-top flex items-center justify-between">
                 <div className="profile flex items-center space-x-3 cursor-pointer">
                     <Link to={`/profile/${post.creator.username}`} state={{ userId: post.creator.id }} className="flex space-x-3 items-center">

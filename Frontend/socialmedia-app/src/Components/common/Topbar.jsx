@@ -8,12 +8,20 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import SearchInputForm1 from "../Topbar/SearchInputForm1";
 import SearchInputForm2 from "../Topbar/SearchInputForm2";
 
+
 export default function Topbar() {
     const [showProPopover, setShowProPopover] = useState(false);    // profpopover - profile popover 
     const [showSidebar, setShowSidebar] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [isClickable, setIsClickable] = useState(false);
     const { profileData } = useContext(ProfileDataContext);
+
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        console.log("search form submitted");
+    }
+
 
     useEffect(() => {
         // Toggle the body's overflow style based on isBgBlur  state
@@ -29,6 +37,10 @@ export default function Topbar() {
             document.body.style.overflow = 'auto';
         };
     }, [showProPopover, showSidebar])
+
+
+
+
     return (<>
         <header>
             <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
@@ -42,7 +54,7 @@ export default function Topbar() {
                     <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
                 </div>
                 <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
-                    <SearchInputForm1 />
+                    <SearchInputForm1 onSearchFormSubmit={handleSearch} />
                     <div className="topbar-links flex space-x-3 text-white">
                         <Link to={'/'} >Homepage</Link>
                         <Link to={'/'} >Timeline</Link>
@@ -58,8 +70,8 @@ export default function Topbar() {
                     <div className="search-bar flex  space-x-2 md:hidden">
 
                         {showSearch &&
-                            <div  className="search-bar-small-screen top-0 left-0 fixed w-full h-fit md:hidden">
-                                <SearchInputForm2 close={() => setShowSearch(!showSearch)} />
+                            <div className="search-bar-small-screen top-0 left-0 fixed w-full h-fit md:hidden">
+                                <SearchInputForm2 onSearchFormSubmit={handleSearch} close={() => setShowSearch(!showSearch)} />
                             </div>
                         }
 

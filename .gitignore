@@ -1,7 +1,8 @@
 __pycache__/
 
 migrations/
-myvenv/
+
+venv/
 media/
 
 db.sqlite3

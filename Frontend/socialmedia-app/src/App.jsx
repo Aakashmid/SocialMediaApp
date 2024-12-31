@@ -15,6 +15,7 @@ import { ProfileDataContext } from './Contexts/ProfileContext';
 import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 import NotFound from './Components/NotFound';
 import EditPostPage from './Components/post/EditPostPage';
+import SearchResultPage from './pages/SearchResultPage';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
@@ -37,11 +38,12 @@ function App() {
         <Route element={<ProtectedRoute />}>
           {/* Protected routes */}
           <Route path="/" element={<Home />} />
+          {/* <Route path="/search/" element={<SearchResultPage />} /> */}
           <Route path="/profile">
             {/* here str is profile username */}
             <Route path=":username" element={<Profile />} />
             <Route path=":username/posts/:id" element={<ProfilePostsPage />} />
-            <Route path=":username/saved-posts/:id" element={<ProfilePostsPage />} />
+            <Route path=":username/saved-posts/:id?" element={<ProfilePostsPage />} />
             <Route path=":username/:str" element={<FollowersFollowings />} />
             <Route path=":username/edit" element={<EditProfile />} />
           </Route>

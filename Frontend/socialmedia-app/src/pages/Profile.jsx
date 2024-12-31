@@ -103,6 +103,7 @@ const Profile = () => {
                 posts: posts,
                 postid: "post" + id,
                 profileId: profile.id,
+                isSavedPosts: feedOP === "saved",
             },
         });
     };
