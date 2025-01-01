@@ -1,14 +1,15 @@
 import { ArrowBack } from '@mui/icons-material'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchInputForm2({ close, onSearchFormSubmit }) {
   const [isVisible, setIsVisible] = useState(false);
-
+  const navigate = useNavigate();
   const handleSearch = (e) => {
-    // e.preventDefault();
-    onSearchFormSubmit(e);
+    e.preventDefault();
+    navigate('/search/?query=' + e.target.query.value);
     console.log("search form submitted");
-  };
+  }
 
   useEffect(() => {
     setIsVisible(true);
@@ -22,7 +23,7 @@ export default function SearchInputForm2({ close, onSearchFormSubmit }) {
         ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
       `}
     >
-      <span className="p-[6px] hover:bg-gray-200 rounded-[50%]" onClick={() => close()} >
+      <span className="p-[6px] hover:bg-gray-200 rounded-[50%]" onClick={() => { navigate('/'); close(); }} >
         <ArrowBack />
       </span>
       {/* search bar form */}

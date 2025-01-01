@@ -38,7 +38,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           {/* Protected routes */}
           <Route path="/" element={<Home />} />
-          {/* <Route path="/search/" element={<SearchResultPage />} /> */}
+          <Route path="/search/:query?" element={<SearchResultPage />} />
           <Route path="/profile">
             {/* here str is profile username */}
             <Route path=":username" element={<Profile />} />

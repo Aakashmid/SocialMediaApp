@@ -21,6 +21,34 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class PostviewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing Post objects.
+
+    Provides CRUD operations for posts and additional functionality for post interactions.
+
+    Attributes:
+        serializer_class: Uses PostSerializer for data serialization
+        queryset: Retrieves all Post objects
+        search_fields: Enables searching posts by text content and creator's username
+        filter_backends: Uses SearchFilter for search functionality
+
+    Actions:
+        list: Get all posts
+        create: Create a new post
+        retrieve: Get a specific post
+        update: Update a post
+        destroy: Delete a post
+        toggle-like: Toggle like status on a post
+
+    Search:
+        Supports searching through:
+        - Post text content
+        - Creator's username
+
+    Example:
+        POST /api/posts/1/toggle-like/ - Toggle like status on post with ID 1
+    """
+
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     search_fields = ['text', 'creator__user__username']  # has to add tags

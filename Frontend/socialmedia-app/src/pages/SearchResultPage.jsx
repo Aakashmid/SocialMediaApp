@@ -1,36 +1,99 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import Layout from '../Layout/Layout'
+import PostList from '../Components/post/PostList'
+import { PostProvider } from '../Contexts/PostContext'
+import { Link } from 'react-router-dom'
+import { ArrowBack } from '@mui/icons-material'
+import { fetchSearchPosts } from '../services/apiService'
+import { BackToHome } from '../Components/common/SmallComponents'
 
 export default function SearchResultPage() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [peoples, setPeoples] = useState([]);
+
+    const [searchType, setSearchType] = useState('post');
+
+    const query = new URLSearchParams(window.location.search).get('query');
+    const get_posts = async (searchQuery) => {
+        console.log('fetching posts....')
+        try {
+            setIsLoading(true);
+            const data = await fetchSearchPosts(searchQuery);
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
+    const get_users = async (searchQuery) => {
+        try {
+            // setIsLoading(true);
+            // const data = await fetchSearchUsers(searchQuery);
+            // setPosts(data);
+        } catch (error) {
+            console.error('Error fetching people:', error);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
 
 
+    //  fetch data for searched query 
+    const lastFetchedQuery = useRef({ post: '', people: '' });
+
+    useEffect(() => {
+        if (
+            searchType === 'posts' &&
+            (posts.length === 0 || lastFetchedQuery.current.post !== query)
+        ) {
+            get_posts(query);
+            lastFetchedQuery.current.post = query; // Update last fetched query for posts
+        } else if (
+            searchType === 'users' &&
+            lastFetchedQuery.current.people !== query
+        ) {
+            get_users(query);
+            lastFetchedQuery.current.people = query; // Update last fetched query for users
+        }
+    }, [query, searchType, posts]);
+
+
+    const filters = ['Post', 'People', 'My Posts Only', 'Followings Posts']
     return (
         <>
             <Layout>
                 <div className="searched-result-wrapper  p-5">
-                    <div className="page-top">
-                        <div className="flex items-center space-x-6">
-                            <Link to={-1} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link>
-                            {isSavedPosts ?
-                                <h2 className='text-lg xl:text-xl font-medium'>Saved Posts</h2>
-                                :
-                                <h2 className='text-lg xl:text-xl font-medium'>{profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`}</h2>
+                    <div className="page-top filters  overflow-x-auto whitespace-nowrap w-full  scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 py-2">
+                        {filters.map((filter, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setSearchType(filter.toLowerCase())}
+                                className={`px-3 py-1 lg:px-4 lg:py-[5px] rounded-full mx-1 ${searchType === filter.toLowerCase() ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            >
+                                {filter}
+                            </button>
+                        ))}
+                    </div>
+                    {searchType === 'posts' &&
+                        <div className="">
+                            {isLoading ? <div className='text-center'>Loading ....</div> :
+                                posts.length === 0 ?
+                                    <div className="text-center mt-5 p-8 bg-gray-100 rounded-lg shadow-md">
+                                        <h4 className="text-gray-800 mb-4 text-2xl">No results found for "{query}"</h4>
+                                        <p className="text-gray-600 text-base mb-6">Try different keywords or check your spelling</p>
+                                        <BackToHome goTo={'/'} text={'Back to Home'} />
+                                    </div> : <div className="mt-5">
+                                        <PostProvider value={{ posts, setPosts }}>
+                                            <PostList />
+                                        </PostProvider>
+                                    </div>
                             }
                         </div>
-                    </div>
-                    {isLoading ? <div className='text-center'>Loading ....</div> :
-                        posts.length === 0 ?
-                            <div className='flex flex-col items-center justify-center min-h-[200px] text-gray-500'>
-                                <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                                <p className="text-xl font-semibold">No Result Found</p>
-                                <p className="text-sm mt-2">Try different query to get result </p>
-                            </div> :
-                            // <div className="mt-5">
-                            //     <PostProvider value={{ posts, setPosts }}>
-                            //         <PostList />
-                            //     </PostProvider>
-                            // </div>
                     }
                 </div>
             </Layout>

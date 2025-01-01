@@ -70,7 +70,7 @@ export default function PostList() {
                 )}
             </div>
 
-            {posts.map((post) => {
+            {(posts || []).map((post) => {
                 return (
                     <CommentsContextProvider key={post.id} initialCommentsCount={post.comments_count}>   {/* for mananging comments related states*/}
                         <PostDetail key={post.id} post={post} onRemovePost={handleRemovePost} />

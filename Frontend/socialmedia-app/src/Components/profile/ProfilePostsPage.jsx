@@ -52,7 +52,6 @@ export default function ProfilePostsPage() {
                 <div className="profile-posts-wrapper  p-5">
                     <div className="page-top">
                         <div className="flex items-center space-x-6">
-                            <Link to={-1} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link>
                             {isSavedPosts ?
                                 <h2 className='text-lg xl:text-xl font-medium'>Saved Posts</h2>
                                 :

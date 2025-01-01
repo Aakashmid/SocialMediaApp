@@ -69,6 +69,14 @@ export const fetchPosts = async () => {
 }
 
 
+export const fetchSearchPosts = async (searchQuery) => {
+    try {
+        const response = await api.get(`/api/posts/?search=${searchQuery}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 
 // get post detail

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import ProfilePopover from "../Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
@@ -15,16 +15,20 @@ export default function Topbar() {
     const [showSearch, setShowSearch] = useState(false);
     const [isClickable, setIsClickable] = useState(false);
     const { profileData } = useContext(ProfileDataContext);
-
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         e.preventDefault();
+        navigate('/search/?query=' + e.target.query.value);
         console.log("search form submitted");
     }
 
 
     useEffect(() => {
-        // Toggle the body's overflow style based on isBgBlur  state
+        if (window.location.pathname.includes('search')) {
+            setShowSearch(true);
+        }
+
         if (showSidebar) {
             document.body.style.overflow = showSidebar ? 'hidden' : 'auto';
         }
