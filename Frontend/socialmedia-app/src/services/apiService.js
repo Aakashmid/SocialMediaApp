@@ -44,6 +44,14 @@ export const partialUpdateUserProfile = async (user_id, data) => {
 // delete user account
 
 
+export const fetchSearchUsers = async (searchQuery) => {
+    try {
+        const response = await api.get(`/api/users/?search=${searchQuery}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export const fetchUserPosts = async (user_id) => {
     try {

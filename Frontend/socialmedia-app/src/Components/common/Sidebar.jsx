@@ -80,7 +80,22 @@ const Sidebar = () => {
           ))}
         </ul>
         <hr className="bg-gray-300 h-[2px] my-2" />
-        <div className="friends-list mt-4">
+        {
+          followings.length > 0 && (
+            <div className="following-list mt-4">
+              <h2 className="text-lg font-medium">Followings</h2>
+              <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
+                {followings.map((user) => (
+                  <FollowingUser user={user} key={user.id} />
+                ))}
+              </ul>
+              <button className="my-4 py-[6px] px-10 font-medium rounded bg-gray-100">
+                Show more
+              </button>
+            </div>
+          )
+        }
+        {/* <div className="following-list mt-4">
           <h2 className="text-lg font-medium">Followings</h2>
           <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
             {followings.map((user) => (
@@ -90,7 +105,7 @@ const Sidebar = () => {
           <button className="my-4 py-[6px] px-10 font-medium rounded bg-gray-100">
             Show more
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

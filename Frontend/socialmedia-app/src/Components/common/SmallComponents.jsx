@@ -27,3 +27,5 @@ export const BackToHome = ({ goTo, text }) => {
         <ArrowBack /> {text}
     </Link>
 }
+
+

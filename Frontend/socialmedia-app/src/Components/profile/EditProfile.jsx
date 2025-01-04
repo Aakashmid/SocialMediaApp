@@ -17,6 +17,7 @@ export const FormInput = ({ label_text, handleChange, field_name, input_value, p
 
 export default function EditProfile() {
     const { profileData, setProfileData } = useContext(ProfileDataContext);     // gettign profile data from ProfileDataContext
+    const [showAlert, setShowAlert] = useState(false);
 
     // initialize edit profile form data
     const [formData, setFormData] = useState({
@@ -38,6 +39,7 @@ export default function EditProfile() {
             profileFormData.append('profileImg', formData.profileImg);
             const response = await partialUpdateUserProfile(profileData.id, profileFormData);
             console.log(response);
+            setShowAlert(true);
             setProfileData({ ...response });
         } catch (error) {
             console.error(error);

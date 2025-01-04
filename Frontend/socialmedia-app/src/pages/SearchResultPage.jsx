@@ -2,17 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import Layout from '../Layout/Layout'
 import PostList from '../Components/post/PostList'
 import { PostProvider } from '../Contexts/PostContext'
-import { Link } from 'react-router-dom'
-import { ArrowBack } from '@mui/icons-material'
-import { fetchSearchPosts } from '../services/apiService'
+import { fetchSearchPosts, fetchSearchUsers } from '../services/apiService'
 import { BackToHome } from '../Components/common/SmallComponents'
+import UserCard from '../Components/common/UserCard'
 
 export default function SearchResultPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [posts, setPosts] = useState([]);
-    const [peoples, setPeoples] = useState([]);
+    const [people, setPeople] = useState([]);
+    //  fetch data for searched query 
+    const lastFetchedQuery = useRef({ posts: '', people: '' });
 
-    const [searchType, setSearchType] = useState('post');
+    const [searchType, setSearchType] = useState('posts');
 
     const query = new URLSearchParams(window.location.search).get('query');
     const get_posts = async (searchQuery) => {
@@ -31,9 +32,10 @@ export default function SearchResultPage() {
 
     const get_users = async (searchQuery) => {
         try {
-            // setIsLoading(true);
-            // const data = await fetchSearchUsers(searchQuery);
-            // setPosts(data);
+            setIsLoading(true);
+            const data = await fetchSearchUsers(searchQuery);
+            console.log('fetched users');
+            setPeople(data);
         } catch (error) {
             console.error('Error fetching people:', error);
         }
@@ -43,27 +45,25 @@ export default function SearchResultPage() {
     }
 
 
-    //  fetch data for searched query 
-    const lastFetchedQuery = useRef({ post: '', people: '' });
 
     useEffect(() => {
         if (
             searchType === 'posts' &&
-            (posts.length === 0 || lastFetchedQuery.current.post !== query)
+            (posts.length === 0 || lastFetchedQuery.current.posts !== query)
         ) {
             get_posts(query);
-            lastFetchedQuery.current.post = query; // Update last fetched query for posts
+            lastFetchedQuery.current.posts = query; // Update last fetched query for posts
         } else if (
-            searchType === 'users' &&
+            searchType === 'people' &&
             lastFetchedQuery.current.people !== query
         ) {
             get_users(query);
             lastFetchedQuery.current.people = query; // Update last fetched query for users
         }
-    }, [query, searchType, posts]);
+    }, [query, searchType]);
 
 
-    const filters = ['Post', 'People', 'My Posts Only', 'Followings Posts']
+    const filters = ['Posts', 'People', 'My Posts Only', 'Followings Posts']
     return (
         <>
             <Layout>
@@ -92,6 +92,23 @@ export default function SearchResultPage() {
                                             <PostList />
                                         </PostProvider>
                                     </div>
+                            }
+                        </div>
+                    }
+
+                    {searchType === 'people' &&
+                        <div className="mt-2">
+                            {isLoading ? <div className='text-center'>Loading ....</div> :
+                                people.length === 0 ?
+                                    <div className="text-center mt-5 p-8 bg-gray-100 rounded-lg shadow-md">
+                                        <h4 className="text-gray-800 mb-4 text-2xl">No results found for "{query}"</h4>
+                                        <p className="text-gray-600 text-base mb-6">Try different keywords or check your spelling</p>
+                                        <BackToHome goTo={'/'} text={'Back to Home'} />
+                                    </div> :
+                                    people.map(user => {
+                                        return <UserCard user={user} key={user.id} setData={setPeople} />
+                                    })
+
                             }
                         </div>
                     }

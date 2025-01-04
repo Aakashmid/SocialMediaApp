@@ -11,8 +11,8 @@ export default function ProfileActions({ showShare, setShowShare, profileData, h
                 {!showShare && <button onClick={() => setShowShare(!showShare)} className='cursor-pointer hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white '>New Post</button>}
             </div>
             {showShare &&
-                <div className="relative py-4">
-                    <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute -top-4 bg-gray-50 p-1 hover:bg-gray-200'><Close /></span>
+                <div className="relative py-4 lg:py-8">
+                    <span onClick={() => setShowShare(!showShare)} className='-right-2 absolute top-0 lg:top-4 bg-gray-100 p-1 hover:bg-gray-200 rounded-lg cursor-pointer'><Close fontSize='small' /></span>
                     <SharePost onShare={handleCreatePost} />
                 </div>}
         </div>

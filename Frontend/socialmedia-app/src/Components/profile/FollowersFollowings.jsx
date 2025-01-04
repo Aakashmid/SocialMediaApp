@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Layout from '../../Layout/Layout'
 import { fetchUserFollowers, fetchUserFollowings, useFetchUserProfile, followUser, unfollowUser } from '../../services/apiService'
 import { PageTopBackArrow } from '../common/SmallComponents'
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
+import UserCard from '../common/UserCard'
 
 
 export default function FollowersFollowings() {
@@ -13,55 +14,11 @@ export default function FollowersFollowings() {
     const [data, setData] = useState([]);           // here data is user followings or followers
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     const fetchUserProfile = useFetchUserProfile();
-
+    const navigate = useNavigate();
     const state = useLocation().state;
     const id = state?.userId ? parseInt(state.userId) : profileData?.id || null;  // here id is id  of user whose followers or followings we are showing
 
 
-    const handelFollowUnfollow = async (user) => {
-        try {
-            var followBtn = document.getElementById(`followBtn${user.id}`);
-            if (user.isFollowed) {
-                const response = await unfollowUser(user.id);
-                setProfileData({ ...profileData, followers_count: profileData.followers_count - 1, isFollowed: false })
-                setData(data.map(item =>
-                    item.id === user.id ? { ...item, isFollowed: false } : item
-                ));
-                // followBtn.innerText='Follow';
-                console.log('unfollowed user')
-            } else {
-                const response = await followUser(user.id);
-                setProfileData({ ...profileData, followers_count: profileData.followers_count + 1, isFollowed: true })
-                setData(data.map(item =>
-                    item.id === user.id ? { ...item, isFollowed: true } : item
-                ));
-                // followBtn.innerText='Following';
-                console.log('following user');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-
-    }
-
-    // card showing user detail
-    const UserCard = ({ user }) => {
-        return (
-            <>
-                <div className='flex px-2 py-2 items-center justify-between'>
-                    <div className="flex items-center space-x-4">
-                        <img src={user.profileImg} className='w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer' alt="..." />
-                        <h4 className='username font-normal text-xl'>{user.username}</h4>
-                    </div>
-                    {user.id !== profileData.id &&
-                        <div className="card-button">
-                            <button id={`followBtn${user.id}`} onClick={() => handelFollowUnfollow(user, str)} className='bg-bg1  text-white px-3 py-1 md:py-[6px] lg:py-[] rounded-md font-medium cursor-pointer'>{user.isFollowed ? "Following" : "Follow"}</button>
-                        </div>
-                    }
-                </div>
-            </>
-        )
-    }
 
     const getFollowersOrFollowings = async (userId) => {
         try {
@@ -127,7 +84,7 @@ export default function FollowersFollowings() {
                         <PageTopBackArrow pageHeading={getpageHeading()} backTo={-1} />
                         <div className="">
                             {data.map(user => {
-                                return <UserCard user={user} key={user.id} />
+                                return <UserCard user={user} key={user.id} setData={setData} />
                             })}
                             {/* <User */}
                         </div>

@@ -147,10 +147,12 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
                     )}
                 </div>
             </div>
-            <div className="card-center">
-                {post.postImg && <img src={post.postImg} className="mt-2 w-full max-h-[400px] md:max-h-[500px] object-contain" alt="Post" />}
-                <p className="post-text mt-2">{post.text}</p>
+            <div className="card-center  ">
+                {post.postImg && <img src={post.postImg} className="mt-2 w-full max-h-[450px]  object-contain  " alt="Post" />}
+                <p className="post-description mt-2">{post.text}</p>
             </div>
+
+
             <div className="post-card-bottom flex justify-between items-center">
                 <div className="postLeftBottom flex space-x-2 items-center">
                     <img className="likeIcon w-6 h-6 cursor-pointer" src="/src/assets/like.png" onClick={likeHandler} alt="Like" />

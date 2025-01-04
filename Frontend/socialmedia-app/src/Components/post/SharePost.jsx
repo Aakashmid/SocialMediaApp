@@ -15,9 +15,11 @@ export default function SharePost({ setPosts, onShare }) {
     const { profileData } = useContext(ProfileDataContext);
     const navigate = useNavigate();
 
+
+    // handle createion of post of post data - data
     const sharePost = async (data) => {
         try {
-            const post_data = await CreatePost(data);
+            const post_data = await CreatePost(data);  // creating post using CreatePost function
             setPosts(prevPosts => [...prevPosts, post_data]);
             setShowAlert(true);
         } catch (error) {
