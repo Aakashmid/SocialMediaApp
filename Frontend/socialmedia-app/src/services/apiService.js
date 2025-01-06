@@ -53,10 +53,15 @@ export const fetchSearchUsers = async (searchQuery) => {
     }
 }
 
-export const fetchUserPosts = async (user_id) => {
+export const fetchUserPosts = async (user_id, searchQuery) => {
     try {
-        const response = await api.get(`api/posts/profile-posts/${user_id}`)
-        return response.data;
+        if (searchQuery) {
+            const response = await api.get(`/api/posts/profile-posts/${user_id}?search=${searchQuery}`);
+            return response.data;
+        } else {
+            const response = await api.get(`/api/posts/profile-posts/${user_id}`);
+            return response.data;
+        }
     } catch (error) {
         throw error;
     }

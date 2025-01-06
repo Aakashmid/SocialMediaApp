@@ -53,7 +53,7 @@ const CommentInputForm = ({ post, replyProps = {} }) => {  // here some props ar
     return <>
         <div className={`${isReply ? 'py-2  flex items-center space-x-2' : 'py-2 px-3 flex items-center space-x-3'}`} >
             <div className="current-user-img" onClick={() => navigate(`/profile/${user.username}`)}>
-                <img src={user.profileImg} className={`${isReply ? 'user-profileImg w-6 h-6 border rounded-[50%] object-cover' : "user-profileImg w-8 h-8 border rounded-[50%] object-cover"}`} alt=".." />
+                <img src={user.profileImg} className={`${isReply ? 'user-profileImg w-7 h-7 border rounded-[50%] object-cover' : "user-profileImg w-9 h-9 border rounded-[50%] object-cover"}`} alt=".." />
 
             </div>
             <form onSubmit={handleSubmit} className="text-input-form bg-gray-200 input-form flex-grow flex items-center rounded-lg overflow-hidden">

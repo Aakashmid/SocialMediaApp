@@ -120,7 +120,7 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
     return (
         <>
             <AlertPopover />
-            <div className="post-card-top flex items-center justify-between">
+            <div className="post-card-top flex items-center justify-between ">
                 <div className="profile flex items-center space-x-3 cursor-pointer">
                     <Link to={`/profile/${post.creator.username}`} state={{ userId: post.creator.id }} className="flex space-x-3 items-center">
                         <img src={post.creator.profileImg} className="user-profileImg w-8 h-8 border rounded-[50%] object-cover" alt="Profile" />
@@ -147,8 +147,8 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
                     )}
                 </div>
             </div>
-            <div className="card-center  ">
-                {post.postImg && <img src={post.postImg} className="mt-2 w-full max-h-[450px]  object-contain  " alt="Post" />}
+            <div className="card-center mt-2">
+                {post.postImg && <img src={post.postImg} className=" w-full max-h-[400px] lg:max-h-[500px] object-contain  " alt="Post" />}
                 <p className="post-description mt-2">{post.text}</p>
             </div>
 
@@ -198,10 +198,10 @@ const PostDetail = ({ post, onRemovePost }) => {
                     className="w-[100vw] h-[140vh] fixed bg-gray-600 -top-10 left-0 z-30 opacity-40"
                 />
             )}
-            <div id={`post${post.id}`} className="post-card p-4 custom-shodow-b rounded-lg flex-col flex space-y-5 lg:space-y-6">
+            <div id={`post${post.id}`} className="post-card p-4 custom-shodow-b rounded-lg ">
                 <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} onRemovePost={onRemovePost} />
                 {showComments && (
-                    <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-[10%] left-1/2 -translate-x-1/2 xl:w-[45%] lg:w-[60%] md:w-[75%] w-full h-full z-40">
+                    <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-10 left-1/2 -translate-x-1/2 lg:w-[40%]  md:w-[75%] w-full h-full z-40">
                         <Comments closeComments={handleCommentsToggle} post={post} />
                     </div>
                 )}

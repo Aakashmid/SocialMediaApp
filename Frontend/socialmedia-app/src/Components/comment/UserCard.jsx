@@ -7,7 +7,7 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import { deleteComment, fetchReplies, likeCommentReply } from "../../services/apiService";
 import CommentInputForm from "./CommentInputForm";
 
-const UserCard = ({ comment, setParentReplies, setParentRepliesCount }) => {
+const UserCard = ({ comment, setParentReplies, setParentRepliesCount, isReply }) => {
     const { profileData } = useContext(ProfileDataContext);
     const { setComments, setCommentsCount } = useContext(CommentsContext);
     const [replies, setReplies] = useState([]);
@@ -73,11 +73,12 @@ const UserCard = ({ comment, setParentReplies, setParentRepliesCount }) => {
     return (
         <div className="flex space-x-4">
             <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate(`/profile/${comment.user.username}`, { state: { userId: comment.user.id } })}>
-                <img src={comment.user.profileImg} className="w-6 h-6 object-cover rounded-[50%]" alt=".." />
+                <img src={comment.user.profileImg} className={`${isReply ? 'w-7 h-7' : 'w-8 h-8'} object-cover rounded-[50%]`} alt=".." />
             </div>
             <div className="flex flex-col w-full">
-                <p onClick={() => navigate(`/profile/${comment.user.id}`)} className={`${comment.parent > 0 && 'text-[15px] '} font-medium cursor-pointer`}>{comment.user.username}</p>
-                <p className={`${comment.parent > 0 ? 'text-[13px]' : 'text-sm'} font-normal`}>{comment.text}</p>
+                {/* <p onClick={() => navigate(`/profile/${comment.user.id}`)} className={`${comment.parent > 0 && 'text-[15px] '} font-medium cursor-pointer`}>{comment.user.username}</p> */}
+                <p onClick={() => navigate(`/profile/${comment.user.id}`)} className={`${isReply && 'text-[15px'} font-medium cursor-pointer`}>{comment.user.username}</p>
+                <p className={`${isReply ? 'text-[13px]' : 'text-sm'} font-normal`}>{comment.text}</p>
                 <div className="mt-1 flex space-x-4">
                     {/* Like Button */}
                     <div className="like-div flex items-center space-x-1">
@@ -127,7 +128,7 @@ const UserCard = ({ comment, setParentReplies, setParentRepliesCount }) => {
                 {showReplies && (
                     <div className="replies-wrapper flex flex-col py-2 space-y-2">
                         {replies.map((reply) => (
-                            <UserCard key={reply.id} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount} />
+                            <UserCard key={reply.id} isReply={true} comment={reply} setParentReplies={setReplies} setParentRepliesCount={setRepliesCount} />
                         ))}
                     </div>
                 )}

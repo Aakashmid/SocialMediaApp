@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from rest_framework import status, viewsets
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
+from drf_spectacular.utils import extend_schema
 
 # from rest_framework.permissions import AllowAny,IsAuthenticated
 # from rest_framework.exceptions import PermissionDenied
@@ -100,10 +100,23 @@ class SaveUnsavePostView(APIView):
 
 # fetch profile posts and saved posts
 class ProfilePostsViewSet(viewsets.ViewSet):
+    filter_backends = [SearchFilter]
+    search_fields = ['text', 'creator__user__username']
+
+    @extend_schema(
+        parameters=[
+            {'name': 'search', 'in': 'query', 'description': 'Search users posts by text or username', 'required': False, 'schema': {'type': 'string'}}
+        ],
+        responses={200: PostSerializer(many=True)},
+    )
     def profile_posts(self, request, user_id=None):
         if user_id is not None:
             # Profile posts logic
             queryset = Post.objects.filter(creator=user_id)
+            # Apply search filter if search query exists
+            if request.query_params.get('search'):
+                search_backend = self.filter_backends[0]()
+                queryset = search_backend.filter_queryset(request, queryset, self)
             serializer = PostSerializer(queryset, many=True, context={'request': request})
             return Response(serializer.data)
         return ValueError("User ID is required for profile posts.")
