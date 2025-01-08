@@ -37,7 +37,7 @@ const Sidebar = () => {
   }, [getFollowings]);
 
   // Reusable component for rendering following users
-  const FollowingUser = ({ user }) => (
+  const FriendUser = ({ user }) => (
     <li className="sidebarFriend">
       <Link
         to={`/profile/${user.username}`} state={{ userId: user.id }}
@@ -54,12 +54,12 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="sidebar-container lg:w-1/4 w-[60%] sm:w-[45%] md:w-[40%] fixed z-20">
+    <div className="sidebar-container xl:w-1/4 lg:w-[30%] w-[60%] sm:w-[45%] md:w-[40%] fixed z-20">
       <div className="sidebar-wrapper py-3 px-2 h-[100vh] overflow-y-scroll custom-scrollbar bg-white">
         <ul className="sideBar-list flex flex-col space-y-1">
           {[
             { label: "Feed", Icon: RssFeed, path: "/" },
-            { label: "Chat", Icon: Chat, path: "/" },
+            { label: "Chat", Icon: Chat, path: "/chat" },
             { label: "Videos", Icon: PlayCircleFilledOutlined, path: "/" },
             { label: "Groups", Icon: Group, path: "/" },
             { label: "Bookmarks", Icon: Bookmark, path: `/profile/${profileData?.username}/saved-posts/`, state: { isSavedPosts: true } },
@@ -83,10 +83,10 @@ const Sidebar = () => {
         {
           followings.length > 0 && (
             <div className="following-list mt-4">
-              <h2 className="text-lg font-medium">Followings</h2>
+              <h2 className="text-lg font-medium">Friends</h2>
               <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
                 {followings.map((user) => (
-                  <FollowingUser user={user} key={user.id} />
+                  <FriendUser user={user} key={user.id} />
                 ))}
               </ul>
               <button className="my-4 py-[6px] px-10 font-medium rounded bg-gray-100">
@@ -95,17 +95,6 @@ const Sidebar = () => {
             </div>
           )
         }
-        {/* <div className="following-list mt-4">
-          <h2 className="text-lg font-medium">Followings</h2>
-          <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
-            {followings.map((user) => (
-              <FollowingUser user={user} key={user.id} />
-            ))}
-          </ul>
-          <button className="my-4 py-[6px] px-10 font-medium rounded bg-gray-100">
-            Show more
-          </button>
-        </div> */}
       </div>
     </div>
   );

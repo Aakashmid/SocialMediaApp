@@ -16,6 +16,7 @@ import ProfilePostsPage from './Components/profile/ProfilePostsPage';
 import NotFound from './Components/NotFound';
 import EditPostPage from './Components/post/EditPostPage';
 import SearchResultPage from './pages/SearchResultPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
@@ -48,6 +49,7 @@ function App() {
             <Route path=":username/edit" element={<EditProfile />} />
           </Route>
           <Route path="/post/:str/edit" element={<EditPostPage />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Route>
 
         {/* Auth routes */}

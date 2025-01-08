@@ -158,7 +158,7 @@ class FollowView(ViewSet):
         serialize = ProfileSerializer(data, many=True, context={'request': request})
         return Response(serialize.data)
 
-    def friends(self, request, user_id=None):
+    def friends(self, request, user_id=None):  # here user_id is the id of the user whose with we are getting mutual freinds
         '''
         getting friends of current user and mutual friends of two users
         '''
@@ -181,6 +181,6 @@ class FollowView(ViewSet):
             followers = user.followers.all().values_list('follower', flat=True)  # returns ids of follower
             followings = user.followings.all().values_list('toFollowing', flat=True)
             friend_ids = set(followers).intersection(followings)
-            friends = Profile.objects.filter(id__in=friend_ids)
+            friends = Profile.objects.filter(user__id__in=friend_ids)
             serializer = ProfileSerializer(friends, many=True, context={'request': request})
         return Response(serializer.data)

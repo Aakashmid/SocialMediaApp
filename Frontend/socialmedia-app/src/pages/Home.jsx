@@ -31,6 +31,8 @@ export default function Home() {
     }
   }, [fetchUserProfile, setProfileData, setLoading, userId]);
 
+
+
   // Fetch profile data on component mount if not already fetched
   useEffect(() => {
     if (!profileData || Object.keys(profileData).length === 0) {

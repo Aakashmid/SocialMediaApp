@@ -17,6 +17,7 @@ import ProfileFeed from "../components/profile/ProfileFeed";
 import ProfileActions from "../Components/profile/ProfileActions";
 import useProfileData from "../hooks/useProfileData";
 import { PostProvider } from "../Contexts/PostContext";
+import Layout2 from "../Layout/Layout2";
 
 const Profile = () => {
     const { profileData, setProfileData } = useContext(ProfileDataContext); // Current user's profile data
@@ -169,55 +170,54 @@ const Profile = () => {
     }, [profileUserId, feedOP, fetchedFeedOps]);
     return (
         <>
-            <Topbar />
-            <div className="profile-page-container lg:flex">
-                <div className="hidden lg:block">
-                    <Sidebar />
-                </div>
-                <PostProvider value={{
-                    posts: feedOP === "posts" ? profilePosts : savedPosts,
-                    setPosts: feedOP === "posts" ? setProfilePosts : setSavedPosts
-                }}>
-                    <div className="profile-wrapper w-full md:w-[650px] md:mx-auto md:shadow-lg min-h-[100vh] flex-[5] lg:ml-[25%]">
-                        <div className="profile-top">
-                            <div className="profileCover relative">
-                                <img
-                                    src="/src/assets/post/3.jpeg"
-                                    className="cover-img w-full h-36 object-cover"
-                                    alt="..."
-                                />
-                                <img
-                                    src={profile.profileImg || "/default-profile.png"} // Fallback for missing image
-                                    className="profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white"
-                                    alt=""
-                                />
-                                <div className="w-full h-16"></div>
-                            </div>
-                            <ProfileHeader
-                                profile={profile}
-                                isCUProfile={isCUProfile}
-                                handleFollow={handleFollow}
-                            />
-                            <ProfileStats profile={profile} />
+            <div className="profile-page-container ">
+                <Layout2>
 
-                            {isCUProfile && (
-                                <ProfileActions
-                                    showShare={showShare}
-                                    setShowShare={setShowShare}
-                                    handleCreatePost={handleCreatePost}
-                                    profileData={profileData}
+                    <PostProvider value={{
+                        posts: feedOP === "posts" ? profilePosts : savedPosts,
+                        setPosts: feedOP === "posts" ? setProfilePosts : setSavedPosts
+                    }}>
+                        <div className="profile-wrapper ">
+                            <div className="profile-top">
+                                <div className="profileCover relative">
+                                    <img
+                                        src="/src/assets/post/3.jpeg"
+                                        className="cover-img w-full h-36 object-cover"
+                                        alt="..."
+                                    />
+                                    <img
+                                        src={profile.profileImg || "/default-profile.png"} // Fallback for missing image
+                                        className="profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white"
+                                        alt=""
+                                    />
+                                    <div className="w-full h-16"></div>
+                                </div>
+                                <ProfileHeader
+                                    profile={profile}
+                                    isCUProfile={isCUProfile}
+                                    handleFollow={handleFollow}
                                 />
-                            )}
+                                <ProfileStats profile={profile} />
+
+                                {isCUProfile && (
+                                    <ProfileActions
+                                        showShare={showShare}
+                                        setShowShare={setShowShare}
+                                        handleCreatePost={handleCreatePost}
+                                        profileData={profileData}
+                                    />
+                                )}
+                            </div>
+                            <ProfileFeed
+                                setFeedOp={setFeedOp}
+                                feedOP={feedOP}
+                                loading={loading}
+                                handleOnclickPost={handleOnclickPost}
+                                isCUProfile={isCUProfile}
+                            />
                         </div>
-                        <ProfileFeed
-                            setFeedOp={setFeedOp}
-                            feedOP={feedOP}
-                            loading={loading}
-                            handleOnclickPost={handleOnclickPost}
-                            isCUProfile={isCUProfile}
-                        />
-                    </div>
-                </PostProvider>
+                    </PostProvider>
+                </Layout2>
             </div>
         </>
     );

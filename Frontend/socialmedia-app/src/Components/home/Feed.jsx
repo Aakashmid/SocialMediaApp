@@ -5,12 +5,14 @@ import PostList from "../post/PostList";
 import { fetchPosts } from "../../services/apiService";
 import { PostContext, PostProvider } from "../../Contexts/PostContext";
 import { use } from "react";
+import { CircleLoader } from "../Loader";
 
 
 export default function Feed() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const getPosts = async () => {
+        console.log('fetching home posts');
         try {
             setLoading(true);
             const data = await fetchPosts();
@@ -21,7 +23,6 @@ export default function Feed() {
         finally {
             setLoading(false);
         }
-        // console.log(posts);
     }
 
 
@@ -41,7 +42,7 @@ export default function Feed() {
                 <SharePost setPosts={setPosts} />
                 <div className="feed-posts mt-5">
                     {/* <PostProvider posts={posts} setPosts={setPosts}> */}
-                    {loading ? <div>Loading...</div> :
+                    {loading ? <CircleLoader /> :
                         <PostProvider value={{ posts, setPosts }}>
                             <PostList />
                         </PostProvider>

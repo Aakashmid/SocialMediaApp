@@ -1,28 +1,28 @@
 import React from 'react'
 import Topbar from '../Components/common/Topbar'
 import Sidebar from '../Components/common/Sidebar';
+import ChatBar from '../Components/chatpage/ChatBar';
 
 export default function Layout({ children }) {
     const [firstChild, secondChild] = React.Children.toArray(children);
+    const SidebarContent = window.location.pathname.includes('chat') ? ChatBar : Sidebar;
+
     return (
-        <>
+        <div className='main-layout-container'>
             <header>
                 <Topbar />
             </header>
-            <div className="home-page-container lg:flex">
-                <div className="hidden lg:block lg:fixed lg:w-[25%]">
-                    <Sidebar />
-                </div>
-                {/* <div className="md:w-[650px] mx-auto lg:w-[45%] lg:ml-[25%] lg:px-12">
+            <div className="main-layout-content lg:flex">
+                <aside className="layout-sidebar hidden lg:block lg:fixed ">
+                    <SidebarContent />
+                </aside>
+                <main className="md:w-[650px] mx-auto lg:w-[45%] 2xl:px-12 xl:px-8 lg:px-4">
                     {firstChild}
-                </div> */}
-                <div className="md:w-[650px] mx-auto lg:w-[45%] lg:px-12">
-                    {firstChild}
-                </div>
-                <div className="hidden lg:block lg:w-[25%] lg:fixed lg:right-0">
+                </main>
+                <aside className="hidden lg:block lg:w-[25%] lg:fixed lg:right-0">
                     {secondChild}
-                </div>
+                </aside>
             </div>
-        </>
+        </div>
     )
 }

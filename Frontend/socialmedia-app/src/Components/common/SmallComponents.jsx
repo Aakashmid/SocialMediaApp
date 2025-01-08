@@ -1,4 +1,4 @@
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, Search } from '@mui/icons-material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -28,4 +28,18 @@ export const BackToHome = ({ goTo, text }) => {
     </Link>
 }
 
-
+// export const SearchInput = ({ onSearch }) => {
+export const SearchInput = () => {
+    // here onSearch is a function that will be called when the user types in the search input.
+    return (
+        <div className="relative w-full ">
+            <input
+                type="text"
+                placeholder="Search users..."
+                className="w-full px-4 py-2 text-gray-700 bg-gray-100  border border-gray-300 rounded-lg outline-none focus:outline-2 focus:outline focus:outline-blue-400"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-600">
+                <Search />
+            </div>
+        </div>)
+}

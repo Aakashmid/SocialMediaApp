@@ -2,12 +2,11 @@ import React, { useContext } from 'react';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { Bookmark, BookmarkBorder, BorderColor, DeleteForever, Report, Share } from '@mui/icons-material';
 
-export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpdate, onRemove }) {
+export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpdate }) {
   const { profileData } = useContext(ProfileDataContext);
   const options = [
     { text: post.isSaved ? 'Unsave post' : 'Save post', action: onSave, Icon: post.isSaved ? Bookmark : BookmarkBorder },
     { text: post.creator.id === profileData.id ? 'Edit Post' : '', action: onUpdate, Icon: BorderColor },
-    { text: post.creator.id === profileData.id ? 'Remove Post' : '', action: onRemove, Icon: DeleteForever },
     { text: 'Report', action: onReport, Icon: Report },
     { text: 'Share', action: onShare, Icon: Share }
   ];

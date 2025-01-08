@@ -11,7 +11,7 @@ import { SavePost } from "../../services/apiService";
 import { PostContext } from "../../Contexts/PostContext";
 
 
-const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
+const Post = ({ initialPost, handleCommentsToggle }) => {
     const { commentsCount } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
     const { posts, setPosts } = useContext(PostContext);
@@ -139,7 +139,6 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
                                 onReport={handleReport}
                                 onSave={handleSave}
                                 onShare={handleShare}
-                                onRemove={() => onRemovePost(post)}
                                 onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
                                 onClose={() => setShowOptionsMenu((prev) => !prev)}
                             />
@@ -174,7 +173,7 @@ const Post = ({ initialPost, handleCommentsToggle, onRemovePost }) => {
 };
 
 
-const PostDetail = ({ post, onRemovePost }) => {
+const PostDetail = ({ post }) => {
     const [isBgBlur, setIsBgBlur] = useState(false);
     const [showComments, setShowComments] = useState(false);
 
@@ -199,7 +198,7 @@ const PostDetail = ({ post, onRemovePost }) => {
                 />
             )}
             <div id={`post${post.id}`} className="post-card p-4 custom-shodow-b rounded-lg ">
-                <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} onRemovePost={onRemovePost} />
+                <Post initialPost={post} handleCommentsToggle={handleCommentsToggle} />
                 {showComments && (
                     <div className="post-comments bg-gray-100 rounded-xl p-4 fixed top-10 left-1/2 -translate-x-1/2 lg:w-[40%]  md:w-[75%] w-full h-full z-40">
                         <Comments closeComments={handleCommentsToggle} post={post} />
