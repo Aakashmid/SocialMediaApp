@@ -9,10 +9,10 @@ export default function Layout({ children }) {
 
     return (
         <div className='main-layout-container'>
-            <header>
+            {/* <header>
                 <Topbar />
-            </header>
-            <div className="main-layout-content lg:flex">
+            </header> */}
+            {/* <div className="main-layout-content lg:flex">
                 <aside className="layout-sidebar hidden lg:block lg:fixed ">
                     <SidebarContent />
                 </aside>
@@ -20,6 +20,19 @@ export default function Layout({ children }) {
                     {firstChild}
                 </main>
                 <aside className="hidden lg:block lg:w-[25%] lg:fixed lg:right-0">
+                    {secondChild}
+                </aside>
+            </div> */}
+            <div className="main-layout-content grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-5">
+                <aside className="layout-sidebar md:col-span-1 lg:col-span-3 hidden md:block ">
+                    <div className=" fixed md:w-[25%] w-full">
+                        <SidebarContent />
+                    </div>
+                </aside>
+                <main className="md:col-span-2 lg:col-span-6 lg:mx-4 xl:mx-auto xl:w-[38rem] ">
+                    {firstChild}
+                </main>
+                <aside className="hidden lg:block lg:col-span-3">
                     {secondChild}
                 </aside>
             </div>

@@ -20,17 +20,16 @@ export default function Home() {
   const fetchProfileData = useCallback(async () => {
     if (!userId) return;
 
-    setLoading(true);
     try {
+      setLoading(true);
       const data = await fetchUserProfile(userId);
       setProfileData(data);
     } catch (error) {
       console.error("Failed to fetch profile data:", error);
     } finally {
-      setLoading(false); // Ensure loading state is always updated
+      setLoading(false);
     }
   }, [fetchUserProfile, setProfileData, setLoading, userId]);
-
 
 
   // Fetch profile data on component mount if not already fetched

@@ -96,7 +96,7 @@ export default function EditProfile() {
                     <PageTopBackArrow pageHeading={"Edit profile"} backTo={-1} />
                 </div>
                 <div className="page-center pb-10 flex flex-col space-y-6">
-                    <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">
+                    <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative ">
                         {/* <span className="p-2 top-4 right-4 absolute"><Edit/></span> */}
                         <label className="p-1 hover:bg-gray-200 top-4 right-4 absolute bg-white rounded-xl">
                             <AddPhotoAlternate />
@@ -123,7 +123,7 @@ export default function EditProfile() {
                         </div>
                     </div>
 
-                    <div className="bg-gray-100 rounded-lg px-3 lg:px-4 py-6 h-fit my-2 md:w-[650px]">
+                    <div className="bg-gray-100 rounded-lg px-3 lg:px-4 py-6 h-fit my-2 ">
                         {/* <h1 className='font-medium text-lg'>About You</h1> */}
                         {/* here show error if */}
                         <form className=' mt-4 flex flex-col space-y-6' onSubmit={handleUpdateProfile}>
@@ -140,6 +140,7 @@ export default function EditProfile() {
                     </div>
                 </div>
             </div>
+            <div></div>
         </Layout >
     )
 }

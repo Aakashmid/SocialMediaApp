@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import SearchInputForm1 from "../Topbar/SearchInputForm1";
 import SearchInputForm2 from "../Topbar/SearchInputForm2";
+import { set } from "date-fns";
 
 
 export default function Topbar() {
@@ -53,7 +54,7 @@ export default function Topbar() {
     return (<>
         <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
             <div className='flex items-center topbar-left'>
-                <div className="lg:hidden mr-2">
+                <div className="md:hidden mr-2">
                     {showSidebar ? <span className="w-fit cursor-pointer " onClick={() => setShowSidebar(!showSidebar)}><Close htmlColor="white" /></span>
                         : <span className="w-fit cursor-pointer " onClick={() => setShowSidebar(!showSidebar)}><MenuIcon htmlColor="white" /></span>
                     }
@@ -103,15 +104,30 @@ export default function Topbar() {
 
 
         {/* for small screen -  sidebar */}
-        <div className="lg:hidden">
+        {/* <div className="lg:hidden ">
             {showSidebar &&
                 <>
-
                     <Sidebar />
                     <span className="hide-sidebar-bg bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-0" onClick={() => setShowSidebar(!showSidebar)}></span>
                 </>
             }
+        </div> */}
+
+        <div className="md:hidden">
+            <div className={`fixed top-[3.25rem] left-0 w-[70%] sm:w-1/2 md:w-[40%] transform transition-all duration-300 z-30 ${showSidebar ? 'translate-x-0' : '-translate-x-full'
+                }`}>
+                <Sidebar closeSidebar={() => setShowSidebar(!showSidebar)} />
+            </div>
+            {showSidebar && (
+                <span
+                    className="hide-sidebar-bg bg-gray-600 fixed opacity-15 left-0 top-0 w-full h-full z-20"
+                    onClick={() => setShowSidebar(!showSidebar)}
+                ></span>
+            )}
         </div>
+
+
+
 
     </>
     )

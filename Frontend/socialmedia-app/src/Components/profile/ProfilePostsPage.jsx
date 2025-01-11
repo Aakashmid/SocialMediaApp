@@ -50,13 +50,14 @@ export default function ProfilePostsPage() {
     return (
         <>
             <Layout>
-                <div className="profile-posts-wrapper  p-5">
-                    <div className="page-top">
+                <div className="profile-posts-wrapper p-5">
+                    <div className="page-top ">
                         <div className="flex items-center space-x-6">
+                            <PageTopBackArrow backTo={-1} />
                             {isSavedPosts ?
-                                <h2 className='text-xl font-semibold'>Saved Posts</h2>
+                                <h2 className='text-2xl font-semibold'>Saved Posts</h2>
                                 :
-                                <h2 className='text-xl font-semibold'>{profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`}</h2>
+                                <h2 className='text-2xl font-semibold'>{profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`}</h2>
                             }
                         </div>
                     </div>
@@ -69,7 +70,7 @@ export default function ProfilePostsPage() {
                                 <p className="text-xl font-semibold">No Saved Posts Yet</p>
                                 <p className="text-sm mt-2">Start saving posts to see them here</p>
                             </div> :
-                            <div className="mt-5">
+                            <div className="mt-2">
                                 <PostProvider value={{ posts, setPosts }}>
                                     <PostList />
                                 </PostProvider>

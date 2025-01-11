@@ -17,6 +17,7 @@ import NotFound from './Components/NotFound';
 import EditPostPage from './Components/post/EditPostPage';
 import SearchResultPage from './pages/SearchResultPage';
 import ChatPage from './pages/ChatPage';
+import Topbar from './Components/common/Topbar';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
@@ -35,6 +36,9 @@ function App() {
   };
   return (
     <>
+      <header>
+        <Topbar />
+      </header>
       <Routes>
         <Route element={<ProtectedRoute />}>
           {/* Protected routes */}

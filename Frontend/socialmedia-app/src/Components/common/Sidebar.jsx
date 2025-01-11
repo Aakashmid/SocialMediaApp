@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import { fetchUserFollowings } from "../../services/apiService";
 
-const Sidebar = () => {
+const Sidebar = ({ closeSidebar }) => {
   const [followings, setFollowings] = useState([]);
   const { profileData } = useContext(ProfileDataContext);
 
@@ -54,8 +54,9 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="sidebar-container xl:w-1/4 lg:w-[30%] w-[60%] sm:w-[45%] md:w-[40%] fixed z-20">
-      <div className="sidebar-wrapper py-3 px-2 h-[100vh] overflow-y-scroll custom-scrollbar bg-white">
+    // <div className="sidebar-container w-full  md:w-[16rem] xl:w-[21rem]">
+    <div className="sidebar-container w-full ">
+      <div className="sidebar-wrapper py-3 px-2  overflow-y-scroll custom-scrollbar bg-white  h-[100vh]">
         <ul className="sideBar-list flex flex-col space-y-1">
           {[
             { label: "Feed", Icon: RssFeed, path: "/" },
@@ -70,11 +71,11 @@ const Sidebar = () => {
           ].map(({ label, Icon, path, state }) => (
             <li key={label} className="hover:bg-blue-200 rounded-lg">
               <Link
-                to={path} state={state}
-                className="py-[5px] px-2 flex items-center space-x-4"
+                to={path} onClick={closeSidebar} state={state}
+                className="py-[5px] px-2 flex items-center  space-x-4"
               >
                 <Icon />
-                <span className="lg:text-lg">{label}</span>
+                <span className="text-lg text-gray-700 font-medium">{label}</span>
               </Link>
             </li>
           ))}

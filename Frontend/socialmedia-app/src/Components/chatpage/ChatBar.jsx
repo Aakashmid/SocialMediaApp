@@ -4,7 +4,7 @@ import { MoreHoriz, MoreVert } from '@mui/icons-material'
 
 export default function ChatBar() {
     return (
-        <div className="chatbar-container xl:w-1/4 lg:w-[30%] w-[60%] sm:w-[45%] md:w-[40%] h-[100vh] fixed py-3 px-2 border-r-2">
+        <div className="chatbar-container h-[100vh] py-3 px-2 border-r-2">
             <div className="header-content flex items-center justify-between p-2">
                 <h1 className="text-xl font-bold">Chats</h1>
                 <div className="flex items-center space-x-2">
