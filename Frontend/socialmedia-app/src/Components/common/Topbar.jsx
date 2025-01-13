@@ -100,7 +100,7 @@ export default function Topbar() {
 
         </div>
 
-        <div className="w-full h-[50px]"></div>
+        <div className="w-full h-[3.2rem]"></div>
 
 
         {/* for small screen -  sidebar */}

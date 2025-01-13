@@ -54,9 +54,8 @@ const Sidebar = ({ closeSidebar }) => {
   );
 
   return (
-    // <div className="sidebar-container w-full  md:w-[16rem] xl:w-[21rem]">
     <div className="sidebar-container w-full ">
-      <div className="sidebar-wrapper py-3 px-2  overflow-y-scroll custom-scrollbar bg-white  h-[100vh]">
+      <div className="sidebar-wrapper p-4  overflow-y-scroll custom-scrollbar bg-white  h-[100vh]">
         <ul className="sideBar-list flex flex-col space-y-1">
           {[
             { label: "Feed", Icon: RssFeed, path: "/" },

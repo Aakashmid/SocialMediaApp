@@ -8,7 +8,7 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { PostProvider } from '../../Contexts/PostContext';
 import { fetchSavedPosts } from '../../services/apiService';
 import { set } from 'date-fns';
-import { PageTopBackArrow } from '../common/SmallComponents';
+import { BackToHome, PageTopBackArrow } from '../common/SmallComponents';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
@@ -52,14 +52,11 @@ export default function ProfilePostsPage() {
             <Layout>
                 <div className="profile-posts-wrapper p-5">
                     <div className="page-top ">
-                        <div className="flex items-center space-x-6">
-                            <PageTopBackArrow backTo={-1} />
-                            {isSavedPosts ?
-                                <h2 className='text-2xl font-semibold'>Saved Posts</h2>
-                                :
-                                <h2 className='text-2xl font-semibold'>{profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`}</h2>
-                            }
-                        </div>
+                        {isSavedPosts ?
+                            <PageTopBackArrow backTo={-1} pageHeading={'Saved Posts'} />
+                            :
+                            <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`} />
+                        }
                     </div>
                     {isLoading ? <div className='text-center'>Loading ....</div> :
                         posts.length === 0 ?

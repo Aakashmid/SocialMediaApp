@@ -34,11 +34,16 @@ function App() {
     localStorage.clear();
     return <Registration />;
   };
+
+  const isAuthRoute = window.location.pathname.startsWith('/auth');
+
   return (
     <>
-      <header>
-        <Topbar />
-      </header>
+      {!isAuthRoute && (
+        <header>
+          <Topbar />
+        </header>
+      )}
       <Routes>
         <Route element={<ProtectedRoute />}>
           {/* Protected routes */}
@@ -65,7 +70,8 @@ function App() {
 
         {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
-      </Routes>    </>
+      </Routes>
+    </>
   )
 }
 

@@ -75,7 +75,7 @@ export default function LoginForm({ route, method }) {
           {method === 'register' && <input type="password" name="confirm_password" id="confirm_password" className="w-full focus:outline-none px-3 py-2 text-lg border rounded-md focus:outline-blue-500" placeholder="Confirm Password" onChange={(e) => setConfirm_Password(e.target.value)} value={confirm_password} required />}
         </div>
         <div className="">
-          <p className="text-center text-[13px]">{method === 'login' ? 'Don\'t have an account ? ' : 'Already have an account ? '}<Link className="hover:underline text-blue-700" to={method === 'login' ? '/register' : '/login'}>{method === 'login' ? 'Register' : 'Login'}</Link>
+          <p className="text-center text-[13px]">{method === 'login' ? 'Don\'t have an account ? ' : 'Already have an account ? '}<Link className="hover:underline text-blue-700" to={method === 'login' ? '/auth/register' : '/auth/login'}>{method === 'login' ? 'Register' : 'Login'}</Link>
           </p>
         </div>
         <button type="submit" className="py-2 text-lg px-4 bg-blue-500 text-white font-medium rounded">{name}</button>

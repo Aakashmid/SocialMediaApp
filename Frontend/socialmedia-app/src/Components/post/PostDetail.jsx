@@ -154,8 +154,8 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
 
             <div className="post-card-bottom flex justify-between items-center">
                 <div className="postLeftBottom flex space-x-2 items-center">
-                    <img className="likeIcon w-6 h-6 cursor-pointer" src="/src/assets/like.png" onClick={likeHandler} alt="Like" />
-                    <img className="likeIcon w-6 h-6 cursor-pointer" src="/src/assets/heart.png" onClick={likeHandler} alt="Heart" />
+                    <img className="likeIcon w-6 h-6 cursor-pointer" src="/images/like.png" onClick={likeHandler} alt="Like" />
+                    <img className="likeIcon w-6 h-6 cursor-pointer" src="/images/heart.png" onClick={likeHandler} alt="Heart" />
                     {likeCount > 0 && <span className="postlikeCounter text-[15px]">{likeCount} people liked it</span>}
                 </div>
                 <div className="postRightBottom">

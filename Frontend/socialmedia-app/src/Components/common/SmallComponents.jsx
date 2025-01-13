@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom'
 
 export const PageTopBackArrow = ({ pageHeading, backTo }) => {
     return (<>
-        <div className="page-top mb-5">
-            <div className="flex items-center space-x-4">
-                {/* <Link to={`/profile/${id}`} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link> */}
-                <Link to={backTo} className='p-1 hover:bg-gray-200 rounded'><ArrowBack /></Link>
-                <h2 className='text-lg xl:text-xl font-medium'>{pageHeading}</h2>
-            </div>
+        <div className="back-arrow flex items-center gap-4  bg-white ">
+            <Link to={backTo} className='p-2 hover:bg-gray-100 text-gray-600 rounded-full transition-colors duration-200'>
+                <ArrowBack
+                />
+            </Link>
+            <h2 className='text-xl lg:text-2xl  font-semibold text-gray-800'>{pageHeading}</h2>
+            <hr className="bg-gray-800 h-[2px] my-2" />
         </div>
     </>
     )
@@ -36,8 +37,7 @@ export const SearchInput = () => {
             <input
                 type="text"
                 placeholder="Search users..."
-                className="w-full px-4 py-2 text-gray-700 bg-gray-100  border border-gray-300 rounded-lg outline-none focus:outline-2 focus:outline focus:outline-blue-400"
-            />
+                className="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-lg outline outline-1 outline-gray-500  focus:outline-blue-500  focus:outline-2  focus:bg-white transition-colors duration-200" />
             <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-600">
                 <Search />
             </div>

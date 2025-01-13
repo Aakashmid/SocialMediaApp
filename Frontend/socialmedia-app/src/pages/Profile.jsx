@@ -181,7 +181,7 @@ const Profile = () => {
                             <div className="profile-top">
                                 <div className="profileCover relative">
                                     <img
-                                        src="/src/assets/post/3.jpeg"
+                                        src="/images/post/3.jpeg"
                                         className="cover-img w-full h-36 object-cover"
                                         alt="..."
                                     />
