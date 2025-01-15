@@ -1,15 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchInput } from '../common/SmallComponents'
 import { MoreHoriz, MoreVert } from '@mui/icons-material'
 import chatUsers from '../../dummyData/ChatUsers'
+import { useNavigate } from 'react-router-dom';
+import { fetchFriends } from '../../services/apiService';
 
-export default function ChatBar({ setSelectedUser }) {
-    // const [users, setUsers] = useState([]);
+export default function ChatBar(selectedUser) {
+    const [friends, setFriends] = useState([]);
+    const navigate = useNavigate();
+    const handleClickUser = (user) => {
+        navigate(`/chat/${user.username.toLowerCase().replace(/\s+/g, '-')}`, { state: { user } });
+    }
 
+    const getFriends = async () => {
+        try {
+            const data = await fetchFriends();
+            console.log('fetched friends:', data);
+            setFriends(data);
+        } catch (error) {
+            console.error('Error fetching friends:', error);
+        }
+    };
+
+    // have to optimze to fetch friends only once when the page loads
+    useEffect(() => {
+        if (friends.length === 0) {
+            getFriends();
+        }
+    }, [])
     const UserCard = ({ user }) => {
         return (
 
-            <div onClick={() => setSelectedUser(user)} className="user-card flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer rounded-lg">
+            <div onClick={() => handleClickUser(user)} className={`${selectedUser === user && 'bg-gray-100'} user-card flex items-center justify-between p-2 hover:bg-gray-100  cursor-pointer rounded-lg`}>
+
                 <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                         <img src={user.profilePicture || "/images/default-avatar.png"} alt="profile" className="w-full h-full object-cover" />
@@ -33,8 +56,8 @@ export default function ChatBar({ setSelectedUser }) {
     }
 
     return (
-        <div className="chatbar-container h-[calc(100vh-3.2rem)]  py-3 px-3 lg:px-4 border-r-2">
-            <div className="header-content flex items-center justify-between p-2">
+        <div className="chatbar-container h-[calc(100vh-3.2rem)]  py-3  border-r-2">
+            <div className="header-content flex items-center justify-between py-2 px-4">
                 <h1 className="text-xl font-bold">Chats</h1>
 
                 {/* incomplete part option menu */}
@@ -53,15 +76,32 @@ export default function ChatBar({ setSelectedUser }) {
                     </span>
                 </div>
             </div>
-            <div className="p-1"><SearchInput /></div>
-            <div className="user-list-wrapper py-3   h-[calc(100%-70px)] overflow-y-scroll custom-scrollbar bg-white">
+            <div className="py-1 px-4"><SearchInput /></div>
+            <hr className='mt-2' />
+            {/* {<div className="friends-list-wrapper  pb-6  h-[calc(100%-70px)]  overflow-y-scroll custom-scrollbar bg-white"> */}
+            {friends.length > 0 && <div className="friends-list-wrapper  pb-6  h-[calc(100%-70px)]  overflow-y-scroll custom-scrollbar bg-white">
+                {friends.map((users, index) => {
+                    return (
+                        <UserCard key={index} user={users} />
+                    )
+                })}
+
                 {chatUsers.map((users, index) => {
                     return (
                         <UserCard key={index} user={users} />
                     )
                 })}
 
-            </div>
+            </div>}
+            {friends.length === 0 &&
+                <>
+                    <div className="p-4">
+                        <p className='text-gray-700'>
+                            No friends found. Add friends to start chatting!
+                        </p>
+                    </div>
+                </>
+            }
         </div>
     )
 }

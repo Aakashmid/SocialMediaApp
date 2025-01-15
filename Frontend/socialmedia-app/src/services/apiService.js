@@ -69,6 +69,26 @@ export const fetchUserPosts = async (user_id, searchQuery) => {
 
 
 
+export const fetchFriends = async () => {
+    try {
+        const response = await api.get(`/api/users/friends`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+export const fetchMutualFriends = async (user_id) => {
+    try {
+        const response = await api.get(`/api/users/${user_id}/mutual-friends`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 /////////////////////// Post related ///////////////////////
 
 // get posts

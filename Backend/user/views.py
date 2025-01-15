@@ -146,15 +146,22 @@ class FollowView(ViewSet):
     # get all followers
     def followers(self, request, pk):
         toFollwoing = get_object_or_404(Profile, user=pk)
-        data = [obj.follower for obj in toFollwoing.followers.all()]
+        queryset = toFollwoing.followers.all()
+        username = request.query_params.get('username', None)
+        if username:
+            queryset = queryset.filter(follower__user__username__icontains=username)
+        data = [obj.follower for obj in queryset]
         serialize = ProfileSerializer(data, many=True, context={'request': request})
         return Response(serialize.data)
 
     # get all followings
-
     def followings(self, request, pk):
         follower = get_object_or_404(Profile, user=pk)
-        data = [obj.toFollowing for obj in follower.followings.all()]
+        queryset = follower.followings.all()
+        username = request.query_params.get('username', None)
+        if username:
+            queryset = queryset.filter(toFollowing__user__username__icontains=username)
+        data = [obj.toFollowing for obj in queryset]
         serialize = ProfileSerializer(data, many=True, context={'request': request})
         return Response(serialize.data)
 
@@ -163,6 +170,8 @@ class FollowView(ViewSet):
         getting friends of current user and mutual friends of two users
         '''
         user = request.user.profile
+        username = request.query_params.get('username', None)
+
         if user_id is not None:
             # Get the other user profile
             other_user = get_object_or_404(Profile, id=user_id)
@@ -176,11 +185,15 @@ class FollowView(ViewSet):
             mutual_friend_ids.update(set(user.followings.all().values_list('toFollowing', flat=True)).intersection(other_user_followers))
 
             mutual_friends = Profile.objects.filter(id__in=mutual_friend_ids)
+            if username:
+                mutual_friends = mutual_friends.filter(user__username__icontains=username)
             serializer = ProfileSerializer(mutual_friends, many=True, context={'request': request})
         else:
             followers = user.followers.all().values_list('follower', flat=True)  # returns ids of follower
             followings = user.followings.all().values_list('toFollowing', flat=True)
             friend_ids = set(followers).intersection(followings)
             friends = Profile.objects.filter(user__id__in=friend_ids)
+            if username:
+                friends = friends.filter(user__username__icontains=username)
             serializer = ProfileSerializer(friends, many=True, context={'request': request})
         return Response(serializer.data)

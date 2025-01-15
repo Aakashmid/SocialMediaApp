@@ -27,7 +27,7 @@ function App() {
       setProfileData({});
     }, [setProfileData]);
 
-    return <Navigate to="/login" />;
+    return <Navigate to="/auth/login" />;
   };
 
   const RegisterAndLogout = () => {
@@ -59,6 +59,7 @@ function App() {
           </Route>
           <Route path="/post/:str/edit" element={<EditPostPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:slug" element={<ChatPage />} />
         </Route>
 
         {/* Auth routes */}

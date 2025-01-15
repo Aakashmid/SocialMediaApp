@@ -8,6 +8,7 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import SearchInputForm1 from "../Topbar/SearchInputForm1";
 import SearchInputForm2 from "../Topbar/SearchInputForm2";
 import { set } from "date-fns";
+import Logo from "../Logo";
 
 
 export default function Topbar() {
@@ -60,6 +61,7 @@ export default function Topbar() {
                     }
                 </div>
                 <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
+                {/* <Link className="Logo text-white font-medium text-2xl" to={'/'}><Logo /></Link> */}
             </div>
             <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
                 <SearchInputForm1 onSearchFormSubmit={handleSearch} />
