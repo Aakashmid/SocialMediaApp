@@ -12,29 +12,29 @@ export default function PostList() {
 
     const [isDeleted, setIsDeleted] = useState(false);
 
-    const handleRemovePost = async (post) => {
-        if (post !== null) {
-            const isConfirmed = window.confirm("Are you sure you want to delete this post?");
+    // const handleRemovePost = async (post) => {
+    //     if (post !== null) {
+    //         const isConfirmed = window.confirm("Are you sure you want to delete this post?");
 
-            if (isConfirmed) {
-                try {
-                    const response = await DeletePost(post.id);
-                    // console.log('Post deleted', post_id);
-                    setIsDeleted(true);
-                    setPosts((prevPosts) => prevPosts.filter(prev_post => prev_post.id !== post.id));
-                    setTimeout(() => setIsDeleted(false), 3000); // Hide message after 3 seconds
-                    if (post.creator.id === profileData.id) {
-                        setProfileData((prevData) => ({
-                            ...prevData,
-                            posts_count: prevData.posts_count - 1,
-                        }));
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        }
-    };
+    //         if (isConfirmed) {
+    //             try {
+    //                 const response = await DeletePost(post.id);
+    //                 // console.log('Post deleted', post_id);
+    //                 setIsDeleted(true);
+    //                 setPosts((prevPosts) => prevPosts.filter(prev_post => prev_post.id !== post.id));
+    //                 setTimeout(() => setIsDeleted(false), 3000); // Hide message after 3 seconds
+    //                 if (post.creator.id === profileData.id) {
+    //                     setProfileData((prevData) => ({
+    //                         ...prevData,
+    //                         posts_count: prevData.posts_count - 1,
+    //                     }));
+    //                 }
+    //             } catch (error) {
+    //                 console.error(error);
+    //             }
+    //         }
+    //     }
+    // };
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [postToDelete, setPostToDelete] = useState(null);

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import users from '../../dummyData/ChatUsers'
 
 export default function Rightbar() {
   const OnlineFollowing = ({ User }) => {
@@ -7,7 +8,7 @@ export default function Rightbar() {
         <Link to={'/profile'} className="flex  space-x-4 items-center">
           <div className="relative">
             <div className="absolute top-0 right-0 w-[10px] h-[10px] bg-green-500 rounded-[50%] outline outline-white"></div>
-            <img src="/images/person/1.jpeg" className="w-9 h-9 object-cover rounded-[50%]" alt="" />
+            <img src={User.profilePicture} className="w-9 h-9 object-cover rounded-[50%]" alt="" />
           </div>
           <span className="font-semibold">{User.username}</span>
         </Link>
@@ -21,11 +22,15 @@ export default function Rightbar() {
       </div>
       <div className="my-5"><img src="/images/group.png" className="w-full object-cover rounded-lg h-auto" alt="" /></div>
       <div className="online-followings">
-        <h2 className="font-bold text-lg">Online Followings</h2>
+        <h2 className="font-bold text-lg">Online Freinds
+        </h2>
         <ul className="py-4 ">
-          <OnlineFollowing key={1} User={{ username: 'Aakash' }} />
-          <OnlineFollowing key={2} User={{ username: 'Aakash' }} />
-          <OnlineFollowing key={3} User={{ username: 'Aakash' }} />
+          {users.length > 0 ? users.map((user, index) => {
+            if (index < 10)
+              return <OnlineFollowing key={index} User={user} />
+          }) : <p> no online friends</p>}
+          {/* <OnlineFollowing key={2} User={{ username: 'Aakash' }} />
+          <OnlineFollowing key={3} User={{ username: 'Aakash' }} /> */}
         </ul>
       </div>
     </div>

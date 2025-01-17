@@ -95,7 +95,7 @@ export default function EditProfile() {
                 <div className="page-top">
                     <PageTopBackArrow pageHeading={"Edit profile"} backTo={-1} />
                 </div>
-                <div className="page-center pb-10 flex flex-col space-y-6">
+                <div className="page-center pb-10  flex flex-col space-y-6">
                     <div className="page-center-top  overflow-hidden bg-gray-100 rounded-lg pb-6 relative ">
                         {/* <span className="p-2 top-4 right-4 absolute"><Edit/></span> */}
                         <label className="p-1 hover:bg-gray-200 top-4 right-4 absolute bg-white rounded-xl">

@@ -10,38 +10,42 @@ import {
   Group,
 } from "@mui/icons-material";
 import { useContext, useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
-import { fetchUserFollowings } from "../../services/apiService";
+import { fetchFriends } from "../../services/apiService";
 
 const Sidebar = ({ closeSidebar }) => {
-  const [followings, setFollowings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [friends, setFriends] = useState([]);
   const { profileData } = useContext(ProfileDataContext);
-
-  // Fetch followings when profileData changes
-  const getFollowings = useCallback(async () => {
+  const navigate = useNavigate();
+  // Fetch friends when profileData changes
+  const getfriends = async () => {
     try {
-      if (profileData?.id) {
-        const data = await fetchUserFollowings(profileData.id);
-        setFollowings(data); // Update followings state
-      }
+      setLoading(true);
+      const data = await fetchFriends();
+      setFriends(data);
     } catch (error) {
-      console.error("Failed to fetch followings:", error);
+      console.error('Error fetching friends:', error);
     }
-  }, [profileData?.id]);
+    finally {
+      setLoading(false);
+    }
+  };
+
 
 
 
   useEffect(() => {
-    getFollowings();
-  }, [getFollowings]);
+    getfriends();
+  }, []);
 
   // Reusable component for rendering following users
   const FriendUser = ({ user }) => (
-    <li className="sidebarFriend">
+    <li className="sidebarFriend hover:bg-gray-100 p-2">
       <Link
         to={`/profile/${user.username}`} state={{ userId: user.id }}
-        className="flex space-x-4 items-center p-1"
+        className="flex space-x-4 items-center"
       >
         <img
           src={user.profileImg}
@@ -68,7 +72,7 @@ const Sidebar = ({ closeSidebar }) => {
             { label: "Event", Icon: Event, path: "/" },
             { label: "Courses", Icon: School, path: "/" },
           ].map(({ label, Icon, path, state }) => (
-            <li key={label} className="hover:bg-blue-200 rounded-lg">
+            <li key={label} className="hover:bg-blue-50  rounded-lg">
               <Link
                 to={path} onClick={closeSidebar} state={state}
                 className="py-[5px] px-2 flex items-center  space-x-4"
@@ -81,15 +85,15 @@ const Sidebar = ({ closeSidebar }) => {
         </ul>
         <hr className="bg-gray-300 h-[2px] my-2" />
         {
-          followings.length > 0 && (
+          friends.length > 0 && (
             <div className="following-list mt-4">
               <h2 className="text-lg font-medium">Friends</h2>
-              <ul className="sidebarFriendList flex flex-col space-y-[6px] mt-2">
-                {followings.map((user) => (
-                  <FriendUser user={user} key={user.id} />
+              <ul className="sidebarFriendList flex flex-col  mt-2">
+                {friends.map((user, index) => (
+                  index < 2 && < FriendUser user={user} key={user.id} />
                 ))}
               </ul>
-              <button className="my-4 py-[6px] px-10 font-medium rounded bg-gray-100">
+              <button onClick={() => navigate('/chat')} className="my-4 py-[6px] px-10 hover:font-medium rounded bg-gray-100">
                 Show more
               </button>
             </div>

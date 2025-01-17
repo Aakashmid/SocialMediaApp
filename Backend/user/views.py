@@ -114,7 +114,9 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
             serializer.save(user=user)
 
 
-# Follower model related request handler
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+
+
 class FollowView(ViewSet):
     def follow(self, request, pk):
         usertoFollow = get_object_or_404(Profile, user=pk)
@@ -143,7 +145,14 @@ class FollowView(ViewSet):
         Follower.objects.get(toFollowing=toUnFollow, follower=follower).delete()
         return Response({'message': f'unfollowed {toUnFollow.user.username}'})
 
-    # get all followers
+    @extend_schema(
+        summary="Get all followers of a user",
+        parameters=[
+            OpenApiParameter(name='pk', description='ID of the user', required=True, type=int),
+            OpenApiParameter(name='username', description='Filter by username (optional)', required=False, type=str),
+        ],
+        responses={200: ProfileSerializer(many=True)},
+    )
     def followers(self, request, pk):
         toFollwoing = get_object_or_404(Profile, user=pk)
         queryset = toFollwoing.followers.all()
@@ -154,7 +163,14 @@ class FollowView(ViewSet):
         serialize = ProfileSerializer(data, many=True, context={'request': request})
         return Response(serialize.data)
 
-    # get all followings
+    @extend_schema(
+        summary="Get all followings of a user",
+        parameters=[
+            OpenApiParameter(name='pk', description='ID of the user', required=True, type=int),
+            OpenApiParameter(name='username', description='Filter by username (optional)', required=False, type=str),
+        ],
+        responses={200: ProfileSerializer(many=True)},
+    )
     def followings(self, request, pk):
         follower = get_object_or_404(Profile, user=pk)
         queryset = follower.followings.all()
@@ -165,16 +181,22 @@ class FollowView(ViewSet):
         serialize = ProfileSerializer(data, many=True, context={'request': request})
         return Response(serialize.data)
 
-    def friends(self, request, user_id=None):  # here user_id is the id of the user whose with we are getting mutual freinds
-        '''
-        getting friends of current user and mutual friends of two users
-        '''
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='username', description='Filter by username (optional)', required=False, type=str),
+        ],
+        responses={200: ProfileSerializer(many=True)},
+    )
+    def friends(self, request, user_id=None):
         user = request.user.profile
         username = request.query_params.get('username', None)
 
         if user_id is not None:
+            '''
+            getting mutual friends of two user with userid and current user
+            '''
             # Get the other user profile
-            other_user = get_object_or_404(Profile, id=user_id)
+            other_user = get_object_or_404(Profile, user__id=user_id)
 
             # Get the followers and followings of the other user
             other_user_followers = other_user.followers.all().values_list('follower', flat=True)
@@ -184,11 +206,12 @@ class FollowView(ViewSet):
             mutual_friend_ids = set(user.followers.all().values_list('follower', flat=True)).intersection(other_user_followings)
             mutual_friend_ids.update(set(user.followings.all().values_list('toFollowing', flat=True)).intersection(other_user_followers))
 
-            mutual_friends = Profile.objects.filter(id__in=mutual_friend_ids)
+            mutual_friends = Profile.objects.filter(user__id__in=mutual_friend_ids)
             if username:
                 mutual_friends = mutual_friends.filter(user__username__icontains=username)
             serializer = ProfileSerializer(mutual_friends, many=True, context={'request': request})
         else:
+            '''getting friends of current user'''
             followers = user.followers.all().values_list('follower', flat=True)  # returns ids of follower
             followings = user.followings.all().values_list('toFollowing', flat=True)
             friend_ids = set(followers).intersection(followings)

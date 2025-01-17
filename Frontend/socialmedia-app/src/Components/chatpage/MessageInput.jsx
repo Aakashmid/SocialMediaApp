@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function MessageInput() {
     return (
-        <div className="message-input-container  w-full bg-gray-900 px-4 py-3 rounded-lg">
+        <div className="message-input-container  w-full bg-gray-800 px-4 py-3 rounded-lg">
             <div className="flex items-center gap-2">
                 <button className="p-2 text-gray-400 hover:text-gray-200 rounded-full rotate-45">
                     <AttachFileSharp />

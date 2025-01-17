@@ -33,7 +33,9 @@ export default function Feed() {
     // }
 
     useEffect(() => {
-        getPosts()
+        if (posts.length === 0) {
+            getPosts()
+        }
     }, [])
     // console.log(posts)
     return (

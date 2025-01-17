@@ -7,7 +7,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import SearchInputForm1 from "../Topbar/SearchInputForm1";
 import SearchInputForm2 from "../Topbar/SearchInputForm2";
-import { set } from "date-fns";
 import Logo from "../Logo";
 
 
@@ -29,9 +28,6 @@ export default function Topbar() {
 
 
     useEffect(() => {
-        if (window.location.pathname.includes('search')) {
-            setShowSearch(true);
-        }
 
         if (showSidebar) {
             document.body.style.overflow = showSidebar ? 'hidden' : 'auto';
@@ -49,7 +45,9 @@ export default function Topbar() {
 
     const { pathname } = window.location;
     useEffect(() => {
-
+        if (pathname.includes('search')) {
+            setShowSearch(true);
+        }
     }, [pathname])
 
     return (<>
@@ -71,10 +69,10 @@ export default function Topbar() {
                 </div>
             </div>
             <div className="topbar-right flex items-center space-x-3 lg:space-x-5 ">
-                <ul className="topbar-icons hidden md:flex items-center space-x-2 lg:space-x-3 ">
-                    <li className="topbar-icon cursor-pointer"><PersonRounded htmlColor="white" className="hover:text-blue-50 " /></li>
-                    <li className="topbar-icon cursor-pointer"><MessageRounded htmlColor="white" className="hover:text-blue-50 " /></li>
-                    <li className="topbar-icon cursor-pointer"><NotificationsRounded htmlColor="white" className="hover:text-blue-50 " /></li>
+                <ul className="topbar-icons hidden md:flex items-center gap-1 lg:space-x-2 ">
+                    {/* <li className="topbar-icon cursor-pointer"><PersonRounded htmlColor="white" className="hover:text-blue-50 " /></li> */}
+                    <li className="topbar-icon cursor-pointer p-1 hover:bg-gray-600 rounded-full" onClick={() => navigate('/chat')}><MessageRounded htmlColor="white" className="hover:text-blue-50 " /></li>
+                    <li className="topbar-icon cursor-pointer p-1 hover:bg-gray-600 rounded-full"><NotificationsRounded htmlColor="white" className="hover:text-blue-50 " /></li>
                 </ul>
 
                 <div className="search-bar flex  space-x-2 md:hidden">

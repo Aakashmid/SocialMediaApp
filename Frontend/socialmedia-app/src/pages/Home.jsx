@@ -7,6 +7,7 @@ import { USER_ID } from "../Components/constants";
 import Rightbar from "../Components/common/Rightbar";
 import { LoadingContext } from "../Contexts/LoadingContext";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
+import { PostProvider } from "../Contexts/PostContext";
 
 export default function Home() {
   const { loading, setLoading } = useContext(LoadingContext);
@@ -45,7 +46,9 @@ export default function Home() {
 
   return (
     <Layout>
-      <Feed />
+      <PostProvider>
+        <Feed />
+      </PostProvider>
       <Rightbar />
     </Layout>
   );

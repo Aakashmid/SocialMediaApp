@@ -77,8 +77,7 @@ const EditPostPage = () => {
                 <div className="page-top">
                     <PageTopBackArrow pageHeading={"Edit Post"} backTo={-1} />
                 </div>
-
-                <div className="page-center pb-10 flex flex-col space-y-6">
+                <div className="page-center pb-10 mt-2 flex flex-col space-y-6">
                     <div className="p-4 overflow-hidden bg-gray-100 rounded-lg pb-6 relative md:w-[650px]">
 
                         <form onSubmit={handleSubmit}>

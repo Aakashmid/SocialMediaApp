@@ -8,6 +8,7 @@ import { PageTopBackArrow } from '../Components/common/SmallComponents';
 
 export default function ChatPage() {
     const [selectedUser, setSelectedUser] = useState(null);
+    const [friends, setFriends] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -84,7 +85,7 @@ export default function ChatPage() {
                     {/* for small scrern */}
                     <div className="md:hidden block">
                         {!selectedUser ?
-                            <ChatBar selectedUser={selectedUser} />
+                            <ChatBar friends={friends} setFriends={setFriends} selectedUser={selectedUser} />
                             : <ChatContent user={selectedUser} />
                         }
                     </div>
@@ -95,7 +96,7 @@ export default function ChatPage() {
                             <div
                                 className="fixed md:w-[33%]  lg:w-[25%]"
                             >
-                                <ChatBar selectedUser={selectedUser} />
+                                <ChatBar friends={friends} setFriends={setFriends} selectedUser={selectedUser} />
                             </div>
 
                         </aside>

@@ -116,6 +116,19 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
     };
 
 
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowOptionsMenu(false);
+        }, 5000); // Hide options menu after 5 seconds
+
+        return () => clearTimeout(timer);
+    }, [showOptionsMenu]);
+
+    const handleHideOptions = () => {
+        setShowOptionsMenu(false);
+    };
+
     const postPublishTime = formatDistanceToNow(new Date(post.publish_time), { addSuffix: true });
     return (
         <>
@@ -132,18 +145,20 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                     <span className="cursor-pointer p-1 rounded-3xl hover:bg-gray-300" onClick={() => setShowOptionsMenu(!showOptionsMenu)}>
                         <MoreVert fontSize="small" />
                     </span>
-                    {showOptionsMenu && (
-                        <div className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20  ${showOptionsMenu ? "opacity-100 translate-x-0" : "-translate-x-full"}`}>
-                            <PostOptionMenu
-                                post={post}
-                                onReport={handleReport}
-                                onSave={handleSave}
-                                onShare={handleShare}
-                                onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
-                                onClose={() => setShowOptionsMenu((prev) => !prev)}
-                            />
-                        </div>
-                    )}
+                    <div
+                        className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 transition-transform duration-300 ease-in-out ${showOptionsMenu ? "opacity-100 " : "opacity-0"}`}
+                        onMouseLeave={handleHideOptions}
+                    >
+                        <PostOptionMenu
+                            post={post}
+                            onReport={handleReport}
+                            onSave={handleSave}
+                            onShare={handleShare}
+                            onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
+                            onClose={() => setShowOptionsMenu((prev) => !prev)}
+                        />
+                    </div>
+
                 </div>
             </div>
             <div className="card-center mt-2">

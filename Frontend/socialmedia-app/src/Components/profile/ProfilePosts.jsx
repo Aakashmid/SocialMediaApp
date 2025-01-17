@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CircleLoader } from "../Loader"
+import { CircleLoader } from '../Loader'
 import { PostContext } from "../../Contexts/PostContext";
 
 // export default function ProfilePosts({ posts, onclickPost, loading }) {

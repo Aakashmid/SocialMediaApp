@@ -67,7 +67,7 @@ export default function ProfilePostsPage() {
                                 <p className="text-xl font-semibold">No Saved Posts Yet</p>
                                 <p className="text-sm mt-2">Start saving posts to see them here</p>
                             </div> :
-                            <div className="mt-2">
+                            <div className="">
                                 <PostProvider value={{ posts, setPosts }}>
                                     <PostList />
                                 </PostProvider>
