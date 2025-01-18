@@ -1,26 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import Topbar from "../Components/common/Topbar";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
-import Sidebar from "../Components/common/Sidebar";
 import {
     CreatePost,
     fetchSavedPosts,
     fetchUserPosts,
     followUser,
     unfollowUser,
-    useFetchUserProfile,
 } from "../services/apiService";
+
 import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileStats from "../components/profile/ProfileStats";
 import ProfileFeed from "../components/profile/ProfileFeed";
 import ProfileActions from "../Components/profile/ProfileActions";
-import useProfileData from "../hooks/useProfileData";
-import { PostProvider } from "../Contexts/PostContext";
+import useProfileData from "../hooks/profile/useProfileData";
+import { PostContext, PostProvider } from "../Contexts/PostContext";
 import Layout2 from "../Layout/Layout2";
 
 const Profile = () => {
     const { profileData, setProfileData } = useContext(ProfileDataContext); // Current user's profile data
+    const { posts, setPosts } = useContext(PostContext);
     const [showShare, setShowShare] = useState(false);
     const [feedOP, setFeedOp] = useState("posts"); // Default to posts
     const [fetchedFeedOps, setFetchedFeedOps] = useState({
@@ -46,7 +45,7 @@ const Profile = () => {
                 navigate('/404')
             }
         }
-    }, [state, username, profileData, navigate])
+    }, [state, username, profileData])
 
 
     // Using custom hook for profile data
@@ -96,15 +95,12 @@ const Profile = () => {
 
     // click post handler to go to the profile posts page
     const handleOnclickPost = (id) => {
-        const posts = feedOP === "posts" ? profilePosts : savedPosts;
         const postUrl = feedOP === "saved" ? `saved-posts/${id}` : `posts/${id}`;
-
         navigate(postUrl, {
             state: {
-                posts: posts,
                 postid: "post" + id,
                 profileId: profile.id,
-                isSavedPosts: feedOP === "saved",
+                isSavedPosts: feedOP === "saved" ? true : false,
             },
         });
     };
@@ -156,16 +152,23 @@ const Profile = () => {
         // Fetch profile data and posts when profileUserId changes and for same profile fetching it only once
         if (profileUserId !== null) {
             if (feedOP === "posts" && !fetchedFeedOps.posts) {
-                console.log("Fetching profile posts...");
                 getProfilePosts().then(() => {
                     setFetchedFeedOps((prev) => ({ ...prev, posts: true }));
                 });
             } else if (feedOP === "saved" && !fetchedFeedOps.saved) {
-                console.log("Fetching saved posts...");
+
                 getSavedPosts().then(() => {
                     setFetchedFeedOps((prev) => ({ ...prev, saved: true }));
                 });
             }
+        }
+
+        // setting posts for postcontext for profile
+        if (feedOP === "saved" && savedPosts.length != 0 && profileUserId !== null) {
+            setPosts(savedPosts);
+        }
+        else if (feedOP === "posts" && profilePosts.length != 0 && profileUserId !== null) {
+            setPosts(profilePosts);
         }
     }, [profileUserId, feedOP, fetchedFeedOps]);
     return (

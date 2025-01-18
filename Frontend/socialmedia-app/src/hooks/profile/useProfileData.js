@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFetchUserProfile } from "../services/apiService";
+import { useFetchUserProfile } from "../../services/apiService";
 
 const useProfileData = (profileUserId, profileData) => {
     const [profile, setProfile] = useState({});
@@ -24,7 +24,6 @@ const useProfileData = (profileUserId, profileData) => {
         if (profileUserId && Object.keys(profileData).length > 0) {
             fetchProfileData();
         }
-        console.log(profileData);
     }, [profileUserId, profileData]);
 
 

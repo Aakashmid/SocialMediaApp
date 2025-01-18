@@ -18,6 +18,7 @@ import EditPostPage from './Components/post/EditPostPage';
 import SearchResultPage from './pages/SearchResultPage';
 import ChatPage from './pages/ChatPage';
 import Topbar from './Components/common/Topbar';
+import { PostProvider } from './Contexts/PostContext';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
@@ -49,15 +50,21 @@ function App() {
           {/* Protected routes */}
           <Route path="/" element={<Home />} />
           <Route path="/search/:query?" element={<SearchResultPage />} />
-          <Route path="/profile">
-            {/* here str is profile username */}
-            <Route path=":username" element={<Profile />} />
-            <Route path=":username/posts/:id" element={<ProfilePostsPage />} />
-            <Route path=":username/saved-posts/:id?" element={<ProfilePostsPage />} />
-            <Route path=":username/:str" element={<FollowersFollowings />} />
-            <Route path=":username/edit" element={<EditProfile />} />
-          </Route>
-          <Route path="/post/:str/edit" element={<EditPostPage />} />
+          {/* here str is profile username */}
+          <Route path="/profile/*" element={
+            <PostProvider>
+              <Routes>
+                <Route path=":username/post/:str/edit" element={<EditPostPage />} />
+                <Route path=":username" element={<Profile />} />
+                <Route path=":username/edit" element={<EditProfile />} />
+                <Route path=":username/posts/:id" element={<ProfilePostsPage />} />
+                <Route path=":username/saved-posts/:id?" element={<ProfilePostsPage />} />
+                <Route path=":username/:str" element={<FollowersFollowings />} />
+              </Routes>
+            </PostProvider>
+          }
+
+          />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/chat/:slug" element={<ChatPage />} />
         </Route>
@@ -71,7 +78,7 @@ function App() {
 
         {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Routes >
     </>
   )
 }

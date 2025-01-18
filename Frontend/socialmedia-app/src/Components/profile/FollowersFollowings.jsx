@@ -82,7 +82,7 @@ export default function FollowersFollowings() {
                 {loading || !profile.id ? <>Loading  ...</> :
                     <div className={`${str}-page-wrapper p-5`}>
                         <PageTopBackArrow pageHeading={getpageHeading()} backTo={-1} />
-                        <div className="">
+                        <div className="mt-4">
                             {data.map(user => {
                                 return <UserCard user={user} key={user.id} setData={setData} />
                             })}

@@ -1,52 +1,64 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PostList from '../post/PostList';
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { ArrowBack } from '@mui/icons-material';
+
 import Layout from '../../Layout/Layout';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
-import { PostProvider } from '../../Contexts/PostContext';
+import { PostContext, PostProvider } from '../../Contexts/PostContext';
 import { fetchSavedPosts } from '../../services/apiService';
-import { set } from 'date-fns';
-import { BackToHome, PageTopBackArrow } from '../common/SmallComponents';
+import { PageTopBackArrow } from '../common/SmallComponents';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
     const { profileData, setProfileData } = useContext(ProfileDataContext);
-    const { posts: initialPosts = [], postid, profileId, isSavedPosts } = location.state || {};  //here profileId is  of post creator    
-    const [posts, setPosts] = useState(initialPosts || []);
-    const [isLoading, setIsLoading] = useState(false);
+    const { postid, profileId, isSavedPosts } = location.state || {};  //here profileId is  of post creator    
+    const { posts, setPosts } = useContext(PostContext);
 
-    const getSavedPosts = async () => {
-        try {
-            setIsLoading(true);
-            const data = await fetchSavedPosts();
-            setPosts(data);
-        } catch (error) {
-            console.error('Error fetching saved posts:', error);
-        }
-        finally {
-            setIsLoading(false);
-        }
-    }
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        // Store posts in localStorage when they change
+        if (posts.length > 0) {
+            localStorage.setItem('cachedPosts', JSON.stringify(posts))
+        }
+    }, [posts])
+
+    useEffect(() => {
+        // Load posts from localStorage on initial render
+        const cachedPosts = localStorage.getItem('cachedPosts')
+        if (cachedPosts) {
+            setPosts(JSON.parse(cachedPosts))
+        }
+
         console.log(isSavedPosts)
         if (postid) {
-            const element = document.getElementById(postid);
+            const element = document.getElementById(postid)
             if (element) {
-                element.scrollIntoView({ block: "center" });
+                element.scrollIntoView({ block: "center" })
             }
         }
-        else {
+    }, [postid])
+
+    useEffect(() => {
+        const fetchPosts = async () => {
             if (isSavedPosts) {
-                getSavedPosts();
+                try {
+                    setIsLoading(true);
+                    const savedPosts = await fetchSavedPosts();
+                    setPosts(savedPosts);
+                } catch (error) {
+                    console.error('Error fetching saved posts:', error)
+                }
+                finally {
+                    setIsLoading(false)
+                }
             }
         }
-    }, [postid, isSavedPosts]);
 
-
-
+        fetchPosts()
+    }, [isSavedPosts])
     return (
         <>
             <Layout>

@@ -9,11 +9,13 @@ import Comments from "../comment/Comments";
 import PostOptionMenu from "./PostOptionMenu";
 import { SavePost } from "../../services/apiService";
 import { PostContext } from "../../Contexts/PostContext";
+import { ProfileDataContext } from "../../Contexts/ProfileContext";
 
 
 const Post = ({ initialPost, handleCommentsToggle }) => {
     const { commentsCount } = useContext(CommentsContext);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+    const { profileData } = useContext(ProfileDataContext);
     const { posts, setPosts } = useContext(PostContext);
     const [post, setPost] = useState(initialPost);
     const [likeCount, setLikeCount] = useState(post.likes_count);
@@ -145,19 +147,21 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                     <span className="cursor-pointer p-1 rounded-3xl hover:bg-gray-300" onClick={() => setShowOptionsMenu(!showOptionsMenu)}>
                         <MoreVert fontSize="small" />
                     </span>
-                    <div
-                        className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 transition-transform duration-300 ease-in-out ${showOptionsMenu ? "opacity-100 " : "opacity-0"}`}
-                        onMouseLeave={handleHideOptions}
-                    >
-                        <PostOptionMenu
-                            post={post}
-                            onReport={handleReport}
-                            onSave={handleSave}
-                            onShare={handleShare}
-                            onUpdate={() => navigate(`/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
-                            onClose={() => setShowOptionsMenu((prev) => !prev)}
-                        />
-                    </div>
+                    {showOptionsMenu &&
+                        <div
+                            className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 transition-transform duration-300 ease-in-out `}
+                            onMouseLeave={handleHideOptions}
+                        >
+                            <PostOptionMenu
+                                post={post}
+                                onReport={handleReport}
+                                onSave={handleSave}
+                                onShare={handleShare}
+                                onUpdate={() => navigate(`/profile/${post.creator.username}/post/${createSlug(post)}/edit`, { state: { initialPost: post } })}
+                                onClose={() => setShowOptionsMenu((prev) => !prev)}
+                            />
+                        </div>
+                    }
 
                 </div>
             </div>

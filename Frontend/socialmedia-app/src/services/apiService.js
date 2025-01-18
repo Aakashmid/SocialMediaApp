@@ -137,7 +137,7 @@ export const LikePost = async (post_id) => {
 // update a post
 export const UpdatePost = async (id, post_data) => {
     try {
-        const response = await api.put(`/api/posts/${id}`, post_data);
+        const response = await api.patch(`/api/posts/${id}/`, post_data);
         return await response.data;
     } catch (error) {
         throw error;

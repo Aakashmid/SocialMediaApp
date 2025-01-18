@@ -1,16 +1,20 @@
 import React, { useContext } from 'react';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { Bookmark, BookmarkBorder, BorderColor, DeleteForever, Report, Share } from '@mui/icons-material';
+import { useLocation } from 'react-router-dom';
 
 export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpdate }) {
   const { profileData } = useContext(ProfileDataContext);
+  const location = useLocation();
+  const isProfilePage = location.pathname.includes('/profile');
+
   const options = [
     { text: post.isSaved ? 'Unsave post' : 'Save post', action: onSave, Icon: post.isSaved ? Bookmark : BookmarkBorder },
-    { text: post.creator.id === profileData.id ? 'Edit Post' : '', action: onUpdate, Icon: BorderColor },
+    { text: isProfilePage && post.creator.id === profileData.id ? 'Edit Post' : '', action: onUpdate, Icon: BorderColor },
+    // { text: isProfilePage && post.creator.id === profileData.id ? 'Delete Post' : '', action: onDelete, Icon: DeleteForever },
     { text: 'Report', action: onReport, Icon: Report },
     { text: 'Share', action: onShare, Icon: Share }
-  ];
-  return (
+  ]; return (
     <div className='bg-white w-full p-2 shadow-lg'>
       <ul className='options flex flex-col space-y-1'>
         {options.map((option, index) => (
