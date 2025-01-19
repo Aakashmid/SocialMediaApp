@@ -17,6 +17,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def checkServerStatus(request):
+    return Response(data={"status": "Server is up and running."}, status=status.HTTP_200_OK)
+
+
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def custom_404_view(request, exception):

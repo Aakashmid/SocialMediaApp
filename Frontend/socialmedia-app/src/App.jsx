@@ -19,6 +19,7 @@ import SearchResultPage from './pages/SearchResultPage';
 import ChatPage from './pages/ChatPage';
 import Topbar from './Components/common/Topbar';
 import { PostProvider } from './Contexts/PostContext';
+import ServerErrorPage from './pages/ServerErrorPage';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
@@ -37,10 +38,10 @@ function App() {
   };
 
   const isAuthRoute = window.location.pathname.startsWith('/auth');
-
+  const isServerErrorRoute = window.location.pathname === '/server-error';
   return (
     <>
-      {!isAuthRoute && (
+      {(!isAuthRoute && !isServerErrorRoute) && (
         <header>
           <Topbar />
         </header>
@@ -76,6 +77,8 @@ function App() {
           <Route path="logout" element={<Logout />} />
         </Route>
 
+
+        <Route path="/server-error" element={<ServerErrorPage />} />
         {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
       </Routes >

@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Logo = ({ width = "200px" }) => {
+const Logo = ({ width = 20, fontSize = "text-xl" }) => {
     return (
-        <div className={`w-${width} h-auto `}>
+        <div className={`w-[${width}rem] h-auto `}>
             <div className="bg-white rounded-full px-2">
-                <span className="text-bgPrimary font-bold text-xl hover:text-gray-700">Buzzline</span>
+                <span className={`text-bgPrimary font-bold ${fontSize} hover:text-gray-500`}>Buzzline</span>
             </div>
         </div>
     );

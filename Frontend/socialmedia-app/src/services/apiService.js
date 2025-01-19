@@ -89,6 +89,15 @@ export const fetchMutualFriends = async (user_id) => {
 }
 
 
+export const checkServerStatus = async () => {
+    try {
+        const response = await api.get('/api/check-server-status/');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 /////////////////////// Post related ///////////////////////
 
 // get posts
@@ -156,7 +165,7 @@ export const CreatePost = async (post_data) => {
 }
 
 
-// delet apost 
+// delete post 
 export const DeletePost = async (post_id) => {
     try {
         const response = await api.delete(`/api/posts/${post_id}/`);
