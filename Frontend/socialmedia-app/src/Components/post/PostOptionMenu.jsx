@@ -11,7 +11,6 @@ export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpda
   const options = [
     { text: post.isSaved ? 'Unsave post' : 'Save post', action: onSave, Icon: post.isSaved ? Bookmark : BookmarkBorder },
     { text: isProfilePage && post.creator.id === profileData.id ? 'Edit Post' : '', action: onUpdate, Icon: BorderColor },
-    // { text: isProfilePage && post.creator.id === profileData.id ? 'Delete Post' : '', action: onDelete, Icon: DeleteForever },
     { text: 'Report', action: onReport, Icon: Report },
     { text: 'Share', action: onShare, Icon: Share }
   ]; return (

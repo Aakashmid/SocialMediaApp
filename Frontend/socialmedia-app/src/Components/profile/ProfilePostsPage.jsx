@@ -8,12 +8,19 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { PostContext, PostProvider } from '../../Contexts/PostContext';
 import { fetchSavedPosts } from '../../services/apiService';
 import { PageTopBackArrow } from '../common/SmallComponents';
+import { Settings } from '@mui/icons-material';
+import useToggle from '../../hooks/useToggle';
+import ManagePostsMdl from '../post/ManagePostsMdl';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     const { postid, profileId, isSavedPosts } = location.state || {};  //here profileId is  of post creator    
     const { posts, setPosts } = useContext(PostContext);
+    const [isMngPstMdlOpen, toggleMngPstMdl] = useToggle(false);
+    const [isFilterMdl, toggleFilterMdl] = useToggle(false);
+
+    const { filteredPosts, setFilteredPosts } = useState(posts);
 
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -41,6 +48,16 @@ export default function ProfilePostsPage() {
         }
     }, [postid])
 
+
+    const handleFilterPosts = () => {
+        if (isSavedPosts) {
+            setFilteredPosts(posts.filter(post => post.isSaved))
+        } else {
+            setFilteredPosts(posts)
+        }
+    }
+
+    // Fetch saved posts if isSavedPosts is true
     useEffect(() => {
         const fetchPosts = async () => {
             if (isSavedPosts) {
@@ -63,11 +80,29 @@ export default function ProfilePostsPage() {
         <>
             <Layout>
                 <div className="profile-posts-wrapper p-5">
-                    <div className="page-top ">
+                    <div className="page-top flex justify-between items-center ">
                         {isSavedPosts ?
-                            <PageTopBackArrow backTo={-1} pageHeading={'Saved Posts'} />
+                            <>
+                                <PageTopBackArrow backTo={-1} pageHeading={'Saved Posts'} />
+                                <div className="posts-actions flex items-center   gap-2 lg:gap-4">
+                                    <button className='filter posts py-1 px-4 rounded-xl bg-gray-200 hover:bg-gray-100'>
+                                        Filter
+                                    </button>
+                                </div>
+                            </>
+
                             :
-                            <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`} />
+                            <>
+                                <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`} />
+                                {profileData.id === profileId && (
+                                    <div className="posts-actions flex items-center   gap-2 lg:gap-4">
+                                        <button className='filter posts py-1 px-4 rounded-xl bg-gray-200 hover:bg-gray-100'>
+                                            Filter
+                                        </button>
+                                        <button onClick={toggleMngPstMdl} className='manage posts py-1 px-4 rounded-xl bg-gray-200 gap-1 items-center flex hover:bg-gray-100'><Settings fontSize='small' /> Manage Posts</button>
+                                    </div>
+                                )}
+                            </>
                         }
                     </div>
                     {isLoading ? <div className='text-center'>Loading ....</div> :
@@ -79,11 +114,24 @@ export default function ProfilePostsPage() {
                                 <p className="text-xl font-semibold">No Saved Posts Yet</p>
                                 <p className="text-sm mt-2">Start saving posts to see them here</p>
                             </div> :
-                            <div className="">
+                            <div className="post-list">
                                 <PostProvider value={{ posts, setPosts }}>
                                     <PostList />
                                 </PostProvider>
                             </div>
+                    }
+                    {isMngPstMdlOpen &&
+                        (
+                            <>
+                                <div className="bg-white top-0 left-0 w-full h-full  z-[60]">
+                                    hello
+                                    <ManagePostsMdl />
+                                </div>
+                                <span className='fixed top-0 left-0 w-full h-full bg-gray-700/20 z-50' onClick={toggleMngPstMdl}></span>
+                            </>
+
+
+                        )
                     }
                 </div>
             </Layout>
