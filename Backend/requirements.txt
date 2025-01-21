@@ -22,6 +22,7 @@ numpy==2.1.1
 packaging==24.2
 pandas==2.2.3
 pillow==10.4.0
+psycopg2-binary==2.9.10
 Pygments==2.18.0
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
