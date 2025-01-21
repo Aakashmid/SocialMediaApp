@@ -9,9 +9,9 @@ import {
     unfollowUser,
 } from "../services/apiService";
 
-import ProfileHeader from "../components/profile/ProfileHeader";
-import ProfileStats from "../components/profile/ProfileStats";
-import ProfileFeed from "../components/profile/ProfileFeed";
+import ProfileHeader from "../Components/profile/ProfileHeader";
+import ProfileStats from "../Components/profile/ProfileStats";
+import ProfileFeed from "../Components/profile/ProfileFeed";
 import ProfileActions from "../Components/profile/ProfileActions";
 import useProfileData from "../hooks/profile/useProfileData";
 import { PostContext, PostProvider } from "../Contexts/PostContext";
