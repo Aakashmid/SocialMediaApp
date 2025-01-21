@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
-import { Bookmark, BookmarkBorder, BorderColor, DeleteForever, Report, Share } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, BorderColor, Report, Share } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 
 export default function PostOptionMenu({ post, onSave, onReport, onShare, onUpdate }) {

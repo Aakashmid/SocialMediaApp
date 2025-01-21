@@ -1,5 +1,4 @@
 import React from 'react'
-import Topbar from '../Components/common/Topbar'
 import Sidebar from '../Components/common/Sidebar'
 
 

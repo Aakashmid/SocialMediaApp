@@ -1,9 +1,8 @@
-import { Close, MoreVert } from "@mui/icons-material";
-import { formatDistanceToNow, set } from 'date-fns';
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { MoreVert } from "@mui/icons-material";
+import { formatDistanceToNow } from 'date-fns';
+import { Link, useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useContext, useEffect, useState } from "react";
-import api from "../../Api";
 import { CommentsContext } from "../../Contexts/CommentContext";
 import Comments from "../comment/Comments";
 import PostOptionMenu from "./PostOptionMenu";

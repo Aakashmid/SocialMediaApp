@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Link } from 'react-router-dom'
-import api from "../Api"
 import { TOKEN, USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
 import { CircleLoader } from "./Loader"

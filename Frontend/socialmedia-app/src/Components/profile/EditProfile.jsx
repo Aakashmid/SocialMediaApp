@@ -1,6 +1,6 @@
 import { AddPhotoAlternate } from '@mui/icons-material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import Layout from '../../Layout/Layout';
 import { partialUpdateUserProfile } from '../../services/apiService';
