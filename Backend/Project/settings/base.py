@@ -1,21 +1,11 @@
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-APPEND_SLASH=True
+APPEND_SLASH = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-52sh(q&%=7i)x!**qbx(gu-7)x6pz6egt93@t!#em6s$&=p6wz'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -27,7 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #external apps
+    # external apps
     'drf_spectacular',
     'corsheaders',
     'rest_framework',
@@ -35,7 +25,8 @@ INSTALLED_APPS = [
     # project App
     'user',
     'comment',
-    'post'
+    'post',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -68,17 +59,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -117,22 +97,17 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL='media/'
-MEDIA_ROOT=BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ] , 
+    ],
     # 'DEFAULT_RENDERER_CLASSES':(
     #     'rest_framework.renderers.JSONRenderer',
     #     'rest_framework.renderers.BrowsableAPIRenderer',
@@ -140,17 +115,9 @@ REST_FRAMEWORK = {
     # 'DEFAULT_FILTER_BACKENDS':(
     #     'django_filters.rest_framework.DjangoFilterBackend',
     # ),
-    
     # drf - spectacular configuration
-     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
-
-
-CORS_ALLOW_ALL_ORIGINS = True   # for development only 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:5173',  # allow specific orign to make request
-# ]
 
 
 # drf_spectacular configuration

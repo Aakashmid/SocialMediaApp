@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../api"
 import { useNavigate } from "react-router-dom";
 
 
@@ -12,7 +12,7 @@ export const useFetchUserProfile = () => {
         } catch (error) {
             console.error('Error fetching user profile:', error);
             if (error.response && error.response.status === 401) { // Correct error status check
-                navigate('/login');
+                navigate('/auth/login');
             }
             throw error;
         }

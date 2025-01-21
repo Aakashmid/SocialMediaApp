@@ -1,6 +1,6 @@
 import { useContext, useEffect, useCallback } from "react";
 import Feed from "../Components/home/Feed";
-import { HomePageLoader } from "../components/Loader";
+import { HomePageLoader } from "../Components/Loader";
 import Layout from "../Layout/Layout";
 import { useFetchUserProfile } from "../services/apiService";
 import { USER_ID } from "../Components/constants";
@@ -12,12 +12,10 @@ import { PostProvider } from "../Contexts/PostContext";
 export default function Home() {
   const { loading, setLoading } = useContext(LoadingContext);
   const { profileData, setProfileData } = useContext(ProfileDataContext);
-  const fetchUserProfile = useFetchUserProfile(); // Custom hook
+  const fetchUserProfile = useFetchUserProfile();
   const userId = localStorage.getItem(USER_ID);
 
-  /**
-   * Fetch user profile data if not already available.
-   */
+  // Fetch user profile if not already available
   const fetchProfileData = useCallback(async () => {
     if (!userId) return;
 
@@ -32,18 +30,16 @@ export default function Home() {
     }
   }, [fetchUserProfile, setProfileData, setLoading, userId]);
 
-
-  // Fetch profile data on component mount if not already fetched
   useEffect(() => {
     if (!profileData || Object.keys(profileData).length === 0) {
       fetchProfileData();
     }
   }, [profileData, fetchProfileData]);
 
-  if (loading) {
-    return <HomePageLoader />;
-  }
+  // Render loader if data is still loading
+  if (loading) return <HomePageLoader />;
 
+  // Render main content
   return (
     <Layout>
       <PostProvider>

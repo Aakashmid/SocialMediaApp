@@ -15,9 +15,7 @@ export default function ChatBar({ selectedUser, friends, setFriends }) {
     const getFriends = async () => {
         try {
             setLoading(true);
-            console.log('fetching friends...');
             const data = await fetchFriends();
-            console.log('fetched friends:', data);
             setFriends(data);
         } catch (error) {
             console.error('Error fetching friends:', error);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFetchUserProfile } from "../../services/apiService";
 
+// for specific user profile page
 const useProfileData = (profileUserId, profileData) => {
     const [profile, setProfile] = useState({});
     const [isCUProfile, setIsCUProfile] = useState(false);

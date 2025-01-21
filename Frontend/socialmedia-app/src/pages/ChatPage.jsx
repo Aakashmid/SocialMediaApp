@@ -4,7 +4,6 @@ import ChatBar from '../Components/chatpage/ChatBar';
 import { ArrowBack, Phone, VideoCall } from '@mui/icons-material';
 import MessageInput from '../Components/chatpage/MessageInput';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { PageTopBackArrow } from '../Components/common/SmallComponents';
 
 export default function ChatPage() {
     const [selectedUser, setSelectedUser] = useState(null);

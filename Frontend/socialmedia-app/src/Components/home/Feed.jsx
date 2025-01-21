@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SharePost from "../post/SharePost";
-import api from "../../Api";
 import PostList from "../post/PostList";
 import { fetchPosts } from "../../services/apiService";
-import { PostContext, PostProvider } from "../../Contexts/PostContext";
-import { use } from "react";
+import { PostProvider } from "../../Contexts/PostContext";
 import { CircleLoader } from "../Loader";
 
 
@@ -12,7 +10,6 @@ export default function Feed() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const getPosts = async () => {
-        console.log('fetching home posts');
         try {
             setLoading(true);
             const data = await fetchPosts();
@@ -42,7 +39,7 @@ export default function Feed() {
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
                 <SharePost setPosts={setPosts} />
-                <div className="feed-posts mt-5">
+                <div className="feed-posts ">
                     {/* <PostProvider posts={posts} setPosts={setPosts}> */}
                     {loading ? <CircleLoader /> :
                         <PostProvider value={{ posts, setPosts }}>

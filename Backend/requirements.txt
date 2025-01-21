@@ -9,6 +9,7 @@ django-cors-headers==4.4.0
 django-filter==24.3
 djangorestframework==3.15.2
 drf-spectacular==0.27.2
+gunicorn==23.0.0
 httpie==3.2.3
 idna==3.7
 inflection==0.5.1
@@ -18,11 +19,13 @@ markdown-it-py==3.0.0
 mdurl==0.1.2
 multidict==6.0.5
 numpy==2.1.1
+packaging==24.2
 pandas==2.2.3
 pillow==10.4.0
 Pygments==2.18.0
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
 pytz==2024.2
 PyYAML==6.0.2
 referencing==0.35.1
