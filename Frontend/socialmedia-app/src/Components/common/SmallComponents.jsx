@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 
 export const PageTopBackArrow = ({ pageHeading, backTo }) => {
     return (<>
-        <div className="back-arrow flex items-center gap-4   bg-white ">
-            <Link to={backTo} className='p-2 hover:bg-gray-100 text-gray-600 rounded-full transition-colors duration-200'>
+        <div className="back-arrow flex items-center gap-2   bg-white ">
+            <Link to={backTo} className='p-1 hover:bg-gray-100 text-gray-600 rounded-full transition-colors duration-200'>
                 <ArrowBack
                 />
             </Link>

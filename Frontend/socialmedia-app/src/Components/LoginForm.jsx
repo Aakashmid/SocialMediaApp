@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { TOKEN, USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
 import { CircleLoader } from "./Loader"
+import api from "../api"
 
 // handing register and login operations
 export default function LoginForm({ route, method }) {
@@ -77,7 +78,7 @@ export default function LoginForm({ route, method }) {
           <p className="text-center text-[13px]">{method === 'login' ? 'Don\'t have an account ? ' : 'Already have an account ? '}<Link className="hover:underline text-blue-700" to={method === 'login' ? '/auth/register' : '/auth/login'}>{method === 'login' ? 'Register' : 'Login'}</Link>
           </p>
         </div>
-        <button type="submit" className="py-2 text-lg px-4 bg-blue-500 text-white font-medium rounded">{name}</button>
+        <button type="submit" className="py-2 text-lg px-4 bg-blue-500 transition-colors duration-200 hover:bg-blue-600 text-white font-medium rounded">{name}</button>
       </form>
     </>
   )

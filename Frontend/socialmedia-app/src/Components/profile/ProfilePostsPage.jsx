@@ -8,9 +8,10 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { PostContext, PostProvider } from '../../Contexts/PostContext';
 import { fetchSavedPosts } from '../../services/apiService';
 import { PageTopBackArrow } from '../common/SmallComponents';
-import { Settings } from '@mui/icons-material';
+import { Filter, FilterList, Settings } from '@mui/icons-material';
 import useToggle from '../../hooks/useToggle';
 import ManagePostsMdl from '../post/ManagePostsMdl';
+import Btn1 from '../common/buttons/Btn1';
 
 export default function ProfilePostsPage() {
     const location = useLocation();
@@ -80,7 +81,7 @@ export default function ProfilePostsPage() {
         <>
             <Layout>
                 <div className="profile-posts-wrapper p-5">
-                    <div className="page-top flex justify-between items-center ">
+                    <div className="page-top flex justify-between items-center relative">
                         {isSavedPosts ?
                             <>
                                 <PageTopBackArrow backTo={-1} pageHeading={'Saved Posts'} />
@@ -93,14 +94,27 @@ export default function ProfilePostsPage() {
 
                             :
                             <>
-                                <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Your Posts` : profileData.username + `\'s Posts`} />
+                                <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Posts` : profileData.username + `\'s Posts`} />
                                 {profileData.id === profileId && (
-                                    <div className="posts-actions flex items-center   gap-2 lg:gap-4">
-                                        <button className='filter posts py-1 px-4 rounded-xl bg-gray-200 hover:bg-gray-100'>
-                                            Filter
-                                        </button>
-                                        <button onClick={toggleMngPstMdl} className='manage posts py-1 px-4 rounded-xl bg-gray-200 gap-1 items-center flex hover:bg-gray-100'><Settings fontSize='small' /> Manage Posts</button>
-                                    </div>
+                                    <>
+                                        <div className="posts-actions flex items-center  gap-2 lg:gap-4">
+                                            <Btn1 text={'Filters'} Icon={<FilterList fontSize='small' />} handleClick={toggleFilterMdl} />
+                                            <Btn1 text='Manage Posts' handleClick={toggleMngPstMdl} Icon={<Settings fontSize='small' />} />
+                                        </div>
+                                        {/* filter and manage posts modals */}
+
+                                        {isMngPstMdlOpen &&
+                                            (
+                                                <>
+                                                    <div className=" top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  w-[80vw]  lg:w-[60vw] xl:w-[50vw] h-[80vh] fixed z-[60] ">
+                                                        <ManagePostsMdl toggleFilterMdl={toggleFilterMdl} toggle={toggleMngPstMdl} posts={posts} setPosts={setPosts} />
+                                                    </div>
+                                                    <span className='fixed top-0 left-0 w-full h-full bg-gray-700/20 z-50' onClick={toggleMngPstMdl}></span>
+                                                </>
+                                            )
+                                        }
+
+                                    </>
                                 )}
                             </>
                         }
@@ -120,19 +134,7 @@ export default function ProfilePostsPage() {
                                 </PostProvider>
                             </div>
                     }
-                    {isMngPstMdlOpen &&
-                        (
-                            <>
-                                <div className="bg-white top-0 left-0 w-full h-full  z-[60]">
-                                    hello
-                                    <ManagePostsMdl />
-                                </div>
-                                <span className='fixed top-0 left-0 w-full h-full bg-gray-700/20 z-50' onClick={toggleMngPstMdl}></span>
-                            </>
 
-
-                        )
-                    }
                 </div>
             </Layout>
         </>

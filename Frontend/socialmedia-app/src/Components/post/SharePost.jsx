@@ -93,7 +93,7 @@ export default function SharePost({ setPosts, onShare }) {
                 <hr className="w-[95%] my-5 mx-auto bg-gray-400 h-[2px]" />
                 <div className="share-bottom flex">
                     <div className="share-bottomRight flex justify-between w-[95%] mx-auto">
-                        <label className="flex items-center space-x-4 cursor-pointer">
+                        <label className="flex items-center space-x-4 cursor-pointer bg-gray-100 px-2 rounded hover:bg-gray-200">
                             <PermMedia htmlColor='tomato' />
                             <p className="text-[15px]">Photo or video</p>
                             <input
