@@ -6,13 +6,9 @@ import { TOKEN } from "../Components/constants";
 
 
 
-function ProtectedRoute() {
-    const [isAuthorized, setIsAuthorized] = useState(null);
-    const [serverStatus, setServerStatus] = useState({
-        isChecking: true,
-        isError: false,
-    });
-
+function ProtectedRoute({ serverProps, authorizationProps }) {
+    const [isAuthorized, setIsAuthorized] = authorizationProps;
+    const [serverStatus, setServerStatus] = serverProps;
     const checkServerAndAuth = async () => {
         try {
             // First check if server is running

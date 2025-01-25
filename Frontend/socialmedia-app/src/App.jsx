@@ -23,6 +23,12 @@ import ServerErrorPage from './pages/ServerErrorPage';
 
 function App() {
   const { setProfileData } = useContext(ProfileDataContext);
+  const [isAuthorized, setIsAuthorized] = useState(null);
+  const [serverStatus, setServerStatus] = useState({
+    isChecking: true,
+    isError: false,
+  });
+
   const Logout = () => {
     useEffect(() => {
       localStorage.clear();
@@ -38,16 +44,16 @@ function App() {
   };
 
   const isAuthRoute = window.location.pathname.startsWith('/auth');
-  const isServerErrorRoute = window.location.pathname === '/server-error';
+  // const isServerErrorRoute = window.location.pathname === '/server-error';
   return (
     <>
-      {(!isAuthRoute && !isServerErrorRoute) && (
+      {(!isAuthRoute && !serverStatus.isChecking && !serverStatus.isError) && (
         <header>
           <Topbar />
         </header>
       )}
       <Routes>
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute serverProps={[serverStatus, setServerStatus]} authorizationProps={[isAuthorized, setIsAuthorized]} />} >
           {/* Protected routes */}
           <Route path="/" element={<Home />} />
           <Route path="/search/:query?" element={<SearchResultPage />} />

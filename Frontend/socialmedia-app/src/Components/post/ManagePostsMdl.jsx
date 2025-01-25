@@ -36,7 +36,7 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPost
                     </div>
                 ))} */}
             {/* </div> */}
-            <div className="grid grid-cols-3  px-4 py-2  overflow-y-scroll">
+            <div className="grid grid-cols-2 lg:grid-cols-3  px-4 py-2  overflow-y-scroll">
                 {posts.map((post) => (
                     <div className="post-card border">
                         <div className="card-content relative w-full">

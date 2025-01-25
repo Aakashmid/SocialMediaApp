@@ -7,6 +7,9 @@ load_dotenv()
 DEBUG = False
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
+# static files (CSS, JavaScript, Images)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').replace(' ', '').split(',')
 
@@ -26,3 +29,43 @@ DATABASES = {
 # CORS settings
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'True') == 'True'
+
+
+# for logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'myapp': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

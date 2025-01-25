@@ -106,7 +106,7 @@ export default function ProfilePostsPage() {
                                         {isMngPstMdlOpen &&
                                             (
                                                 <>
-                                                    <div className=" top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  w-[80vw]  lg:w-[60vw] xl:w-[50vw] h-[80vh] fixed z-[60] ">
+                                                    <div className=" top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  w-[90vw]  lg:w-[60vw] xl:w-[50vw] h-[80vh] fixed z-[60] ">
                                                         <ManagePostsMdl toggleFilterMdl={toggleFilterMdl} toggle={toggleMngPstMdl} posts={posts} setPosts={setPosts} />
                                                     </div>
                                                     <span className='fixed top-0 left-0 w-full h-full bg-gray-700/20 z-50' onClick={toggleMngPstMdl}></span>
