@@ -9,6 +9,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 # handler404 = views.custom_404_view
 handler404 = 'user.views.custom_404_view'  # works only when debug is false
+# handler500 = 'user.views.custom_500_view'  # works only when debug is false
 
 urlpatterns = [
     path('admin/', admin.site.urls),
