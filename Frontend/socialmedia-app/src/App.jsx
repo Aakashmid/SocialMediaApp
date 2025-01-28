@@ -47,7 +47,7 @@ function App() {
   // const isServerErrorRoute = window.location.pathname === '/server-error';
   return (
     <>
-      {(!isAuthRoute && !serverStatus.isChecking && !serverStatus.isError) && (
+      {(!isAuthRoute && !serverStatus.isChecking && !serverStatus.isError && isAuthorized) && (
         <header>
           <Topbar />
         </header>

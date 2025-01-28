@@ -48,7 +48,7 @@ export default function LoginForm({ route, method }) {
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          setShowError('User not found! ');
+          setShowError('Username or password is wrong ! ');
         }
         console.log(error)
       } finally {
