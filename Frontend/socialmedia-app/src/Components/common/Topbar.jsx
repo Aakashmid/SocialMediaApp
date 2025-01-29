@@ -58,8 +58,8 @@ export default function Topbar() {
                         : <span className="w-fit cursor-pointer " onClick={() => setShowSidebar(!showSidebar)}><MenuIcon htmlColor="white" /></span>
                     }
                 </div>
-                <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link>
-                {/* <Link className="Logo text-white font-medium text-2xl" to={'/'}><Logo /></Link> */}
+                {/* <Link className="Logo text-white font-medium text-2xl" to={'/'}><span>Buzzline</span></Link> */}
+                <Link className="Logo text-white font-medium text-2xl" to={'/'}><Logo bg="white" /></Link>
             </div>
             <div className="topbar-center hidden md:flex md:items-center md:space-x-4 xl:space-x-6  ">
                 <SearchInputForm1 onSearchFormSubmit={handleSearch} />

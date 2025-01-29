@@ -4,35 +4,39 @@ import { CircularProgress } from "@mui/material";
 import { checkServerStatus } from "../services/apiService";
 import { TOKEN } from "../Components/constants";
 
-
-
 function ProtectedRoute({ serverProps, authorizationProps }) {
     const [isAuthorized, setIsAuthorized] = authorizationProps;
     const [serverStatus, setServerStatus] = serverProps;
-    const checkServerAndAuth = async () => {
-        try {
-            // First check if server is running
-            await checkServerStatus();
-            // If server check passes, proceed with auth check
-            const token = localStorage.getItem(TOKEN);
-            setIsAuthorized(!!token);
-        } catch (error) {
-            console.error("Server connection error:", error);
-            setServerStatus({
-                isChecking: false,
-                isError: true
-            });
-        } finally {
-            setServerStatus(prev => ({
-                ...prev,
-                isChecking: false
-            }));
-        }
-    };
 
     useEffect(() => {
+        const checkServerAndAuth = async () => {
+            if (isAuthorized) {
+                setServerStatus({ isChecking: false, isError: false });
+                return;
+            }
+            try {
+                // First check if server is running
+                await checkServerStatus();
+                // If server check passes, proceed with auth check
+                const token = localStorage.getItem(TOKEN);
+                setIsAuthorized(!!token);
+            } catch (error) {
+                console.error("Server connection error:", error);
+                setServerStatus({
+                    isChecking: false,
+                    isError: true
+                });
+            } finally {
+                setServerStatus(prev => ({
+                    ...prev,
+                    isChecking: false
+                }));
+            }
+        };
+
         checkServerAndAuth();
-    }, []);
+
+    }, [setIsAuthorized, setServerStatus]);
 
     // Show loading state while checking server and auth
     if (serverStatus.isChecking) {
@@ -49,7 +53,12 @@ function ProtectedRoute({ serverProps, authorizationProps }) {
     }
 
     // Handle authentication routing
-    return isAuthorized ? <Outlet /> : <Navigate to="/auth/login" replace />;
+    if (!isAuthorized) {
+        return <Navigate to="/auth/login" replace />;
+    }
+
+    console.log('protected route');
+    return <Outlet />;
 }
 
 export default ProtectedRoute;

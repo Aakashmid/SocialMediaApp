@@ -4,9 +4,10 @@ import { TOKEN, USER_ID } from "./constants"
 import { useNavigate } from "react-router-dom"
 import { CircleLoader } from "./Loader"
 import api from "../api"
+import { set } from "date-fns"
 
 // handing register and login operations
-export default function LoginForm({ route, method }) {
+export default function AuthForm({ route, method, setIsAuthorized }) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
@@ -43,8 +44,12 @@ export default function LoginForm({ route, method }) {
         if (res && res.data) {
           localStorage.setItem(TOKEN, res.data.token)
           localStorage.setItem(USER_ID, res.data.user.id) // set user id in local storage
-          ClearForm()
-          navigate('/')
+          console.log(res.data);
+          console.log('logged in or registered');
+          setIsAuthorized(true);
+          ClearForm();
+          navigate('/');
+
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {

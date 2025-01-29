@@ -1,14 +1,13 @@
 import ProtectedRoute from './routes/Protectedroute';
 import {
   Routes,
-  Route
+  Route,
+  Navigate,
+  useLocation
 } from 'react-router-dom';
 
-import { Navigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { Login, Profile, Registration, Home } from './Components/index'
-
-
 import FollowersFollowings from './Components/profile/FollowersFollowings';
 import EditProfile from './Components/profile/EditProfile';
 import { ProfileDataContext } from './Contexts/ProfileContext';
@@ -28,6 +27,7 @@ function App() {
     isChecking: true,
     isError: false,
   });
+  const location = useLocation();
 
   const Logout = () => {
     useEffect(() => {
@@ -40,14 +40,20 @@ function App() {
 
   const RegisterAndLogout = () => {
     localStorage.clear();
-    return <Registration />;
+    return <Registration setIsAuthorized={setIsAuthorized} />;
   };
 
-  const isAuthRoute = window.location.pathname.startsWith('/auth');
-  // const isServerErrorRoute = window.location.pathname === '/server-error';
+  const isAuthRoute = location.pathname.startsWith('/auth');
+
+
+
+  // if (!isAuthorized && !isAuthRoute) {
+  //   return <Navigate to="/auth/login" />;
+  // }
+
   return (
     <>
-      {(!isAuthRoute && !serverStatus.isChecking && !serverStatus.isError && isAuthorized) && (
+      {(!isAuthRoute && !serverStatus.isError && !serverStatus.isChecking && isAuthorized) && (
         <header>
           <Topbar />
         </header>
@@ -55,7 +61,7 @@ function App() {
       <Routes>
         <Route element={<ProtectedRoute serverProps={[serverStatus, setServerStatus]} authorizationProps={[isAuthorized, setIsAuthorized]} />} >
           {/* Protected routes */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home isAuthRoute={isAuthorized} />} />
           <Route path="/search/:query?" element={<SearchResultPage />} />
           {/* here str is profile username */}
           <Route path="/profile/*" element={
@@ -69,27 +75,24 @@ function App() {
                 <Route path=":username/:str" element={<FollowersFollowings />} />
               </Routes>
             </PostProvider>
-          }
-
-          />
+          } />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/chat/:slug" element={<ChatPage />} />
         </Route>
 
         {/* Auth routes */}
         <Route path="/auth">
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Login setIsAuthorized={setIsAuthorized} />} />
           <Route path="register" element={<RegisterAndLogout />} />
           <Route path="logout" element={<Logout />} />
         </Route>
 
-
         <Route path="/server-error" element={<ServerErrorPage />} />
         {/* Catch all route */}
         <Route path="*" element={<NotFound />} />
-      </Routes >
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

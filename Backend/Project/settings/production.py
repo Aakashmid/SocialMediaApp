@@ -9,6 +9,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # static files (CSS, JavaScript, Images)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').replace(' ', '').split(',')

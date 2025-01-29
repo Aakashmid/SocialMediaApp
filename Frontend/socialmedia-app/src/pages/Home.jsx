@@ -9,7 +9,7 @@ import { LoadingContext } from "../Contexts/LoadingContext";
 import { ProfileDataContext } from "../Contexts/ProfileContext";
 import { PostProvider } from "../Contexts/PostContext";
 
-export default function Home() {
+export default function Home({ isAuthorized }) {
   const { loading, setLoading } = useContext(LoadingContext);
   const { profileData, setProfileData } = useContext(ProfileDataContext);
   const fetchUserProfile = useFetchUserProfile();
@@ -18,7 +18,6 @@ export default function Home() {
   // Fetch user profile if not already available
   const fetchProfileData = useCallback(async () => {
     if (!userId) return;
-
     try {
       setLoading(true);
       const data = await fetchUserProfile(userId);
@@ -34,7 +33,7 @@ export default function Home() {
     if (!profileData || Object.keys(profileData).length === 0) {
       fetchProfileData();
     }
-  }, [profileData, fetchProfileData]);
+  }, [profileData, fetchProfileData, isAuthorized]);
 
   // Render loader if data is still loading
   if (loading) return <HomePageLoader />;
