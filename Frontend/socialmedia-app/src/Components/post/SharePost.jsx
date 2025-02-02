@@ -77,7 +77,7 @@ export default function SharePost({ setPosts, onShare }) {
                 <div className="share-top flex space-x-2">
                     <img
                         onClick={() => navigate(`/profile/${profileData.username}`)}
-                        src={profileData.profileImg}
+                        src={profileData.profileImg || "/images/default-profile.png"}
                         alt="Profile"
                         className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer"
                     />

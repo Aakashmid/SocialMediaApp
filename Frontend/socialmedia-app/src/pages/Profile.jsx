@@ -189,7 +189,7 @@ const Profile = () => {
                                         alt="..."
                                     />
                                     <img
-                                        src={profile.profileImg || "/default-profile.png"} // Fallback for missing image
+                                        src={profile.profileImg || "/images/default-profile.png"} // Fallback for missing image
                                         className="profile-img w-28 h-28 rounded-[50%] absolute left-1/2 top-20 object-cover -translate-x-1/2 border-4 border-white"
                                         alt=""
                                     />

@@ -51,6 +51,7 @@ export default function Topbar() {
     }, [pathname])
 
     return (<>
+    
         <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
             <div className='flex items-center topbar-left'>
                 <div className="md:hidden mr-2">
