@@ -145,7 +145,7 @@ const Post = ({ initialPost, handleCommentsToggle }) => {
                         <MoreVert fontSize="small" />
                     </span>
                     <div
-                        className={`post-actions-menu absolute top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 transition-transform duration-300 ease-in-out ${showOptionsMenu ? "opacity-100 " : "opacity-0"}`}
+                        className={`post-actions-menu  top-6 right-0 w-56 bg-white shadow-lg rounded-lg border border-gray-300 z-20 transition-transform duration-300 ease-in-out ${showOptionsMenu ? "absolute" : "hidden"}`}
                         onMouseLeave={handleHideOptions}
                     >
                         <PostOptionMenu

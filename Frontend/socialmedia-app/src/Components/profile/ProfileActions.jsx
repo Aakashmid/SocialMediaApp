@@ -4,7 +4,7 @@ import SharePost from '../post/SharePost'
 import { Close } from '@mui/icons-material'
 export default function ProfileActions({ showShare, setShowShare, profileData, handleCreatePost }) {
     return (
-        <div className='px-4 mx-auto lg:w-2/3 xl:2-1/2 '>
+        <div className='px-4 mx-auto lg:w-2/3  '>
             <div className="grid grid-cols-2 gap-5 py-2 mb-4">
                 {/* profile buttons  */}
                 <Link className='block  hover:bg-gray-900  py-1 bg-gray-700 rounded-lg text-white text-center' to={`/profile/${profileData.username}/edit`}>Edit Profile</Link>

@@ -12,13 +12,14 @@ load_dotenv()
 
 # Supabase credentials
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-if not SUPABASE_URL or not SUPABASE_KEY:
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
     raise ValueError("Missing Supabase credentials! Check your .env file.")
 
 # Initialize Supabase client
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 @deconstructible
 class SupabaseStorage(Storage):
@@ -41,6 +42,9 @@ class SupabaseStorage(Storage):
             mime_type, _ = mimetypes.guess_type(name)
             file_options = {"content-type": mime_type or "application/octet-stream"}
 
+            if self.exists(name):
+                print(f"File {name} already exists. Skipping upload.")
+                return name
             # Upload file to Supabase
             response = supabase.storage.from_(self.bucket_name).upload(name, file_data, file_options=file_options)
 
@@ -76,13 +80,19 @@ class SupabaseStorage(Storage):
         """Checks if the file already exists in Supabase Storage."""
         try:
             name = name.replace("\\", "/")  # Ensure correct path format
-            response = supabase.storage.from_(self.bucket_name).list(path=name)
+            # Get the list of files in the specified path
+            path = "/".join(name.split("/")[:-1])
+            file_name = name.split("/")[-1]
+            
+            response = supabase.storage.from_(self.bucket_name).list(path=path)
 
             if isinstance(response, dict) and "error" in response:
                 raise Exception(response["error"]["message"])
 
-            if isinstance(response, list) and response:
-                return True  # If any file exists, return True
+            # Check if the file exists in the list of files
+            for file in response:
+                if file['name'] == file_name:
+                    return True
 
             return False
 

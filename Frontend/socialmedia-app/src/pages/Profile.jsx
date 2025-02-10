@@ -16,11 +16,13 @@ import ProfileActions from "../Components/profile/ProfileActions";
 import useProfileData from "../hooks/profile/useProfileData";
 import { PostContext, PostProvider } from "../Contexts/PostContext";
 import Layout2 from "../Layout/Layout2";
+import ProfileSkeleton from "../Components/skeletons/ProfileSkelton";
 
 const Profile = () => {
     const { profileData, setProfileData } = useContext(ProfileDataContext); // Current user's profile data
     const { posts, setPosts } = useContext(PostContext);
     const [showShare, setShowShare] = useState(false);
+    const [showSkeleton, setShowSkeleton] = useState(true);
     const [feedOP, setFeedOp] = useState("posts"); // Default to posts
     const [fetchedFeedOps, setFetchedFeedOps] = useState({
         posts: false,
@@ -171,11 +173,27 @@ const Profile = () => {
             setPosts(profilePosts);
         }
     }, [profileUserId, feedOP, fetchedFeedOps]);
+
+    useEffect(() => {
+        // Show skeleton for 2 seconds before displaying profile data
+        const timer = setTimeout(() => {
+            setShowSkeleton(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (showSkeleton) {
+        return <Layout2>
+            <ProfileSkeleton />
+        </Layout2>;
+    }
+
+
     return (
         <>
             <div className="profile-page-container ">
                 <Layout2>
-
                     <PostProvider value={{
                         posts: feedOP === "posts" ? profilePosts : savedPosts,
                         setPosts: feedOP === "posts" ? setProfilePosts : setSavedPosts
@@ -222,6 +240,7 @@ const Profile = () => {
                     </PostProvider>
                 </Layout2>
             </div>
+
         </>
     );
 };

@@ -11,18 +11,17 @@ SECRET_KEY = 'django-insecure-52sh(q&%=7i)x!**qbx(gu-7)x6pz6egt93@t!#em6s$&=p6wz
 ALLOWED_HOSTS = ["*"]
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://buzzlinedb_user:VHcOBbxxXZneyu1QkcmK4DA9l5oNf9ZP@dpg-cu8eltd2ng1s73ejs6p0-a.singapore-postgres.render.com/buzzlinedb', conn_max_age=600
-    )  # use conn_max_age so that connection from  db remain for given time
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
-
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         'postgresql://buzzlinedb_user:VHcOBbxxXZneyu1QkcmK4DA9l5oNf9ZP@dpg-cu8eltd2ng1s73ejs6p0-a.singapore-postgres.render.com/buzzlinedb', conn_max_age=600
+#     )  # use conn_max_age so that connection from  db remain for given time
+# }
 
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
@@ -30,16 +29,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 # ]
 
 
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR.parent, 'media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR.parent, 'media')
+
 
 # Supabase credentials
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')  # Use service role key for full access
+# SUPABASE_URL = os.getenv('SUPABASE_URL')
 
-# Initialize Supabase client
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Media settings
-MEDIA_URL = f"{SUPABASE_URL}/storage/v1/object/public/media/"  # Adjust 'media' to your bucket name
-DEFAULT_FILE_STORAGE = "Project.supabase_storage_backend.SupabaseStorage"
+# # Media settings
+# MEDIA_URL = f"{SUPABASE_URL}/storage/buckets/media/"  # Adjust 'media' to your bucket name
+# DEFAULT_FILE_STORAGE = "Project.supabase_storage_backend.SupabaseStorage"

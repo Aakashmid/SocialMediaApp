@@ -36,7 +36,9 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')  # Use service role key for full access
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Media settings
-MEDIA_URL = f"{SUPABASE_URL}/storage/v1/object/public/media/"  # Adjust 'media' to your bucket name
+
+# Media settings
+MEDIA_URL = f"{SUPABASE_URL}/storage/buckets/media/"  # Adjust 'media' to your bucket name
 DEFAULT_FILE_STORAGE = "Project.supabase_storage_backend.SupabaseStorage"
 
 

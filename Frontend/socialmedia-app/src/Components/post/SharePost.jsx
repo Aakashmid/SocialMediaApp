@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom"
 
 export default function SharePost({ setPosts, onShare }) {
     const [showAlert, setShowAlert] = useState(false);
-    // const [showAlert, setShowAlert] = useState(true);
     const [formData, setFormData] = useState({
         text: '',
         postImg: ''
@@ -75,12 +74,17 @@ export default function SharePost({ setPosts, onShare }) {
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="share-top flex space-x-2">
-                    <img
-                        onClick={() => navigate(`/profile/${profileData.username}`)}
-                        src={profileData.profileImg || "/images/default-profile.png"}
-                        alt="Profile"
-                        className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer"
-                    />
+                    {profileData.profileImg ? (
+                        <img
+                            onClick={() => navigate(`/profile/${profileData.username}`)}
+                            src={profileData.profileImg}
+                            alt="Profile"
+                            className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer"
+                        />
+                    ) : (
+                        <div className="w-12 h-12 rounded-[50%] bg-gray-200 animate-pulse cursor-pointer"
+                        />
+                    )}
                     <input
                         type="text"
                         name="text"

@@ -39,13 +39,13 @@ export default function Feed() {
         <div className="feed-container  p-5">
             <div className="feed-wrapper">
                 <SharePost setPosts={setPosts} />
-                <div className="feed-posts ">
+                <div className="feed-posts mt-4">
                     {/* <PostProvider posts={posts} setPosts={setPosts}> */}
-                    {loading ? <CircleLoader /> :
+                    {/* {loading ? <CircleLoader /> : */}
                         <PostProvider value={{ posts, setPosts }}>
                             <PostList />
                         </PostProvider>
-                    }
+                    {/* } */}
                 </div>
             </div>
         </div>
