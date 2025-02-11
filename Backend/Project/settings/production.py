@@ -30,12 +30,6 @@ DATABASES = {
 
 # Supabase credentials
 SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')  # Use service role key for full access
-
-# Initialize Supabase client
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Media settings
 
 # Media settings
 MEDIA_URL = f"{SUPABASE_URL}/storage/buckets/media/"  # Adjust 'media' to your bucket name

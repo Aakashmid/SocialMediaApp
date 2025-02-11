@@ -29,13 +29,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 # ]
 
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR.parent, 'media')
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR.parent, 'media')
 
 
 # Supabase credentials
-# SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_URL = os.getenv('SUPABASE_URL')
 
 # # Media settings
-# MEDIA_URL = f"{SUPABASE_URL}/storage/buckets/media/"  # Adjust 'media' to your bucket name
-# DEFAULT_FILE_STORAGE = "Project.supabase_storage_backend.SupabaseStorage"
+MEDIA_URL = f"{SUPABASE_URL}/storage/buckets/media/"  # Adjust 'media' to your bucket name
+DEFAULT_FILE_STORAGE = "Project.supabase_storage_backend.SupabaseStorage"
