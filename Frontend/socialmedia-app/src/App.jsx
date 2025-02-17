@@ -70,8 +70,8 @@ function App() {
                 <Route path=":username/post/:str/edit" element={<EditPostPage />} />
                 <Route path=":username" element={<Profile />} />
                 <Route path=":username/edit" element={<EditProfile />} />
-                <Route path=":username/posts/:id" element={<ProfilePostsPage />} />
-                <Route path=":username/saved-posts/:id?" element={<ProfilePostsPage />} />
+                <Route path=":username/posts" element={<ProfilePostsPage />} />
+                <Route path=":username/saved-posts" element={<ProfilePostsPage />} />
                 <Route path=":username/:str" element={<FollowersFollowings />} />
               </Routes>
             </PostProvider>

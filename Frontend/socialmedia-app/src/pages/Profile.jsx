@@ -97,14 +97,8 @@ const Profile = () => {
 
     // click post handler to go to the profile posts page
     const handleOnclickPost = (id) => {
-        const postUrl = feedOP === "saved" ? `saved-posts/${id}` : `posts/${id}`;
-        navigate(postUrl, {
-            state: {
-                postid: "post" + id,
-                profileId: profile.id,
-                isSavedPosts: feedOP === "saved" ? true : false,
-            },
-        });
+        const postUrl = feedOP === "saved" ? `saved-posts?postid=${id}&profileId=${profile.id}` : `posts?postid=${id}&profileId=${profile.id}`;
+        navigate(postUrl);
     };
 
     const handleFollow = async (userId) => {

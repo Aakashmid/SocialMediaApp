@@ -51,7 +51,7 @@ const CommentInputForm = ({ post, replyProps = {} }) => {  // here some props ar
     }
 
     return <>
-        <div className={`${isReply ? 'py-2  flex items-center space-x-2' : 'py-2 px-3 flex items-center space-x-3'}`} >
+        <div className={`${isReply ? 'flex items-center space-x-2' : ' px-3 flex items-center space-x-3'} py-3 w-full overflow-hidden`} >
             <div className="current-user-img" onClick={() => navigate(`/profile/${user.username}`)}>
                 <img src={user.profileImg} className={`${isReply ? 'user-profileImg w-7 h-7 border rounded-[50%] object-cover' : "user-profileImg w-9 h-9 border rounded-[50%] object-cover"}`} alt=".." />
 

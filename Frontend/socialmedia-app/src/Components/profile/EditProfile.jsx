@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import Layout from '../../Layout/Layout';
 import { partialUpdateUserProfile } from '../../services/apiService';
-import { ButtonPrimary, PageTopBackArrow } from '../common/SmallComponents';
+import {  PageTopBackArrow } from '../common/SmallComponents';
+import { ButtonPrimary } from '../common/buttons/ButtonPrimary';
 
 
 export const FormInput = ({ label_text, handleChange, field_name, input_value, placeholder, field_type }) => {
@@ -17,6 +18,8 @@ export const FormInput = ({ label_text, handleChange, field_name, input_value, p
 
 export default function EditProfile() {
     const { profileData, setProfileData } = useContext(ProfileDataContext);     // gettign profile data from ProfileDataContext
+    const [updateingImage, setUpdateingImage] = useState(false);
+    const [updateingProfile, setUpdateingProfile] = useState(false);    
     const [showAlert, setShowAlert] = useState(false);
 
     // initialize edit profile form data
@@ -36,6 +39,7 @@ export default function EditProfile() {
     const handleUpdateProfileImg = async () => {
         const profileFormData = new FormData();
         try {
+            setUpdateingImage(true);
             profileFormData.append('profileImg', formData.profileImg);
             const response = await partialUpdateUserProfile(profileData.id, profileFormData);
             console.log(response);
@@ -43,6 +47,9 @@ export default function EditProfile() {
             setProfileData({ ...response });
         } catch (error) {
             console.error(error);
+        }
+        finally {
+            setUpdateingImage(false);
         }
     }
 
@@ -56,11 +63,15 @@ export default function EditProfile() {
             }
         });
         try {
+            setUpdateingProfile(true);
             const respose = await partialUpdateUserProfile(profileData.id, profileDataFormData);
             console.log(respose);
             setProfileData({ ...respose });
         } catch (error) {
             console.error(error);
+        }
+        finally {
+            setUpdateingProfile(false);
         }
     }
 
@@ -118,7 +129,7 @@ export default function EditProfile() {
                                     <input type="file" accept="image/*" className='hidden' name='profileImg' onChange={handleFileChange} required />
                                 </label>
 
-                                <ButtonPrimary onclick={() => handleUpdateProfileImg()} text="Save" />
+                                <ButtonPrimary onclick={() => handleUpdateProfileImg()}  Disabled={updateingImage}  text={updateingImage ? 'Saving...' : 'Save'} />
                             </div>
                         </div>
                     </div>
@@ -135,7 +146,7 @@ export default function EditProfile() {
                                 Bio
                                 <textarea onChange={handleChange} className='text-sm w-full focus:outline-none text-[15px] p-2 rounded-md h-20' name="bio" id="" value={formData.bio} placeholder='write about yourself...'></textarea>
                             </label>
-                            <ButtonPrimary onclick={() => handleUpdateProfile()} text="Update" />
+                            <ButtonPrimary onclick={() => handleUpdateProfile()} text={updateingProfile ? 'Updateing...' : 'Update'}  Disabled={updateingProfile}/>
                         </form>
                     </div>
                 </div>

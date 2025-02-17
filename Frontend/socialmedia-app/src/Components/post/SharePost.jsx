@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function SharePost({ setPosts, onShare }) {
     const [showAlert, setShowAlert] = useState(false);
+    const [sharing,setSharing] = useState(false);
     const [formData, setFormData] = useState({
         text: '',
         postImg: ''
@@ -18,11 +19,15 @@ export default function SharePost({ setPosts, onShare }) {
     // handle createion of post of post data - data
     const sharePost = async (data) => {
         try {
+            setSharing(true);
             const post_data = await CreatePost(data);  // creating post using CreatePost function
             setPosts(prevPosts => [...prevPosts, post_data]);
             setShowAlert(true);
         } catch (error) {
             console.error('Error creating post:', error);
+        }
+        finally {
+            setSharing(false);
         }
     }
 
@@ -112,7 +117,7 @@ export default function SharePost({ setPosts, onShare }) {
                                 type="submit"
                                 className="bg-green-700 rounded-md px-3 py-1 text-white"
                             >
-                                Share
+                                {sharing ? 'Sharing...' : 'Share'}
                             </button>
                         </div>
                     </div>

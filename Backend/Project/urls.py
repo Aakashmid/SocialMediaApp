@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/users/', include('user.urls')),  # User-app endpoints
     path('api/posts/', include('post.urls')),  # Post-app endpoints
     path('api/comments/', include('comment.urls')),  # Comment-app  endpoints
-]
+]   
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

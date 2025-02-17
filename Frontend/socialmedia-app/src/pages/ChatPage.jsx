@@ -29,11 +29,11 @@ export default function ChatPage() {
         return (
             <div className="chat-wrapper  h-[calc(100vh-3.2rem)]">
                 {!user ? (
-                    <div className="flex items-center justify-center h-screen">
+                    <div className="flex items-center justify-center h-full">
                         <p className="text-gray-500 text-lg">Please select a user to start chatting</p>
                     </div>
                 ) : (
-                    <>
+                    <div className='h-full w-full'>
                         <div className="chat-top  user-info flex items-center gap-2 pl-1 pr-2 md:px-3 py-2 w-full bg-gray-200 shadow-sm">
                             <Link to={'/chat'} className='p-1 hover:bg-gray-100 rounded-full md:hidden'>
                                 <ArrowBack />
@@ -72,7 +72,7 @@ export default function ChatPage() {
                             </div>
                         </div>
 
-                    </>
+                    </div>
                 )}
             </div>
         )

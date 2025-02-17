@@ -14,6 +14,9 @@ export const useFetchUserProfile = () => {
             if (error.response && error.response.status === 401) { // Correct error status check
                 navigate('/auth/login');
             }
+            if (error.response && error.response.status === 500) {
+                navigate('/server-error');
+            }
             throw error;
         }
     };
@@ -27,6 +30,9 @@ export const partialUpdateUserProfile = async (user_id, data) => {
         return response.data;
     } catch (error) {
         console.error('Error updating profile:', error);
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -49,6 +55,9 @@ export const fetchSearchUsers = async (searchQuery) => {
         const response = await api.get(`/api/users/?search=${searchQuery}`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -63,6 +72,9 @@ export const fetchUserPosts = async (user_id, searchQuery) => {
             return response.data;
         }
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -74,6 +86,9 @@ export const fetchFriends = async () => {
         const response = await api.get(`/api/users/friends`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -84,6 +99,9 @@ export const fetchMutualFriends = async (user_id) => {
         const response = await api.get(`/api/users/${user_id}/mutual-friends`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -94,6 +112,9 @@ export const checkServerStatus = async () => {
         const response = await api.get('/api/check-server-status/');
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -106,6 +127,9 @@ export const fetchPosts = async () => {
         const response = await api.get(`/api/posts/`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -116,6 +140,9 @@ export const fetchSearchPosts = async (searchQuery) => {
         const response = await api.get(`/api/posts/?search=${searchQuery}`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -127,6 +154,9 @@ export const GetPostDetail = async (post_id) => {
         const response = await api.get(`/api/posts/${post_id}`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -138,6 +168,9 @@ export const LikePost = async (post_id) => {
         const res = await api.post(`/api/posts/${post_id}/toggle-like/`);
         return res.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -149,6 +182,9 @@ export const UpdatePost = async (id, post_data) => {
         const response = await api.patch(`/api/posts/${id}/`, post_data);
         return await response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -160,6 +196,9 @@ export const CreatePost = async (post_data) => {
         const response = await api.post(`/api/posts/`, post_data);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -171,6 +210,9 @@ export const DeletePost = async (post_id) => {
         const response = await api.delete(`/api/posts/${post_id}/`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -182,6 +224,9 @@ export const SavePost = async (post_id) => {
         const response = await api.post(`/api/posts/${post_id}/toggle-save/`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -193,6 +238,9 @@ export const fetchSavedPosts = async () => {
         const response = await api.get('/api/posts/saved-posts/');
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -206,6 +254,9 @@ export const fetchComments = async (post_id) => {  // fetch comments of a post o
         const response = await api.get(`/api/comments/posts/${post_id}/`);
         return await response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -215,6 +266,9 @@ export const fetchReplies = async (comment_id) => {  // fetch replies of a comme
         const response = await api.get(`/api/comments/${comment_id}/replies`);
         return await response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -225,6 +279,9 @@ export const createComment = async (post_id, comment_data) => {
         const response = await api.post(`/api/comments/posts/${post_id}/`, comment_data);
         return await response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -235,6 +292,9 @@ export const likeCommentReply = async (comment_id) => {
         const res = await api.post(`/api/comments/${comment_id}/like/`);
         return res.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -245,6 +305,9 @@ export const createReply = async (comment_id, reply_data) => {
         const response = await api.post(`/api/comments/${comment_id}/replies/`, reply_data);
         return await response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -256,6 +319,9 @@ export const deleteComment = async (comment_id) => {
         const response = await api.delete(`/api/comments/${comment_id}/`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error;
     }
 }
@@ -275,6 +341,9 @@ export const followUser = async (userId) => {
         return res.data
         // }
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         console.error(error)
     }
 }
@@ -284,6 +353,9 @@ export const unfollowUser = async (userId) => {
         const res = await api.delete(`/api/users/${userId}/unfollow/`)
         return res.data
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         throw error
     }
 }
@@ -295,6 +367,9 @@ export const fetchUserFollowings = async (userId) => {
         const response = await api.get(`/api/users/${userId}/followings`);
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         console.error('Error fetching user followings:', error);
         throw error;
     }
@@ -308,8 +383,10 @@ export const fetchUserFollowers = async (userId) => {
         }
         return response.data;
     } catch (error) {
+        if (error.response && error.response.status === 500) {
+            window.location.href = '/server-error';
+        }
         console.error('Error fetching user followers:', error);
         throw error;
     }
 };
-

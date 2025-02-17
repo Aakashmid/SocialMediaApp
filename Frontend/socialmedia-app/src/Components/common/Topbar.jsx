@@ -8,6 +8,8 @@ import { ProfileDataContext } from "../../Contexts/ProfileContext";
 import SearchInputForm1 from "../Topbar/SearchInputForm1";
 import SearchInputForm2 from "../Topbar/SearchInputForm2";
 import Logo from "../Logo";
+import { Skeleton } from "@mui/material";
+import { FALLBACK_PROFILE_IMG } from "../constants";
 
 
 export default function Topbar() {
@@ -15,6 +17,7 @@ export default function Topbar() {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showChatBar, setShowChatBar] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);   // for tracking profile image loading
 
     const [isClickable, setIsClickable] = useState(false);
     const { profileData } = useContext(ProfileDataContext);
@@ -51,7 +54,7 @@ export default function Topbar() {
     }, [pathname])
 
     return (<>
-    
+
         <div className="topbarContainer z-30 fixed bg-bgPrimary w-full px-3 md:px-4  xl:px-5 flex items-center justify-between py-2 ">
             <div className='flex items-center topbar-left'>
                 <div className="md:hidden mr-2">
@@ -90,8 +93,14 @@ export default function Topbar() {
                 </div>
 
                 <div className="profileImg ">{/*show when user is logged in */}
-                    <img src={profileData.profileImg} alt="" className="w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer" onClick={() => setShowProPopover(!showProPopover)} />
-                    {/* <div className={`topbar-popover absolute right-2 top-[50px] w-36  lg:w-44 transform h-0 overflow-hidden`}> */}
+                    {!imgLoaded &&
+                        <Skeleton variant="circular" sx={{ bgcolor: 'gray.500' }} width={36} height={36} />
+                    }
+                    {profileData.profileImg && (
+                        <img src={profileData.profileImg} alt="" onLoad={() => setImgLoaded(true)}
+                            onError={(e) =>e.target.src = FALLBACK_PROFILE_IMG } className={`${!imgLoaded && 'hidden'} w-9 h-9 rounded-[50%] object-cover border border-gray-400 cursor-pointer`} onClick={() => setShowProPopover(!showProPopover)} />
+                    )}
+
                     <div className={`topbar-profile-popover absolute right-2 top-[50px] w-36  lg:w-44 transition-all duration-1000 overflow-hidden z-10 ${showProPopover ? 'h-fit' : 'h-0'}`}>
                         <ProfilePopover popover={{ showProPopover, setShowProPopover }} />
                     </div>
