@@ -1,23 +1,61 @@
 import { Close, FilterList } from '@mui/icons-material'
-import React, { useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Btn1 from '../common/buttons/Btn1'
 import Btn2 from '../common/buttons/Btn2'
-import { PostContext } from '../../Contexts/PostContext';
+import { ButtonPrimary } from '../common/buttons/ButtonPrimary';
 
-export default function ManagePostsMdl({ toggle, toggleFilterMdl }) {
-    const { posts, setPosts } = useContext(PostContext); // get posts which are in PostContext for this user (it can be either saved post or post of this user)
+export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPosts }) {
     const [filteredPosts, setFilteredPosts] = useState(posts);
+    const [checkedPosts, setCheckedPosts] = useState([]);
+    const [isApplyingAction, setIsApplyingAction] = useState(false);
+    const handleCheckboxChange = (postId) => {
+        setCheckedPosts(prev =>
+            prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]
+        );
+    };
 
-    const handleRemovePost = async (postId) => {
+    useEffect(() => {
+        setFilteredPosts(posts);
+    }, [posts,setPosts]);
 
+    const handlePostsAction = (checkedPosts) => {
+        const selectedOption = document.querySelector('input[name="post_option"]:checked')
+
+        if (!selectedOption) {
+            console.log("Please select an action")
+            return
+        }
+
+        setIsApplyingAction(true);
+        switch (selectedOption.id) {
+            case 'delete_posts':
+                console.log('delete posts action for:', checkedPosts)
+                setPosts(prevPosts => prevPosts.filter(post => !checkedPosts.includes(post.id)));
+                setCheckedPosts([]);
+                break;
+            case 'hide_posts':
+                console.log("Hide posts action for:", checkedPosts)
+                break
+            case 'remove_tags':
+                console.log("Remove tags action for:", checkedPosts)
+                break
+            default:
+                console.log("Invalid action selected")
+        }
+        setIsApplyingAction(false);
     }
 
     const Card = ({ post }) => (
-        <div key={post.id} className="post-card w-full h-fit rounded-lg overflow-hidden border hover:border-blue-400 transition-all duration-200 flex flex-col">
+        <div onClick={() => handleCheckboxChange(post.id)} key={post.id} className="post-card w-full h-fit rounded-lg border cursor-pointer hover:border-blue-400 transition-all duration-200 flex flex-col">
             <div className="card-content relative flex-1">
-                <img src={post.postImg} alt="post-image" className="object-cover h-[10rem] lg:h-[12rem] w-full hover:scale-105 transition-transform duration-300 flex-shrink-0" />
+                <img src={post.postImg} alt="post-image" className="object-cover h-[10rem] lg:h-[12rem] w-full hover:opacity-95 transition-transform duration-300 flex-shrink-0" />
                 <span className="checkbox-input absolute top-2 left-2">
-                    <input type="checkbox" className="w-5 h-5 cursor-pointer accent-blue-500" defaultChecked={false} />
+                    <input
+                        type="checkbox"
+                        className="w-5 h-5 cursor-pointer accent-blue-500"
+                        checked={checkedPosts.includes(post.id)}
+                        onChange={() => handleCheckboxChange(post.id)}
+                    />
                 </span>
             </div>
             <div className="card-bottom flex items-center gap-2 bg-gray-200/90 backdrop-blur-sm p-3 border-t">
@@ -26,7 +64,6 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl }) {
             </div>
         </div>
     );
-
 
     return (
         <div className='manage-posts-modal-container bg-gray-100 w-full h-full rounded-lg'>
@@ -43,28 +80,28 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl }) {
             </div>
 
             {/* posts container */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 px-4 py-4 h-[60%] gap-1  lg:gap-2 overflow-y-scroll">
-                {filteredPosts.map((post) => (
+            <div className="grid grid-cols-2 lg:grid-cols-3 px-4 py-4 h-[65%] gap-1  lg:gap-2 overflow-y-scroll">
+                {filteredPosts && filteredPosts.map((post) => (
                     <Card key={post.id} post={post} />
                 ))}
             </div>
-            <div className="posts-actions px-4 py-2 border-t-2">
+            <div className="posts-actions px-4 py-2 border-t-2 ">
                 <h2 className='text-lg'>Select action  : </h2>
-                <div className="flex flex-col gap-1 mt-2">
-                    <label htmlFor="hide_posts" className="flex items-center">
+                <div className="flex gap-4 mt-2 mb-2">
+                    <label htmlFor="hide_posts" className="flex items-center cursor-pointer">
                         <input name="post_option" type="radio" id="hide_posts" className="mr-2" />
                         Hide Posts
                     </label>
-                    <label htmlFor="delete_posts" className="flex items-center">
+                    <label htmlFor="delete_posts" className="flex items-center cursor-pointer">
                         <input name="post_option" type="radio" id="delete_posts" className="mr-2" />
                         Delete Posts
                     </label>
-                    <label htmlFor="remove_tags" className="flex items-center">
+                    <label htmlFor="remove_tags" className="flex items-center cursor-pointer">
                         <input name="post_option" type="radio" id="remove_tags" className="mr-2" />
                         Remove Tags
                     </label>
                 </div>
-                <Btn2 text={'Done'} handleClick={() => console.log('done')} />
+                <ButtonPrimary text={isApplyingAction ? 'Applying' : 'Apply'} onclick={() => handlePostsAction(checkedPosts)} Disabled={isApplyingAction} />
             </div>
         </div>
     )

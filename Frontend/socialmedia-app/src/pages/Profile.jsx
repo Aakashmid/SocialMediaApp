@@ -50,13 +50,14 @@ const Profile = () => {
     }, [state, username, profileData])
 
 
-    // Using custom hook for profile data
+    // Using custom hook for profile  page user's profile data
     const { profile, setProfile, isCUProfile } = useProfileData(profileUserId, profileData);
 
 
     const getProfilePosts = async () => {
         setLoading(true);
         try {
+            
             const data = await fetchUserPosts(profileUserId);
             setProfilePosts(data);
         } catch (error) {

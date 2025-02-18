@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Layout from '../../Layout/Layout';
 import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { PostContext, PostProvider } from '../../Contexts/PostContext';
-import { fetchSavedPosts } from '../../services/apiService';
+import { fetchSavedPosts, fetchUserPosts } from '../../services/apiService';
 import { PageTopBackArrow } from '../common/SmallComponents';
 import { Filter, FilterList, Settings } from '@mui/icons-material';
 import useToggle from '../../hooks/useToggle';
@@ -17,19 +17,68 @@ export default function ProfilePostsPage() {
     const location = useLocation();
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     const queryParams = new URLSearchParams(location.search);
-    const postid = queryParams.get('postid');
-    const profileId = queryParams.get('profileId');
+    const postid = parseInt(queryParams.get('postid'));
+    const profileId = parseInt(queryParams.get('profileId'));
     const isSavedPosts = location.pathname.includes('saved-posts') ? true : false;
 
     const { posts, setPosts } = useContext(PostContext);
     const [isMngPstMdlOpen, toggleMngPstMdl] = useToggle(false);
     const [isFilterMdl, toggleFilterMdl] = useToggle(false);
 
-    const [ filteredPosts, setFilteredPosts ] = useState(posts);
+    const [filteredPosts, setFilteredPosts] = useState(posts);
 
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
+
+    useEffect(() => {
+        const loadPosts = async () => {
+            setIsLoading(true);
+            try {
+                // Check if posts exist in localStorage and are not expired
+                const cachedData = localStorage.getItem('profilePosts');
+                const cachedTimestamp = localStorage.getItem('profilePostsTimestamp');
+                const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+                if (cachedData && cachedTimestamp && (Date.now() - parseInt(cachedTimestamp) < CACHE_DURATION)) {
+                    console.log("Cached data is seted");
+                    const parsedData = JSON.parse(cachedData);
+                    setPosts(parsedData);
+                    setFilteredPosts(parsedData);
+                } else if (posts.length === 0) {
+                    // If no cache or expired, fetch new data
+                    if (isSavedPosts) {
+                        const savedPostsData = await fetchSavedPosts();
+                        setPosts(savedPostsData);
+                        setFilteredPosts(savedPostsData);
+                        // Store in localStorage with timestamp
+                        localStorage.setItem('profilePosts', JSON.stringify(savedPostsData));
+                        localStorage.setItem('profilePostsTimestamp', Date.now().toString());
+                    }
+                    else {
+                        const userPostsData = await fetchUserPosts(profileId);
+                        setPosts(userPostsData);
+                        setFilteredPosts(userPostsData);
+                        // Store in localStorage with timestamp
+                        localStorage.setItem('profilePosts', JSON.stringify(userPostsData));
+                        localStorage.setItem('profilePostsTimestamp', Date.now().toString());
+                    }
+                }
+                else {
+                    localStorage.setItem('profilePosts', JSON.stringify(posts));
+                }
+            } catch (error) {
+                console.error('Error loading posts:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadPosts();
+    }, [isSavedPosts, setPosts, profileId]);
+
+
+    // for scroll to post of postId
     useEffect(() => {
         if (postid) {
             const element = document.getElementById("post" + postid)
@@ -39,6 +88,7 @@ export default function ProfilePostsPage() {
         }
     }, [postid])
 
+
     const handleFilterPosts = () => {
         if (isSavedPosts) {
             setFilteredPosts(posts.filter(post => post.isSaved))
@@ -46,7 +96,7 @@ export default function ProfilePostsPage() {
             setFilteredPosts(posts)
         }
     }
-
+   
     return (
         <>
             <Layout>
@@ -64,7 +114,7 @@ export default function ProfilePostsPage() {
 
                             :
                             <>
-                                <PageTopBackArrow backTo={-1} pageHeading={profileData.id === profileId ? `Posts` : profileData.username + `\'s Posts`} />
+                                <PageTopBackArrow backTo={-1} pageHeading={profileData.id == profileId ? `Posts` : profileData.username + `\'s Posts`} />
                                 {profileData.id === profileId && (
                                     <>
                                         <div className="posts-actions flex items-center  gap-2 lg:gap-4">
@@ -77,7 +127,7 @@ export default function ProfilePostsPage() {
                                             (
                                                 <>
                                                     <div className="bottom-0 lg:top-1/2 left-1/2 lg:-translate-y-1/2 -translate-x-1/2  w-full  lg:w-[60vw] xl:w-[50vw] h-[90vh]  fixed z-[60] ">
-                                                        <ManagePostsMdl toggleFilterMdl={toggleFilterMdl} toggle={toggleMngPstMdl} />
+                                                        <ManagePostsMdl posts={posts} setPosts={setPosts} toggleFilterMdl={toggleFilterMdl} toggle={toggleMngPstMdl} />
                                                     </div>
                                                     <span className='fixed top-0 left-0 w-full h-full bg-gray-700/20 z-50' onClick={toggleMngPstMdl}></span>
                                                 </>
@@ -91,7 +141,7 @@ export default function ProfilePostsPage() {
                     </div>
 
                     <div className="post-list">
-                        <PostProvider value={{ posts , setPosts }}>
+                        <PostProvider value={{ posts, setPosts }}>
                             <PostList />
                         </PostProvider>
                     </div>
