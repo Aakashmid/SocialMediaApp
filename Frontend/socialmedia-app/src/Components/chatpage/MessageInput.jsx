@@ -12,7 +12,7 @@ export default function MessageInput() {
                 <input
                     type="text"
                     placeholder="Type your message here..."
-                    className="w-full bg-gray-800 text-gray-200 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-800 text-gray-200 rounded-full px-4 py-2 ring-1 ring-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
                 <button className="p-2 text-gray-400 hover:text-gray-200 rounded-full">

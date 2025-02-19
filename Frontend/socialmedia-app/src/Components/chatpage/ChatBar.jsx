@@ -1,12 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { MoreHoriz, MoreVert, Search } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom';
-import { fetchFriends } from '../../services/apiService';
+import { fetchFriends, fetchUserFollowings } from '../../services/apiService';
+import { ProfileDataContext } from '../../Contexts/ProfileContext';
 
 export default function ChatBar({ selectedUser, friends, setFriends }) {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchedUsers, setSearchedUsers] = useState([]);
+    const { profileData } = useContext(ProfileDataContext);
+
     const navigate = useNavigate();
     const handleClickUser = (user) => {
         navigate(`/chat/${user.username.toLowerCase().replace(/\s+/g, '-')}`, { state: { user } });
@@ -15,7 +18,9 @@ export default function ChatBar({ selectedUser, friends, setFriends }) {
     const getFriends = async () => {
         try {
             setLoading(true);
-            const data = await fetchFriends();
+            // const data = await fetchFriends(profileData.id); 
+            const data = await fetchUserFollowings(profileData.id);
+            console.log('fetched friends')
             setFriends(data);
         } catch (error) {
             console.error('Error fetching friends:', error);
@@ -25,11 +30,13 @@ export default function ChatBar({ selectedUser, friends, setFriends }) {
         }
     };
 
+    // const get
+
     useEffect(() => {
-        if (friends.length === 0) {
+        if (friends.length === 0 && profileData.id) {
             getFriends();
         }
-    }, [])
+    }, [profileData])
 
 
     const ChatUserCard = ({ user }) => {
@@ -80,11 +87,13 @@ export default function ChatBar({ selectedUser, friends, setFriends }) {
                         <MoreHoriz fontSize='small' />
                         <div className="hidden absolute bg-white shadow-lg rounded-lg mt-2">
                             <ul>
+                                {/* incomplete part  -------------> */}
                                 <li className="px-4 py-2 hover:bg-gray-100">New Chat</li>
                                 <li className="px-4 py-2 hover:bg-gray-100">Mark as Read</li>
                                 <li className="px-4 py-2 hover:bg-gray-100">Archive Chat</li>
                                 <li className="px-4 py-2 hover:bg-gray-100">Delete Chat</li>
                                 <li className="px-4 py-2 hover:bg-gray-100">Block User</li>
+                                {/* <--------- */}
                             </ul>
                         </div>
                     </span>
@@ -107,13 +116,32 @@ export default function ChatBar({ selectedUser, friends, setFriends }) {
                 </div>
             </div>
             <hr className='mt-2' />
-            {(searchTerm.trim() === '' ? friends : searchedUsers).length > 0 &&
+            {loading ? (
                 <div className="friends-list-wrapper pb-6 h-[calc(100%-70px)] overflow-y-scroll custom-scrollbar bg-white">
-                    {(searchTerm.trim() === '' ? friends : searchedUsers).map((users, index) => (
-                        <ChatUserCard key={index} user={users} />
+                    {[1, 2, 3, 4, 5].map((_, index) => (
+                        <div key={index} className="animate-pulse">
+                            <div className="flex items-center p-4">
+                                <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                                <div className="ml-4 flex-1">
+                                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                                    <div className="h-3 bg-gray-200 rounded w-1/2 mt-2"></div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
                     ))}
                 </div>
-            }
+            ) : (
+                (searchTerm.trim() === '' ? friends : searchedUsers).length > 0 &&
+                <div className="friends-list-wrapper pb-6 h-[calc(100%-70px)] overflow-y-scroll custom-scrollbar bg-white">
+                    {(searchTerm.trim() === '' ? friends : searchedUsers).map((user, index) => {
+                        return <div key={index}>
+                            <ChatUserCard user={user} />
+                            <hr />
+                        </div>
+                    })}
+                </div>
+            )}
             {(searchTerm.trim() === '' ? friends : searchedUsers).length === 0 &&
                 <div className="p-4">
                     <p className='text-gray-700'>

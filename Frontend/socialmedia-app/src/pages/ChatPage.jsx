@@ -26,6 +26,7 @@ export default function ChatPage() {
         navigate(`/profile/${user.username}`, { state: { userId: user.id } });
     }
     const ChatContent = ({ user }) => {
+        const [messages, setMessages] = useState([]);
         return (
             <div className="chat-wrapper  h-[calc(100vh-3.2rem)]">
                 {!user ? (
@@ -64,9 +65,15 @@ export default function ChatPage() {
                         </div>
 
                         <div className="chat-content   h-[calc(100vh-7rem)] overflow-y-auto rounded-xl relative">
-                            <div className="px-4 py-2">
-                                Chat content will go here when user is selected
-                            </div>
+                            {messages.length === 0 &&
+                                <div className="flex flex-col items-center justify-center h-full">
+
+                                    <p className="text-gray-500 mt-4">No messages yet</p>
+                                    <p className="text-gray-400 text-sm">Send a message to start the conversation</p>
+                                </div>
+
+                            }
+
                             <div className="absolute bottom-0 w-full ">
                                 <MessageInput />
                             </div>

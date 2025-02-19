@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import ProfilePopover from "../Topbar/ProfilePopover";
 import { SearchRounded, MessageRounded, PersonRounded, NotificationsRounded, Person, PersonOutline, ExitToApp, Close } from '@mui/icons-material/';
@@ -26,7 +26,6 @@ export default function Topbar() {
     const handleSearch = (e) => {
         e.preventDefault();
         navigate('/search/?query=' + e.target.query.value);
-        console.log("search form submitted");
     }
 
 
@@ -46,10 +45,13 @@ export default function Topbar() {
     }, [showProPopover, showSidebar])
 
 
-    const { pathname } = window.location;
+    const { pathname } = useLocation();
     useEffect(() => {
         if (pathname.includes('search')) {
             setShowSearch(true);
+        }
+        else{
+            setShowSearch(false);
         }
     }, [pathname])
 

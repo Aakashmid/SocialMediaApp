@@ -3,10 +3,12 @@ import { PermMedia } from '@mui/icons-material'
 import { ProfileDataContext } from "../../Contexts/ProfileContext"
 import { CreatePost } from "../../services/apiService"
 import { useNavigate } from "react-router-dom"
+import { FALLBACK_PROFILE_IMG } from "../constants"
 
 export default function SharePost({ setPosts, onShare }) {
     const [showAlert, setShowAlert] = useState(false);
     const [sharing,setSharing] = useState(false);
+    const [profileImgLoaded,setProfileImgLoaded] =useState(false);
     const [formData, setFormData] = useState({
         text: '',
         postImg: ''
@@ -79,15 +81,15 @@ export default function SharePost({ setPosts, onShare }) {
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="share-top flex space-x-2">
-                    {profileData.profileImg ? (
+                    {!profileImgLoaded && <div className="w-12 h-12 rounded-[50%] bg-gray-200 animate-pulse cursor-pointer"/>}
+                    {profileData.profileImg && (
                         <img
                             onClick={() => navigate(`/profile/${profileData.username}`)}
                             src={profileData.profileImg}
+                            onLoad={() => setProfileImgLoaded(true)}
+                            onError={(e) => {setProfileImgLoaded(true); e.target.src = FALLBACK_PROFILE_IMG}}
                             alt="Profile"
-                            className="w-12 h-12 rounded-[50%] object-cover border cursor-pointer"
-                        />
-                    ) : (
-                        <div className="w-12 h-12 rounded-[50%] bg-gray-200 animate-pulse cursor-pointer"
+                            className={`${!profileImgLoaded && 'hidden'} w-12 h-12 rounded-[50%] object-cover border cursor-pointer`}
                         />
                     )}
                     <input

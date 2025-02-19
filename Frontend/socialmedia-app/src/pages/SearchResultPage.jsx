@@ -7,6 +7,7 @@ import { BackToHome } from '../Components/common/SmallComponents'
 import UserCard from '../Components/common/UserCard'
 import { ProfileDataContext } from '../Contexts/ProfileContext'
 import { CircleLoader } from '../Components/Loader'
+import { useLocation } from 'react-router-dom'
 
 export default function SearchResultPage() {
     const { profileData: current_user } = useContext(ProfileDataContext);
@@ -16,7 +17,8 @@ export default function SearchResultPage() {
     const [people, setPeople] = useState([]);
     const lastFetchedQuery = useRef({ posts: '', people: '', my_posts: '' });
     const [searchType, setSearchType] = useState('posts');
-    const query = new URLSearchParams(window.location.search).get('query');
+    const location = useLocation();
+    const query = new URLSearchParams(location.search).get('query');
 
 
     const fetchData = async (searchQuery, type) => {
@@ -24,6 +26,7 @@ export default function SearchResultPage() {
             setIsLoading(true);
             if (type === 'posts') {
                 const data = await fetchSearchPosts(searchQuery);
+                console.log('posts fetched')
                 setPosts(data);
                 lastFetchedQuery.current.posts = searchQuery;
             } else if (type === 'people') {
@@ -47,16 +50,19 @@ export default function SearchResultPage() {
     }
 
     useEffect(() => {
-        if (searchType === 'posts' &&
-            (posts.length === 0 || lastFetchedQuery.current.posts !== query)) {
-            fetchData(query, 'posts');
-        } else if (searchType === 'people' &&
-            lastFetchedQuery.current.people !== query) {
-            fetchData(query, 'people');
-        }
-        else if (searchType === 'my posts only' && lastFetchedQuery.current.my_posts !== query) {
-            console.log('fetch my posts')
-            fetchData(query, 'my posts only');
+        if (query) {
+            console.log(query)
+            if (searchType === 'posts' &&
+                (posts.length === 0 || lastFetchedQuery.current.posts !== query)) {
+                fetchData(query, 'posts');
+            } else if (searchType === 'people' &&
+                lastFetchedQuery.current.people !== query) {
+                fetchData(query, 'people');
+            }
+            else if (searchType === 'my posts only' && lastFetchedQuery.current.my_posts !== query) {
+                console.log('fetch my posts')
+                fetchData(query, 'my posts only');
+            }
         }
     }, [query, searchType]);
 

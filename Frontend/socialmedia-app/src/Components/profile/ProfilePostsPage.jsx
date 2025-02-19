@@ -8,7 +8,7 @@ import { ProfileDataContext } from '../../Contexts/ProfileContext';
 import { PostContext, PostProvider } from '../../Contexts/PostContext';
 import { fetchSavedPosts, fetchUserPosts } from '../../services/apiService';
 import { PageTopBackArrow } from '../common/SmallComponents';
-import { Filter, FilterList, Settings } from '@mui/icons-material';
+import { BookmarkBorder, Filter, FilterList, Settings } from '@mui/icons-material';
 import useToggle from '../../hooks/useToggle';
 import ManagePostsMdl from '../post/ManagePostsMdl';
 import Btn1 from '../common/buttons/Btn1';
@@ -18,7 +18,7 @@ export default function ProfilePostsPage() {
     const { profileData, setProfileData } = useContext(ProfileDataContext);
     const queryParams = new URLSearchParams(location.search);
     const postid = parseInt(queryParams.get('postid'));
-    const profileId = parseInt(queryParams.get('profileId'));
+    const profileId = parseInt(queryParams.get('profileId')) || profileData.id;
     const isSavedPosts = location.pathname.includes('saved-posts') ? true : false;
 
     const { posts, setPosts } = useContext(PostContext);
@@ -40,7 +40,7 @@ export default function ProfilePostsPage() {
                 const cachedTimestamp = localStorage.getItem('profilePostsTimestamp');
                 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-                if (cachedData && cachedTimestamp && (Date.now() - parseInt(cachedTimestamp) < CACHE_DURATION)) {
+                if ( cachedData && cachedData.length !=0  && cachedTimestamp && (Date.now() - parseInt(cachedTimestamp) < CACHE_DURATION)) {
                     console.log("Cached data is seted");
                     const parsedData = JSON.parse(cachedData);
                     setPosts(parsedData);
@@ -73,7 +73,8 @@ export default function ProfilePostsPage() {
                 setIsLoading(false);
             }
         };
-
+        
+       
         loadPosts();
     }, [isSavedPosts, setPosts, profileId]);
 
@@ -106,9 +107,11 @@ export default function ProfilePostsPage() {
                             <>
                                 <PageTopBackArrow backTo={-1} pageHeading={'Saved Posts'} />
                                 <div className="posts-actions flex items-center   gap-2 lg:gap-4">
-                                    <button className='filter posts py-1 px-4 rounded-xl bg-gray-200 hover:bg-gray-100'>
+                                    { posts.length > 0 &&
+                                        <button className='filter posts py-1 px-4 rounded-xl bg-gray-200 hover:bg-gray-100'>
                                         Filter
                                     </button>
+                                    }
                                 </div>
                             </>
 
@@ -133,7 +136,6 @@ export default function ProfilePostsPage() {
                                                 </>
                                             )
                                         }
-
                                     </>
                                 )}
                             </>
@@ -145,6 +147,25 @@ export default function ProfilePostsPage() {
                             <PostList />
                         </PostProvider>
                     </div>
+
+
+                    {isSavedPosts && posts.length === 0 && (
+                        <div className="no-saved-posts flex flex-col items-center justify-center py-10">
+                            <div className="icon text-gray-300 mb-4">
+                                <BookmarkBorder sx={{ fontSize: '4rem' }} />
+                            </div>
+                            <h2 className="text-xl font-semibold text-gray-600 mb-2">No Saved Posts</h2>
+                            <p className="text-gray-500 text-center">You haven't saved any posts yet.</p>
+                        </div>
+                    )}
+                    {!isSavedPosts && posts.length === 0 && (
+                        <div className="no-posts flex flex-col items-center justify-center py-10">
+                            <h2 className="text-xl font-semibold text-gray-600 mb-2">No Posts</h2>
+                            <p className="text-gray-500 text-center">You haven't posted anything yet.</p>
+                        </div>
+                    )}
+
+
 
 
                 </div>

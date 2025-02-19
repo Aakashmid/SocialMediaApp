@@ -45,7 +45,7 @@ export default function Comments({ post, closeComments }) {
                     })}
                 </div>
             </div>
-            <div className="comment-input border-t  absolute   bottom-3 lg:bottom-5  left-0 bg-[#F8F9FA] w-full h-20  ">
+            <div className="comment-input border-t  absolute   bottom-5  left-0 bg-[#F8F9FA] w-full h-20  ">
                 <CommentInputForm user={profileData} post={post} />
             </div>
         </div>

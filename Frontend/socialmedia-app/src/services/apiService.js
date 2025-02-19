@@ -1,5 +1,8 @@
+import { useContext } from "react";
 import api from "../api"
 import { useNavigate } from "react-router-dom";
+import { ProfileDataContext } from "../Contexts/ProfileContext";
+
 
 
 ////////////////////////////////// User related endpoints ///////////////////////////////
@@ -216,6 +219,8 @@ export const DeletePost = async (post_id) => {
         throw error;
     }
 }
+
+
 
 
 // save a post

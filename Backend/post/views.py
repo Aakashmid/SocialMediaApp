@@ -11,7 +11,8 @@ from rest_framework.decorators import action
 from rest_framework import status, viewsets
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema , OpenApiParameter
+
 
 # from rest_framework.permissions import AllowAny,IsAuthenticated
 # from rest_framework.exceptions import PermissionDenied
@@ -39,6 +40,7 @@ class PostviewSet(viewsets.ModelViewSet):
         update: Update a post
         destroy: Delete a post
         toggle-like: Toggle like status on a post
+        delete-multiple : delete multiple posts 
 
     Search:
         Supports searching through:
@@ -79,6 +81,22 @@ class PostviewSet(viewsets.ModelViewSet):
             liked = True
         return Response({'liked': liked}, status=status.HTTP_200_OK)
 
+
+
+    @extend_schema(
+        parameters=[OpenApiParameter(name='postIds', type=str, location='array', description='Comma-separated list of post IDs to delete')],
+        responses={200: 'Posts deleted successfully'},
+    )
+    @action(detail=False, methods=['delete'], url_path='delete-multiple')
+    def delete_multiple_posts(self, request):
+        post_ids = request.data.get('postIds', [])
+        if not post_ids:
+            return Response({'detail': 'No post IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        posts = Post.objects.filter(id__in=post_ids)
+        deleted_count = posts.delete()[0]
+
+        return Response({'detail': f'{deleted_count} posts deleted successfully'}, status=status.HTTP_200_OK)
 
 #  view for handling save a post  and  list saved post like functionality
 class SaveUnsavePostView(APIView):

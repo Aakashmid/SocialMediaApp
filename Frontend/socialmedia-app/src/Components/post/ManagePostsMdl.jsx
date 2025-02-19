@@ -3,11 +3,15 @@ import React, { useEffect, useState } from 'react'
 import Btn1 from '../common/buttons/Btn1'
 import Btn2 from '../common/buttons/Btn2'
 import { ButtonPrimary } from '../common/buttons/ButtonPrimary';
+import ConfirmationModal from '../common/ConfirmationModal';
+import { DeletePost } from '../../services/apiService';
 
 export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPosts }) {
     const [filteredPosts, setFilteredPosts] = useState(posts);
     const [checkedPosts, setCheckedPosts] = useState([]);
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
     const [isApplyingAction, setIsApplyingAction] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
     const handleCheckboxChange = (postId) => {
         setCheckedPosts(prev =>
             prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]
@@ -16,19 +20,18 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPost
 
     useEffect(() => {
         setFilteredPosts(posts);
-    }, [posts,setPosts]);
+    }, [posts, setPosts]);
 
-    const handlePostsAction = (checkedPosts) => {
-        const selectedOption = document.querySelector('input[name="post_option"]:checked')
-
+    const handlePostsAction =async (checkedPosts) => {
         if (!selectedOption) {
             console.log("Please select an action")
             return
         }
 
         setIsApplyingAction(true);
-        switch (selectedOption.id) {
+        switch (selectedOption) {
             case 'delete_posts':
+                await DeletePosts(checkedPosts);
                 console.log('delete posts action for:', checkedPosts)
                 setPosts(prevPosts => prevPosts.filter(post => !checkedPosts.includes(post.id)));
                 setCheckedPosts([]);
@@ -44,6 +47,16 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPost
         }
         setIsApplyingAction(false);
     }
+
+
+
+    // perform selected action to selected posts
+    const confirmAction = () => {
+        if (checkedPosts.length  > 0) {
+            handlePostsAction(checkedPosts);
+        }
+        setIsConfirmationModalOpen(false);
+    };
 
     const Card = ({ post }) => (
         <div onClick={() => handleCheckboxChange(post.id)} key={post.id} className="post-card w-full h-fit rounded-lg border cursor-pointer hover:border-blue-400 transition-all duration-200 flex flex-col">
@@ -88,21 +101,22 @@ export default function ManagePostsMdl({ toggle, toggleFilterMdl, posts, setPost
             <div className="posts-actions px-4 py-2 border-t-2 ">
                 <h2 className='text-lg'>Select action  : </h2>
                 <div className="flex gap-4 mt-2 mb-2">
-                    <label htmlFor="hide_posts" className="flex items-center cursor-pointer">
+                    <label htmlFor="hide_posts" className="flex items-center cursor-pointer" onClick={() => setSelectedOption('hide_posts')}>
                         <input name="post_option" type="radio" id="hide_posts" className="mr-2" />
                         Hide Posts
                     </label>
-                    <label htmlFor="delete_posts" className="flex items-center cursor-pointer">
+                    <label htmlFor="delete_posts" className="flex items-center cursor-pointer" onClick={() => setSelectedOption('delete_posts')}>
                         <input name="post_option" type="radio" id="delete_posts" className="mr-2" />
                         Delete Posts
                     </label>
-                    <label htmlFor="remove_tags" className="flex items-center cursor-pointer">
+                    <label htmlFor="remove_tags" className="flex items-center cursor-pointer" onClick={() => setSelectedOption('remove_tags')}>
                         <input name="post_option" type="radio" id="remove_tags" className="mr-2" />
                         Remove Tags
                     </label>
                 </div>
-                <ButtonPrimary text={isApplyingAction ? 'Applying' : 'Apply'} onclick={() => handlePostsAction(checkedPosts)} Disabled={isApplyingAction} />
+                <ButtonPrimary text={isApplyingAction ? 'Applying' : 'Apply'} onclick={()=>setIsConfirmationModalOpen(true)} Disabled={isApplyingAction} />
             </div>
+            <ConfirmationModal isOpen={isConfirmationModalOpen} message={`Are you sure you want to Apply this actions  '${selectedOption}' to the selected posts`} onCancel={()=>setIsConfirmationModalOpen(false)} onConfirm={confirmAction}  />
         </div>
     )
 }

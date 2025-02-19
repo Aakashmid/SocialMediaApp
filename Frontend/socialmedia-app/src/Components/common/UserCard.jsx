@@ -13,7 +13,7 @@ const UserCard = ({ user, setData }) => {
             var followBtn = document.getElementById(`followBtn${user.id}`);
             if (user.isFollowed) {
                 const response = await unfollowUser(user.id);
-                setProfileData({ ...profileData, followers_count: profileData.followers_count - 1, isFollowed: false })
+                setProfileData({ ...profileData, followings_count: profileData.followings_count - 1, isFollowed: false })
                 setData((prevData) => {
                     const userExists = prevData.some(item => item.id === user.id);
                     if (!userExists) return prevData;
@@ -26,7 +26,7 @@ const UserCard = ({ user, setData }) => {
                 console.log('unfollowed user')
             } else {
                 const response = await followUser(user.id);
-                setProfileData({ ...profileData, followers_count: profileData.followers_count + 1, isFollowed: true })
+                setProfileData({ ...profileData, followings_count: profileData.followings_count + 1, isFollowed: true })
 
                 setData((prevData) => {
                     const userExists = prevData.some(item => item.id === user.id);
